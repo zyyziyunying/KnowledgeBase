@@ -1,0 +1,282 @@
+{
+  "$schema": "../../../schema/evidence-manifest.schema.json",
+  "schema_version": 1,
+  "topic_id": "android.framework.system-app-update",
+  "topic_document": "../../../../knowledge/android/framework/系统应用更新与OTA.md",
+  "verified_at": "2026-08-18",
+  "baseline_note": "Frameworks/base is pinned to 1cdfff555f4a21f71ccc978290e2e212e2f8b168, the same immutable revision as the Android boot and Home/SystemUI evidence packages. The Permission module, which now hosts the android.app.role framework sources, was resolved from main to immutable revision 26231a7eac744c7d2a8fea4740926620f56b20c6 on 2026-08-18. In this revision the default Home is resolved through the ROLE_HOME default app provider; the document makes no claim about any PackageManager API that persisted the default Home in older releases.",
+  "claims": [
+    {
+      "id": "upd-001",
+      "section": "更新路线与取舍",
+      "statement": "When a system app is updated by a data-app install, the old system copy is moved into the disabled system package set with its code and resource paths preserved, and the new package setting is marked as an updated system app.",
+      "source_ids": ["aosp-settings", "aosp-scan-package-utils", "aosp-install-package-helper"]
+    },
+    {
+      "id": "upd-002",
+      "section": "决策起点：包类别决定自由度",
+      "statement": "PackageManager defines INSTALL_FAILED_UPDATE_INCOMPATIBLE as the failure code reported for an incompatible package update.",
+      "source_ids": ["aosp-package-manager"]
+    },
+    {
+      "id": "upd-003",
+      "section": "更新路线与取舍",
+      "statement": "PackageInstaller provides setStaged() to mark an install session as staged, and staged sessions are scheduled to be installed at the next reboot.",
+      "source_ids": ["aosp-package-installer"]
+    },
+    {
+      "id": "upd-004",
+      "section": "Framework 内部链路",
+      "statement": "StagingManager is the component dedicated to staged install sessions that require a reboot, and PackageManagerService applies staged packages at the end of systemReady via restoreAndApplyStagedSessionIfNeeded.",
+      "source_ids": ["aosp-staging-manager", "aosp-package-manager-service"]
+    },
+    {
+      "id": "upd-005",
+      "section": "Framework 的设计支撑",
+      "statement": "StagingManager registers a boot phase callback that marks staged sessions successful and completes boot handling when the system reaches PHASE_BOOT_COMPLETED.",
+      "source_ids": ["aosp-staging-manager"]
+    },
+    {
+      "id": "upd-006",
+      "section": "Framework 内部链路",
+      "statement": "After an update is committed the system sends ACTION_PACKAGE_REPLACED broadcasts; the decision whether to kill the replaced app is derived from the INSTALL_DONT_KILL_APP install flag, and the removal broadcast reports that decision to receivers through the EXTRA_DONT_KILL_APP extra.",
+      "source_ids": ["aosp-broadcast-helper", "aosp-install-package-helper"]
+    },
+    {
+      "id": "upd-007",
+      "section": "Framework 内部链路",
+      "statement": "While an update is installed, the package being replaced is frozen through PackageFreezer with ApplicationExitInfo.REASON_PACKAGE_UPDATED.",
+      "source_ids": ["aosp-install-package-helper"]
+    },
+    {
+      "id": "upd-008",
+      "section": "Framework 内部链路",
+      "statement": "The default Home activity is resolved by ComputerEngine through getDefaultHomeActivity and getHomeActivitiesAsUser, consulting the ROLE_HOME default app provider and falling back to the preferred activity during the role transition window.",
+      "source_ids": ["aosp-computer-engine", "aosp-role-manager"]
+    },
+    {
+      "id": "upd-009",
+      "section": "Framework 的设计支撑",
+      "statement": "Privileged permission allowlists for privileged apps are read by SystemConfig from privapp-permissions XML files in the system image.",
+      "source_ids": ["aosp-system-config"]
+    }
+  ],
+  "sources": [
+    {
+      "id": "aosp-settings",
+      "source_class": "official_source",
+      "title": "Package settings and disabled system package set",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-18",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/core/java/com/android/server/pm/Settings.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/Settings.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/Settings.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "0cc3ff5ba9ef31fde423cbd728e1130d589df66b9707bdcad2b7853dd3bf138f",
+      "assertions": [
+        "boolean disableSystemPackageLPw(String name, boolean replaced) {",
+        "// a little trick...  when we install the new package, we don't",
+        "p.getPkgState().setUpdatedSystemApp(true);",
+        "mDisabledSysPackages.put(name, disabled);"
+      ]
+    },
+    {
+      "id": "aosp-scan-package-utils",
+      "source_class": "official_source",
+      "title": "Package scan and updated system app marking",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-18",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/core/java/com/android/server/pm/ScanPackageUtils.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/ScanPackageUtils.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/ScanPackageUtils.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "878a527fcf6b32073fc9a90e4e0aaca8bcfed8a34fc41ae1ec6accc22820cc99",
+      "assertions": [
+        "pkgSetting.getPkgState().setUpdatedSystemApp(true);"
+      ]
+    },
+    {
+      "id": "aosp-install-package-helper",
+      "source_class": "official_source",
+      "title": "Install commit path: disable system copy and freeze replaced package",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-18",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/core/java/com/android/server/pm/InstallPackageHelper.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/InstallPackageHelper.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/InstallPackageHelper.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "d8733ca11726c7e06e8b42d1eab956ff394b95b99b411f783cd1eebc6e84f0ae",
+      "assertions": [
+        "mPm.mSettings.disableSystemPackageLPw(oldPkg.getPackageName(), true);",
+        "freezer = freezePackageForInstall(pkgName, UserHandle.USER_ALL, installFlags,",
+        "\"installPackageLI\", ApplicationExitInfo.REASON_PACKAGE_UPDATED, request);",
+        "final boolean killApp =",
+        "(request.getInstallFlags() & PackageManager.INSTALL_DONT_KILL_APP) == 0;"
+      ]
+    },
+    {
+      "id": "aosp-package-manager",
+      "source_class": "official_source",
+      "title": "PackageManager update failure codes and Home activity API",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-18",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "core/java/android/content/pm/PackageManager.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/core/java/android/content/pm/PackageManager.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/core/java/android/content/pm/PackageManager.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "29fffd551bd2643d3fcac2f621356c3673a35adb79991756f91da4c603ca1f07",
+      "assertions": [
+        "public static final int INSTALL_FAILED_UPDATE_INCOMPATIBLE = -7;",
+        "public abstract ComponentName getHomeActivities(@NonNull List<ResolveInfo> outActivities);"
+      ]
+    },
+    {
+      "id": "aosp-package-installer",
+      "source_class": "official_source",
+      "title": "PackageInstaller staged session API",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-18",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "core/java/android/content/pm/PackageInstaller.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/core/java/android/content/pm/PackageInstaller.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/core/java/android/content/pm/PackageInstaller.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "4bef266f3b1d8a7d38b02853597b772644a38837f6efb095a749ad8b540dba0b",
+      "assertions": [
+        "* Set this session to be staged to be installed at reboot.",
+        "public void setStaged() {",
+        "this.isStaged = true;"
+      ]
+    },
+    {
+      "id": "aosp-staging-manager",
+      "source_class": "official_source",
+      "title": "StagingManager staged session lifecycle",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-18",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/core/java/com/android/server/pm/StagingManager.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/StagingManager.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/StagingManager.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "b1121a8b2eee70bf270ec3b417bba68ec8a586ce3214bd4a121d447ba80e4104",
+      "assertions": [
+        "* This class handles staged install sessions, i.e. install sessions that require packages to",
+        "* be installed only after a reboot.",
+        "if (phase == SystemService.PHASE_BOOT_COMPLETED && sStagingManager != null) {",
+        "void commitSession(@NonNull StagedSession session) {"
+      ]
+    },
+    {
+      "id": "aosp-package-manager-service",
+      "source_class": "official_source",
+      "title": "PackageManagerService systemReady staged session restore",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-18",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/core/java/com/android/server/pm/PackageManagerService.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/PackageManagerService.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/PackageManagerService.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "fd51222123d26cc26d9bd018c8da36f973507546175300ac0c1f5fa450fe679f",
+      "assertions": [
+        "// Installer service might attempt to install some packages that have been staged for",
+        "mInstallerService.restoreAndApplyStagedSessionIfNeeded();"
+      ]
+    },
+    {
+      "id": "aosp-broadcast-helper",
+      "source_class": "official_source",
+      "title": "Post-install broadcasts and kill decision",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-18",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/core/java/com/android/server/pm/BroadcastHelper.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/BroadcastHelper.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/BroadcastHelper.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "01dac985d5d32602fe8219e77f0de3bb225bbdf2d65647b9034440756c8f9498",
+      "assertions": [
+        "sendPackageBroadcastAndNotify(Intent.ACTION_PACKAGE_REPLACED,",
+        "extras.putBoolean(Intent.EXTRA_DONT_KILL_APP, !killApp);"
+      ]
+    },
+    {
+      "id": "aosp-computer-engine",
+      "source_class": "official_source",
+      "title": "ComputerEngine default Home resolution",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-18",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/core/java/com/android/server/pm/ComputerEngine.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/ComputerEngine.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/ComputerEngine.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "c69cda6e4102591b070dcd6877768053cabc73d72c26175d252ea6af8cb0a6dc",
+      "assertions": [
+        "public final ComponentName getDefaultHomeActivity(int userId) {",
+        "String packageName = mDefaultAppProvider.getDefaultHome(userId);",
+        "//  ROLE_HOME in RoleManager. Continue with a warning log for now."
+      ]
+    },
+    {
+      "id": "aosp-role-manager",
+      "source_class": "official_source",
+      "title": "RoleManager home role constant",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-18",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/packages/modules/Permission",
+      "revision": "26231a7eac744c7d2a8fea4740926620f56b20c6",
+      "path": "framework-s/java/android/app/role/RoleManager.java",
+      "web_url": "https://android.googlesource.com/platform/packages/modules/Permission/+/26231a7eac744c7d2a8fea4740926620f56b20c6/framework-s/java/android/app/role/RoleManager.java",
+      "raw_url": "https://android.googlesource.com/platform/packages/modules/Permission/+show/26231a7eac744c7d2a8fea4740926620f56b20c6/framework-s/java/android/app/role/RoleManager.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "55baffdd395944de53bc362ec17fb9f438d5e324a78c4ad13e1986dddb6aad97",
+      "assertions": [
+        "public static final String ROLE_HOME = \"android.app.role.HOME\";"
+      ]
+    },
+    {
+      "id": "aosp-system-config",
+      "source_class": "official_source",
+      "title": "SystemConfig privileged permission allowlist parsing",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-18",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/core/java/com/android/server/SystemConfig.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/SystemConfig.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/SystemConfig.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "62442f55508773e1758dcadb49976e7f6e4ddb043124ef68a62c271896647123",
+      "assertions": [
+        "case \"privapp-permissions\": {",
+        "readPermissionAllowlist(parser, allowlist, \"privapp-permissions\");"
+      ]
+    }
+  ]
+}
