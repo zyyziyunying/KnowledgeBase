@@ -48,7 +48,7 @@ init：first stage → SELinux setup → second stage
                           ↓
    bootstrap / core / other / APEX system services
                           ↓
-       systemReady → Home/系统界面 → boot completed
+   systemReady → SystemUI + 当前用户/显示的 Home → boot completed
 ```
 
 Bootloader 还可能处理 A/B slot、recovery、`boot`、`vendor_boot`、`init_boot` 等镜像，这些属于硬件和版本相关的启动前半段。AOSP 的 [Bootloader 概览](https://source.android.com/docs/core/architecture/bootloader) 给出了当前推荐流程。
@@ -147,6 +147,8 @@ startApexServices()
 这些里程碑相互关联但不等价。`sys.boot_completed=1` 是 Framework 的启动完成标志，不能单独证明 Launcher 首帧已显示，也不能证明应用自己的初始化已经完成。Home 启动路径可从 [RootWindowContainer.startHomeOnAllDisplays()](https://android.googlesource.com/platform/frameworks/base/+/refs/heads/main/services/core/java/com/android/server/wm/RootWindowContainer.java) 继续追踪；全局 boot completed 处理可从 [ActivityManagerService.finishBooting()](https://android.googlesource.com/platform/frameworks/base/+/refs/heads/main/services/core/java/com/android/server/am/ActivityManagerService.java) 追踪，用户状态与广播则继续查看 [UserController](https://android.googlesource.com/platform/frameworks/base/+/refs/heads/main/services/core/java/com/android/server/am/UserController.java)。[WindowManagerService.performEnableScreen()](https://android.googlesource.com/platform/frameworks/base/+/refs/heads/main/services/core/java/com/android/server/wm/WindowManagerService.java) 则展示了另一条控制路径：等待必要窗口、请求退出 Boot Animation、通知 SurfaceControl boot finished、启用显示和输入分发。源码只能证明这些控制条件与调用关系；某台设备的首帧是否真正合成、输入是否及时响应，仍需 boot trace、SurfaceFlinger/窗口状态和实际输入观测。
 
 “最后启动 Launcher，系统才呈现桌面”只适用于典型手机的简化回答。TV、Automotive、无屏设备、多显示设备、Setup Wizard、Keyguard 和厂商定制系统可能使用不同 Home 或拥有不同的“用户可用”终点。
+
+Home 与 SystemUI 通常是两个独立 APK，也分别不同于 `system_server` 中的 AMS/ATMS/WMS 和 SurfaceFlinger 等 native 进程；其组件、进程、启动与替换边界见 [Home、Launcher 与 SystemUI：进程与 APK 边界](Home-Launcher-SystemUI-%E8%BF%9B%E7%A8%8B%E4%B8%8EAPK%E8%BE%B9%E7%95%8C.md)。
 
 ### 关键点
 

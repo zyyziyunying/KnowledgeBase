@@ -1,0 +1,196 @@
+{
+  "$schema": "../../../schema/evidence-manifest.schema.json",
+  "schema_version": 1,
+  "topic_id": "android.framework.home-system-ui",
+  "topic_document": "../../../../knowledge/android/framework/Home-Launcher-SystemUI-进程与APK边界.md",
+  "verified_at": "2026-08-17",
+  "baseline_note": "Launcher3 main was resolved to an immutable revision on 2026-08-17. Frameworks/base uses the same immutable revision as the Android boot evidence package and was reverified for Home and SystemUI claims on 2026-08-17.",
+  "claims": [
+    {
+      "id": "home-ui-001",
+      "section": "Home：一个角色，不是写死的类名",
+      "statement": "AOSP Launcher3 is built as a privileged android_app package, and its Launcher Activity advertises MAIN, HOME, and DEFAULT intent categories.",
+      "source_ids": ["aosp-launcher3-build", "aosp-launcher3-manifest"]
+    },
+    {
+      "id": "home-ui-002",
+      "section": "Framework 怎样启动 Home",
+      "statement": "The Framework resolves a Home intent for a user and display area, converts the resolved ActivityInfo into an explicit component, and starts that Home Activity; it also has separate handling for secondary displays.",
+      "source_ids": ["aosp-root-window-container"]
+    },
+    {
+      "id": "home-ui-003",
+      "section": "SystemUI：独立 APK，也是特权持久进程",
+      "statement": "AOSP SystemUI is built as a privileged platform android_app with package com.android.systemui, a persistent application process, and a declared SystemUIService.",
+      "source_ids": ["aosp-systemui-build", "aosp-systemui-manifest"]
+    },
+    {
+      "id": "home-ui-004",
+      "section": "SystemUI：独立 APK，也是特权持久进程",
+      "statement": "AOSP defines SystemUI as a persistent process that provides system UI outside the system_server process.",
+      "source_ids": ["aosp-systemui-readme"]
+    },
+    {
+      "id": "home-ui-005",
+      "section": "谁启动 SystemUI",
+      "statement": "SystemServer obtains the configured SystemUI service component, starts it as the system user, and then notifies WindowManager that SystemUI started.",
+      "source_ids": ["aosp-system-server"]
+    },
+    {
+      "id": "home-ui-006",
+      "section": "谁启动 SystemUI",
+      "statement": "Home Activity resolution and SystemUI service startup are separate Framework paths and target separate application components.",
+      "source_ids": ["aosp-root-window-container", "aosp-system-server"]
+    }
+  ],
+  "sources": [
+    {
+      "id": "aosp-launcher3-build",
+      "source_class": "official_source",
+      "title": "Launcher3 build definition",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-17",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/packages/apps/Launcher3",
+      "revision": "2663cf0a414bd603d6a833cb691cea76eb1897b7",
+      "path": "Android.bp",
+      "web_url": "https://android.googlesource.com/platform/packages/apps/Launcher3/+/2663cf0a414bd603d6a833cb691cea76eb1897b7/Android.bp",
+      "raw_url": "https://android.googlesource.com/platform/packages/apps/Launcher3/+show/2663cf0a414bd603d6a833cb691cea76eb1897b7/Android.bp?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "cd2754d9f94ce5622bb8ea0802cd81f0aceb888c2862422ed645f29483c38ab7",
+      "assertions": [
+        "android_app {\n    name: \"Launcher3\",",
+        "privileged: true,",
+        "system_ext_specific: true,"
+      ]
+    },
+    {
+      "id": "aosp-launcher3-manifest",
+      "source_class": "official_source",
+      "title": "Launcher3 application manifest",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-17",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/packages/apps/Launcher3",
+      "revision": "2663cf0a414bd603d6a833cb691cea76eb1897b7",
+      "path": "AndroidManifest.xml",
+      "web_url": "https://android.googlesource.com/platform/packages/apps/Launcher3/+/2663cf0a414bd603d6a833cb691cea76eb1897b7/AndroidManifest.xml",
+      "raw_url": "https://android.googlesource.com/platform/packages/apps/Launcher3/+show/2663cf0a414bd603d6a833cb691cea76eb1897b7/AndroidManifest.xml?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "ae3def40f736b8263ce00e6154e97a33deb0ef1146e7e5b795c715ba11a82f20",
+      "assertions": [
+        "package=\"com.android.launcher3\"",
+        "android:name=\"com.android.launcher3.Launcher\"",
+        "android:name=\"android.intent.action.MAIN\"",
+        "android:name=\"android.intent.category.HOME\"",
+        "android:name=\"android.intent.category.DEFAULT\""
+      ]
+    },
+    {
+      "id": "aosp-root-window-container",
+      "source_class": "official_source",
+      "title": "RootWindowContainer Home resolution and startup",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-17",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/core/java/com/android/server/wm/RootWindowContainer.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/wm/RootWindowContainer.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/wm/RootWindowContainer.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "e61ad25dc42baa62020d5f6f50bb9a71f0fec662913ae6e17a8646fab287da51",
+      "assertions": [
+        "boolean startHomeOnAllDisplays(int userId, String reason)",
+        "homeIntent = mService.getHomeIntent();",
+        "aInfo = resolveHomeActivity(userId, homeIntent);",
+        "homeIntent.setComponent(new ComponentName(aInfo.applicationInfo.packageName, aInfo.name));",
+        "mTaskSupervisor.resolveIntent(homeIntent, resolvedType,"
+      ]
+    },
+    {
+      "id": "aosp-systemui-build",
+      "source_class": "official_source",
+      "title": "SystemUI build definition",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-17",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "packages/SystemUI/Android.bp",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/packages/SystemUI/Android.bp",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/packages/SystemUI/Android.bp?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "a3c33e65143af87d166ff6a7a429c93d3e14e516bfd6009f1dc06a3aba184d36",
+      "assertions": [
+        "android_app {\n    name: \"SystemUI\",",
+        "platform_apis: true,",
+        "certificate: \"platform\",",
+        "privileged: true,"
+      ]
+    },
+    {
+      "id": "aosp-systemui-manifest",
+      "source_class": "official_source",
+      "title": "SystemUI application manifest",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-17",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "packages/SystemUI/AndroidManifest.xml",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/packages/SystemUI/AndroidManifest.xml",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/packages/SystemUI/AndroidManifest.xml?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "cf606b66a16a16d930e4590278727b98f5ccf301e20e652c7f5eac18ec57bbfc",
+      "assertions": [
+        "package=\"com.android.systemui\"",
+        "android:name=\".SystemUIApplication\"",
+        "android:persistent=\"true\"",
+        "android:process=\"com.android.systemui\"",
+        "<service android:name=\"SystemUIService\""
+      ]
+    },
+    {
+      "id": "aosp-systemui-readme",
+      "source_class": "official_source",
+      "title": "SystemUI architecture README",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-17",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "packages/SystemUI/README.md",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/packages/SystemUI/README.md",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/packages/SystemUI/README.md?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "7ca311ca2e6013ab81af61180b013cd3c9f5979e7f46e127f3c23d46fb30f2a1",
+      "assertions": [
+        "SystemUI is a persistent process that provides UI for the system but outside",
+        "of the system_server process.",
+        "When SystemUIApplication starts up, it instantiates a Dagger graph"
+      ]
+    },
+    {
+      "id": "aosp-system-server",
+      "source_class": "official_source",
+      "title": "SystemServer SystemUI startup",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-17",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/java/com/android/server/SystemServer.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/java/com/android/server/SystemServer.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/java/com/android/server/SystemServer.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "fc4d8fe6fac0f283ba23ee713dae8d595ca7752faeee6fa230253def6ffe600d",
+      "assertions": [
+        "private static void startSystemUi(Context context, WindowManagerService windowManager)",
+        "intent.setComponent(pm.getSystemUiServiceComponent());",
+        "context.startServiceAsUser(intent, UserHandle.SYSTEM);",
+        "windowManager.onSystemUiStarted();"
+      ]
+    }
+  ]
+}

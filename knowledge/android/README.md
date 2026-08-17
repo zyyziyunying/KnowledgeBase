@@ -6,7 +6,7 @@
 
 | 专题 | 状态 | 入口 |
 | --- | --- | --- |
-| Android Framework | 已初始化；当前保留一份完整核心讲义 | [Framework](framework/README.md) |
+| Android Framework | 已初始化；维护核心讲义与独立深挖文档 | [Framework](framework/README.md) |
 | Android 建设路线 | 当前计划事实源 | [ROADMAP.md](ROADMAP.md) |
 
 这里仅提供领域边界和入口，不复制专题正文或路线中的可变计划。
