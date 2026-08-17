@@ -1,0 +1,312 @@
+{
+  "$schema": "../../../schema/evidence-manifest.schema.json",
+  "schema_version": 1,
+  "topic_id": "android.framework.boot",
+  "topic_document": "../../../../knowledge/android/framework/Android-Framework-高频核心讲义.md",
+  "verified_at": "2026-08-17",
+  "baseline_note": "AOSP main was resolved to immutable revisions on 2026-08-14; WindowManagerService was added from the same frameworks/base revision and the complete package was reverified on 2026-08-17. Official web documents remain dynamic and therefore record update and retrieval dates instead of content hashes.",
+  "claims": [
+    {
+      "id": "boot-001",
+      "section": "Bootloader 与 Kernel 的边界",
+      "statement": "Bootloader verifies the selected boot path and loads the kernel, ramdisk, device configuration, and related boot images before transferring control to the kernel.",
+      "source_ids": ["android-bootloader-doc"]
+    },
+    {
+      "id": "boot-002",
+      "section": "init 不是一个阶段，而是三段启动",
+      "statement": "Modern AOSP early init is divided into first-stage init, SELinux setup, and second-stage init.",
+      "source_ids": ["aosp-init-readme"]
+    },
+    {
+      "id": "boot-003",
+      "section": "init 不是一个阶段，而是三段启动",
+      "statement": "Second-stage init advances through event and property triggers, including zygote-start before early-boot and boot.",
+      "source_ids": ["aosp-init-readme"]
+    },
+    {
+      "id": "boot-004",
+      "section": "init 怎样启动 Zygote",
+      "statement": "The 64-bit primary Zygote service starts app_process64 with --zygote and --start-system-server.",
+      "source_ids": ["aosp-init-zygote64-rc"]
+    },
+    {
+      "id": "boot-005",
+      "section": "init 怎样启动 Zygote",
+      "statement": "app_process enters com.android.internal.os.ZygoteInit through AndroidRuntime.",
+      "source_ids": ["aosp-app-main"]
+    },
+    {
+      "id": "boot-006",
+      "section": "init 怎样启动 Zygote",
+      "statement": "Zygote preloads shared runtime state, forks system_server when requested, and then accepts process creation commands; some products can use USAPs or multiple Zygotes.",
+      "source_ids": ["aosp-zygote-init", "android-zygote-doc"]
+    },
+    {
+      "id": "boot-007",
+      "section": "system_server 怎样启动 Framework 服务",
+      "statement": "Current SystemServer starts bootstrap, core, other, and APEX system-service groups.",
+      "source_ids": ["aosp-system-server"]
+    },
+    {
+      "id": "boot-008",
+      "section": "system_server 怎样启动 Framework 服务",
+      "statement": "SystemServiceManager delivers monotonically increasing boot phases to started SystemService instances through onBootPhase.",
+      "source_ids": ["aosp-system-service-manager"]
+    },
+    {
+      "id": "boot-009",
+      "section": "从 systemReady 到用户可操作",
+      "statement": "Home activities are started per user and display after the activity/window system reaches the appropriate readiness state.",
+      "source_ids": ["aosp-root-window-container"]
+    },
+    {
+      "id": "boot-010",
+      "section": "从 systemReady 到用户可操作",
+      "statement": "PHASE_BOOT_COMPLETED and sys.boot_completed are global Framework milestones, while LOCKED_BOOT_COMPLETED and BOOT_COMPLETED are delivered through per-user lifecycle handling.",
+      "source_ids": ["aosp-activity-manager", "aosp-user-controller"]
+    },
+    {
+      "id": "boot-011",
+      "section": "Zygote 为什么能加快应用启动",
+      "statement": "Zygote preloaded classes reduce repeated app initialization and enable memory sharing, but the preload list must be tuned to avoid wasted memory.",
+      "source_ids": ["android-art-config-doc"]
+    },
+    {
+      "id": "boot-012",
+      "section": "从 systemReady 到用户可操作",
+      "statement": "WindowManager waits for required boot windows, stops the boot animation, notifies SurfaceControl that boot finished, enables the display, and enables input dispatch through a screen-enabling path separate from Framework boot-completion markers.",
+      "source_ids": ["aosp-window-manager-service"]
+    }
+  ],
+  "sources": [
+    {
+      "id": "aosp-init-readme",
+      "source_class": "official_source",
+      "title": "Android init README",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-14",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/system/core",
+      "revision": "a3b721a32242006b59cb12bd62c9133632af3a2d",
+      "path": "init/README.md",
+      "web_url": "https://android.googlesource.com/platform/system/core/+/a3b721a32242006b59cb12bd62c9133632af3a2d/init/README.md",
+      "raw_url": "https://android.googlesource.com/platform/system/core/+show/a3b721a32242006b59cb12bd62c9133632af3a2d/init/README.md?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "d4b4a69f79fa84d7ccdab335b4443193394e54ba2f1b29bd0ae4e3591666937e",
+      "assertions": [
+        "The early init boot sequence is broken up into three stages",
+        "`zygote-start` - Start the zygote.",
+        "`ro.boottime.init.first_stage`"
+      ]
+    },
+    {
+      "id": "aosp-init-zygote64-rc",
+      "source_class": "official_source",
+      "title": "64-bit primary Zygote init service",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-14",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/system/core",
+      "revision": "a3b721a32242006b59cb12bd62c9133632af3a2d",
+      "path": "rootdir/init.zygote64.rc",
+      "web_url": "https://android.googlesource.com/platform/system/core/+/a3b721a32242006b59cb12bd62c9133632af3a2d/rootdir/init.zygote64.rc",
+      "raw_url": "https://android.googlesource.com/platform/system/core/+show/a3b721a32242006b59cb12bd62c9133632af3a2d/rootdir/init.zygote64.rc?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "7be8fde03ec2cc4417aecf1a79163e0e4088fdff02ee6cd2426d02f91127e479",
+      "assertions": [
+        "service zygote /system/bin/app_process64 -Xzygote /system/bin --zygote --start-system-server --socket-name=zygote"
+      ]
+    },
+    {
+      "id": "aosp-app-main",
+      "source_class": "official_source",
+      "title": "app_process main entry",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-14",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "cmds/app_process/app_main.cpp",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/cmds/app_process/app_main.cpp",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/cmds/app_process/app_main.cpp?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "50e38aed3d9debefc075c5644306eeea17c335a0b1d37c4166a3685772a2d1d3",
+      "assertions": [
+        "runtime.start(\"com.android.internal.os.ZygoteInit\", args, zygote);"
+      ]
+    },
+    {
+      "id": "aosp-zygote-init",
+      "source_class": "official_source",
+      "title": "ZygoteInit",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-14",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "core/java/com/android/internal/os/ZygoteInit.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/core/java/com/android/internal/os/ZygoteInit.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/core/java/com/android/internal/os/ZygoteInit.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "d1b0d7bbd54f83ca2da8647c512a793e640f3a5f98cf44df30e16dcba591e49f",
+      "assertions": [
+        "preload(bootTimingsTraceLog);",
+        "forkSystemServer(abiList, zygoteSocketName, zygoteServer);",
+        "zygoteServer.runSelectLoop(abiList);"
+      ]
+    },
+    {
+      "id": "aosp-system-server",
+      "source_class": "official_source",
+      "title": "SystemServer",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-14",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/java/com/android/server/SystemServer.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/java/com/android/server/SystemServer.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/java/com/android/server/SystemServer.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "fc4d8fe6fac0f283ba23ee713dae8d595ca7752faeee6fa230253def6ffe600d",
+      "assertions": [
+        "startBootstrapServices(t);",
+        "startCoreServices(t);",
+        "startOtherServices(t);",
+        "startApexServices(t);"
+      ]
+    },
+    {
+      "id": "aosp-system-service-manager",
+      "source_class": "official_source",
+      "title": "SystemServiceManager",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-14",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/core/java/com/android/server/SystemServiceManager.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/SystemServiceManager.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/SystemServiceManager.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "890f7de2ea43bbb6866d1637268fee944b4761cc477070d501e6a47e2075e172",
+      "assertions": [
+        "service.onBootPhase(mCurrentPhase);",
+        "phase == SystemService.PHASE_BOOT_COMPLETED"
+      ]
+    },
+    {
+      "id": "aosp-activity-manager",
+      "source_class": "official_source",
+      "title": "ActivityManagerService boot completion",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-14",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/core/java/com/android/server/am/ActivityManagerService.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/am/ActivityManagerService.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/am/ActivityManagerService.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "54137cc45a5e4bffdd58c2f40fbb57c168a9b1d3d6721bcd3574c253b18a2cf7",
+      "assertions": [
+        "mSystemServiceManager.startBootPhase(t, SystemService.PHASE_BOOT_COMPLETED);",
+        "SystemProperties.set(\"sys.boot_completed\", \"1\");"
+      ]
+    },
+    {
+      "id": "aosp-user-controller",
+      "source_class": "official_source",
+      "title": "UserController boot broadcasts",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-14",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/core/java/com/android/server/am/UserController.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/am/UserController.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/am/UserController.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "489c6adda07d3289d048be31cdba12fd8e4a6127cb009657aa1a9d17342c3059",
+      "assertions": [
+        "Intent.ACTION_LOCKED_BOOT_COMPLETED",
+        "Intent.ACTION_BOOT_COMPLETED"
+      ]
+    },
+    {
+      "id": "aosp-root-window-container",
+      "source_class": "official_source",
+      "title": "RootWindowContainer Home startup",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-14",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/core/java/com/android/server/wm/RootWindowContainer.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/wm/RootWindowContainer.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/wm/RootWindowContainer.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "e61ad25dc42baa62020d5f6f50bb9a71f0fec662913ae6e17a8646fab287da51",
+      "assertions": [
+        "boolean startHomeOnAllDisplays(int userId, String reason)",
+        "startHomeOnDisplay(userId, reason, displayId)"
+      ]
+    },
+    {
+      "id": "aosp-window-manager-service",
+      "source_class": "official_source",
+      "title": "WindowManagerService boot screen enabling",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-17",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/core/java/com/android/server/wm/WindowManagerService.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/wm/WindowManagerService.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/wm/WindowManagerService.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "3f0d900dc87d402d3d072223c934bd5f58c27f630290b781d506a2ac04ae77a0",
+      "assertions": [
+        "public void enableScreenAfterBoot()",
+        "shouldWaitForSystemDecorWindowsOnBoot()",
+        "SystemProperties.set(\"service.bootanim.exit\", \"1\");",
+        "if (!SurfaceControl.bootFinished())",
+        "mInputManagerCallback.setEventDispatchingLw(mEventDispatchingEnabled);"
+      ]
+    },
+    {
+      "id": "android-bootloader-doc",
+      "source_class": "official_document",
+      "title": "Bootloader overview",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-14",
+      "license": "CC-BY-4.0",
+      "url": "https://source.android.com/docs/core/architecture/bootloader",
+      "last_updated": "2026-07-13",
+      "applies_to": "Current AOSP bootloader guidance; device bootloader implementation remains vendor-specific."
+    },
+    {
+      "id": "android-zygote-doc",
+      "source_class": "official_document",
+      "title": "About the Zygote processes",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-14",
+      "license": "CC-BY-4.0",
+      "url": "https://source.android.com/docs/core/runtime/zygote",
+      "last_updated": "2026-06-17",
+      "applies_to": "Modern Android Zygote, multi-ABI products, WebView Zygote, and optional USAP pool behavior."
+    },
+    {
+      "id": "android-art-config-doc",
+      "source_class": "official_document",
+      "title": "Configure ART",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-14",
+      "license": "CC-BY-4.0",
+      "url": "https://source.android.com/docs/core/runtime/configure#boot_classpath_configuration",
+      "last_updated": "2026-07-13",
+      "applies_to": "Current ART configuration guidance, including Zygote preloaded-class tradeoffs."
+    }
+  ]
+}

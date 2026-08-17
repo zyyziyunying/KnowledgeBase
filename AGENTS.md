@@ -14,6 +14,8 @@
 - `knowledge/<domain>/ROADMAP.md`：该领域当前建设顺序、延期主题和完成标准；仅在确有计划时创建。
 - `knowledge/<domain>/<topic>/README.md`：专题范围、当前事实源、阅读顺序和拆分状态。
 - 专题内容文档：具体知识、证据、源码入口、适用版本和边界。
+- `evidence/<domain>/<topic>/<slug>/manifest.json`：专题结论对应的来源、固定版本、哈希和可执行断言；格式与来源等级见 [evidence/README.md](evidence/README.md)。
+- `tools/verify_evidence.py`：离线检查 evidence 结构和引用，联网时复核固定源码的 SHA-256 与断言。
 - 占位文档至少要说明范围、非范围和未来入口；不创建空目录或只有“待补充”的文档。
 
 Android Framework 只是 Android 领域下的一个专题。新增其他领域或 Android 专题时，应建立同级目录，不要继续扩张现有 Framework 讲义。
@@ -24,6 +26,8 @@ Android Framework 只是 Android 领域下的一个专题。新增其他领域�
 
 - 优先修订既有事实源，不创建表达同一主题的平行文档。
 - 新结论尽量包含机制、可复查入口和适用边界；不确定内容明确标注待验证。
+- 影响系统模型的关键结论应映射到 evidence claim；优先使用固定 revision 的官方源码和近期官方文档。权威博客只能作为补充解释，必须记录作者/机构、发布日期、适用版本和采用理由。
+- evidence 不复制正文结论，也不批量镜像无明确许可的网页；固定源码使用 revision、路径、SHA-256 和关键断言保存可复查性。
 - 本地绝对路径、密钥、账号和机器状态不写进知识正文。
 - 内部链接使用相对路径；移动或拆分文档时同步修复入口和反向链接。
 - 保留既有文件名，除非重命名能明显改善长期导航，并且同次完成链接迁移。
@@ -42,6 +46,8 @@ Android Framework 只是 Android 领域下的一个专题。新增其他领域�
 ## 完成前检查
 
 - 运行 `git diff --check`。
+- 修改 evidence schema 或校验器时，运行 `python3 -m unittest discover -s tools -p 'test_*.py' -v`。
+- 运行 `python3 tools/verify_evidence.py`；新增或刷新来源且允许联网时，再运行 `python3 tools/verify_evidence.py --online`。
 - 确认新增或修改的 Markdown 相对链接均可解析。
 - 确认索引没有复制具体文档中的可变结论。
 - 若只做静态文档检查，明确说明尚未验证的设备、源码分支或运行时事实。

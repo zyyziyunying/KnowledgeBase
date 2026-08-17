@@ -5,6 +5,7 @@
 ## 当前事实源
 
 - [Android Framework 高频核心讲义](Android-Framework-%E9%AB%98%E9%A2%91%E6%A0%B8%E5%BF%83%E8%AE%B2%E4%B9%89.md)：当前唯一正文，建议先读第 0–6 章，再读第 7–12 章，最后完成源码阅读与自测部分。
+- [Android 启动证据包](../../../evidence/android/framework/boot/manifest.json)：第 1 章关键结论的固定 AOSP revision、官方文档元数据、SHA-256 与可执行断言。
 
 当前讲义仍适合整体阅读，因此暂不拆分。新增或修订内容应直接进入该讲义，避免建立内容重叠的笔记。
 

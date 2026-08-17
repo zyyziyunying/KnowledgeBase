@@ -21,58 +21,195 @@
 
 ### 一句话结论
 
-Android 启动是从 bootloader 到 Kernel，再由 `init` 拉起 native 服务、Zygote 和 `system_server` 的链路；`system_server` 是 Java Framework 核心系统服务的宿主进程。
+Android 启动不是一个进程从头执行到尾，而是一条跨越固件、内核和用户空间的接力链：Bootloader 校验并加载启动镜像，Linux Kernel 启动 PID 1 的 `init`，`init` 完成早期挂载与 SELinux 初始化后启动 native 服务和 Zygote，Zygote 再 fork 出 `system_server`；`system_server` 是大部分 Java Framework 核心系统服务的宿主进程。
+
+> **适用边界**：本节以 AOSP `refs/heads/main` 为主要事实源，核对日期为 2026-08-14。Bootloader、分区、服务清单、Home 应用和启动耗时会随 Android 版本、设备形态与厂商实现变化；文中的稳定主线不等于所有设备拥有完全相同的启动细节。
+
+本节的关键结论、固定 AOSP revision、源文件 SHA-256 和机器可执行断言记录在 [Android 启动证据包](../../../evidence/android/framework/boot/manifest.json)。正文负责解释机制，证据包负责证明“依据是什么、核对的是哪个版本”。
 
 ### 主链路
 
 ```text
-Boot ROM → Bootloader → Linux Kernel
-                         ↓
-                       init（PID 1）
-                         ↓ 解析 *.rc、挂载分区、启动 native daemon
-                       Zygote
-                         ↓ 预加载类/资源，fork
-                       system_server
-                         ↓
-     AMS / ATMS / WMS / PMS / Power / Input / ...
+SoC Boot ROM / 固件
+        ↓
+Bootloader：选择启动目标、Verified Boot、加载 Kernel 与 ramdisk/bootconfig
+        ↓
+Linux Kernel：驱动、调度、内存、根文件系统，启动 /init（PID 1）
+        ↓
+init：first stage → SELinux setup → second stage
+        ├── 启动 servicemanager、surfaceflinger、netd 等 native 进程
+        └── 根据 zygote rc 启动 app_process
+                          ↓
+                AndroidRuntime → ZygoteInit.main()
+                          ↓ 预加载类/资源/共享库
+                    fork system_server
+                          ↓
+          SystemServer → SystemServiceManager
+                          ↓
+   bootstrap / core / other / APEX system services
+                          ↓
+       systemReady → Home/系统界面 → boot completed
 ```
 
-Android 官方把 Android 特有的启动主线概括为 `init → Zygote → system server`；SystemServer 是第一个 Java 系统组件，会启动核心系统服务。[官方启动说明](https://source.android.com/docs/automotive/power/boot_time)
+Bootloader 还可能处理 A/B slot、recovery、`boot`、`vendor_boot`、`init_boot` 等镜像，这些属于硬件和版本相关的启动前半段。AOSP 的 [Bootloader 概览](https://source.android.com/docs/core/architecture/bootloader) 给出了当前推荐流程。
+
+### 1. Bootloader 与 Kernel 的边界
+
+- Boot ROM 和 Bootloader 通常由 SoC/厂商实现，不属于 Android Framework。Bootloader 负责建立最低硬件环境、选择启动槽位或 recovery、执行 Verified Boot，并把 Kernel、ramdisk、设备树与 bootconfig 等放入内存。
+- Kernel 解压并初始化 CPU、内存管理、调度器和驱动，然后启动用户空间的 `/init`。因此“Bootloader 加载 Kernel”是正确的高层概括，但真实设备并不只有单一 `boot.img`。
+- Android 12 起，面向 Android 用户空间的部分 `androidboot.*` 参数可以通过 bootconfig 传递；Android 13 引入了用于通用 ramdisk 的 `init_boot` 分区，是否使用以及具体布局取决于 boot image header、GKI 和设备配置。阅读启动参数时需要同时考虑 Android 版本和启动镜像布局。
+
+### 2. init 不是一个阶段，而是三段启动
+
+现代 AOSP 的早期 init 分为三段，不能只概括成“解析 `init.rc`”：
+
+1. **first-stage init**：建立继续启动所需的最小环境，挂载 `/dev`、`/proc` 和包含系统代码的 early-mount 分区；不同 ramdisk/system-as-root 配置还可能执行 switch root。
+2. **SELinux setup**：加载或编译 SELinux policy，并通过重新执行 `init` 完成从 kernel domain 到 init domain 的切换。
+3. **second-stage init**：初始化属性系统，解析系统、system_ext、vendor、odm 等分区中的 rc 文件，执行 action，管理 service，并进入持续的事件循环。
+
+官方事实源：[init README：Early Init Boot Sequence](https://android.googlesource.com/platform/system/core/+/refs/heads/main/init/README.md#Early-Init-Boot-Sequence)。
+
+second-stage init 的启动工作由 **event trigger + property trigger** 驱动，不是把所有 rc 文件简单地从上到下执行一遍。当前 AOSP 的核心事件顺序可以概括为：
+
+```text
+early-init → init → late-init
+    → early-fs → fs → post-fs → late-fs → post-fs-data
+    → post-fs-data-checkpointed → bpf-progs-loaded
+    → zygote-start → early-boot → boot
+```
+
+具体 action 可能因加密状态、charger mode、OTA checkpoint、属性和厂商 rc 而跳过、延后或增加。完整语义见 [init trigger sequence](https://android.googlesource.com/platform/system/core/+/refs/heads/main/init/README.md#Trigger-Sequence)。
+
+### 3. init 怎样启动 Zygote
+
+以当前 64 位主 Zygote 为例，rc 中的关键定义是：
+
+```text
+service zygote /system/bin/app_process64 -Xzygote /system/bin \
+    --zygote --start-system-server --socket-name=zygote
+```
+
+源码入口：[system/core/rootdir/init.zygote64.rc](https://android.googlesource.com/platform/system/core/+/refs/heads/main/rootdir/init.zygote64.rc)。这里说明两件容易混淆的事：
+
+- `init` 直接创建的是 `app_process64`/Zygote 进程，不是 `system_server`。
+- `--start-system-server` 参数告诉 `ZygoteInit` 在预加载之后 fork `system_server`。
+
+`app_process` 的 native 入口创建 ART runtime，然后调用 `ZygoteInit.main()`；当前主链可写为：
+
+```text
+init rc
+  → /system/bin/app_process[32|64]
+  → AndroidRuntime.start("com.android.internal.os.ZygoteInit", ...)
+  → ZygoteInit.main()
+  → preload()
+  → forkSystemServer()
+  → ZygoteServer.runSelectLoop()
+```
+
+对应源码：[app_main.cpp](https://android.googlesource.com/platform/frameworks/base/+/refs/heads/main/cmds/app_process/app_main.cpp)、[ZygoteInit.java](https://android.googlesource.com/platform/frameworks/base/+/refs/heads/main/core/java/com/android/internal/os/ZygoteInit.java)。
+
+当前 Android 使用 **ART**；Dalvik 是 Android 5.0 以前的历史实现。Zygote 会预加载常用类、资源、共享库和部分运行时状态，然后 fork 子进程。父子进程最初可以通过 Copy-on-Write 共享物理页，写入过的页才会产生私有副本。
+
+应用进程通常也由 Zygote 创建：`system_server` 通过 Unix domain socket 向合适的 Zygote 请求进程，Zygote fork 后再设置 UID/GID、进程名、cgroup、SELinux 上下文及其他隔离参数。启用 USAP pool 时，可以先保留未特化的应用进程，再按请求完成 specialization。设备还可能同时存在主/次 32 位与 64 位 Zygote，以及专门的 WebView Zygote。见 [Zygote 官方说明](https://source.android.com/docs/core/runtime/zygote)。
+
+### 4. system_server 怎样启动 Framework 服务
+
+`system_server` 是 Zygote 的特殊子进程。子进程进入 `SystemServer.main()`/`run()` 后，会准备主 Looper、加载 `android_servers` native library、创建 System Context 和 `SystemServiceManager`，再按依赖顺序启动系统服务：
+
+```text
+startBootstrapServices()
+  → 系统立足所需且依赖关系复杂的关键服务
+startCoreServices()
+  → 核心但不属于 bootstrap 的服务
+startOtherServices()
+  → WMS、网络、位置及大量其他平台服务
+startApexServices()
+  → 由可更新 APEX 模块定义的 System Service
+```
+
+分组不是安全级别，也不是所有服务严格完成后才进入下一组；部分初始化会并行或延迟。真正表达“依赖已经到达某个阶段”的机制还包括 `SystemServiceManager.startBootPhase()`，System Service 可通过 `onBootPhase()` 接收阶段通知。当前实现见 [SystemServer.java](https://android.googlesource.com/platform/frameworks/base/+/refs/heads/main/services/java/com/android/server/SystemServer.java) 与 [SystemServiceManager.java](https://android.googlesource.com/platform/frameworks/base/+/refs/heads/main/services/core/java/com/android/server/SystemServiceManager.java)。
+
+`system_server` 也不是“所有系统服务的进程”。`servicemanager`、`surfaceflinger`、`netd`、`audioserver`、`cameraserver` 以及许多 HAL 服务仍是由 init 管理的独立 native 进程；SystemServer 中的 Java 服务会通过 Binder 与它们协作。
+
+### 5. 从 systemReady 到用户可操作
+
+“系统启动完成”不是单个瞬间，至少应区分以下里程碑。下面是理解用的阶段列表，不是所有设备、所有用户状态都严格一致的全序关系：
+
+1. Zygote 已开始监听进程创建请求；
+2. SystemServer 已创建并启动关键服务；
+3. System Service 到达相应 boot phase，AMS/ATMS 进入 `systemReady`；
+4. 系统解析并启动当前用户和显示对应的 Home Activity；
+5. Home、SystemUI 或 Setup Wizard 等开始提交可见帧，WMS 再结合窗口绘制状态决定何时退出 Boot Animation、启用屏幕；
+6. Framework 进入 `PHASE_BOOT_COMPLETED` 并设置全局属性 `sys.boot_completed=1`；
+7. 用户生命周期再根据该用户是否处于 locked/unlocked、是否为 headless system user 等状态发送 `LOCKED_BOOT_COMPLETED`、`BOOT_COMPLETED` 等广播，较新版本还可能延迟向部分应用投递 boot-completed 广播；
+8. 首屏真正完成绘制并能响应输入。
+
+这些里程碑相互关联但不等价。`sys.boot_completed=1` 是 Framework 的启动完成标志，不能单独证明 Launcher 首帧已显示，也不能证明应用自己的初始化已经完成。Home 启动路径可从 [RootWindowContainer.startHomeOnAllDisplays()](https://android.googlesource.com/platform/frameworks/base/+/refs/heads/main/services/core/java/com/android/server/wm/RootWindowContainer.java) 继续追踪；全局 boot completed 处理可从 [ActivityManagerService.finishBooting()](https://android.googlesource.com/platform/frameworks/base/+/refs/heads/main/services/core/java/com/android/server/am/ActivityManagerService.java) 追踪，用户状态与广播则继续查看 [UserController](https://android.googlesource.com/platform/frameworks/base/+/refs/heads/main/services/core/java/com/android/server/am/UserController.java)。[WindowManagerService.performEnableScreen()](https://android.googlesource.com/platform/frameworks/base/+/refs/heads/main/services/core/java/com/android/server/wm/WindowManagerService.java) 则展示了另一条控制路径：等待必要窗口、请求退出 Boot Animation、通知 SurfaceControl boot finished、启用显示和输入分发。源码只能证明这些控制条件与调用关系；某台设备的首帧是否真正合成、输入是否及时响应，仍需 boot trace、SurfaceFlinger/窗口状态和实际输入观测。
+
+“最后启动 Launcher，系统才呈现桌面”只适用于典型手机的简化回答。TV、Automotive、无屏设备、多显示设备、Setup Wizard、Keyguard 和厂商定制系统可能使用不同 Home 或拥有不同的“用户可用”终点。
 
 ### 关键点
 
-- `init` 是用户空间的 PID 1，负责解析 `init.rc`，创建/挂载文件系统、设置属性、启动 service。它不是 Java Framework 服务。
-- Zygote 运行在 ART/Dalvik Java 运行时中，预加载常用 class、资源等，然后通过 fork 产生 app 进程，也会 fork 出 `system_server`。
-- `system_server` 不是“所有系统进程”。例如 `surfaceflinger`、`servicemanager`、`netd` 等是独立 native 进程；它主要承载 Java 系统服务。
-- SystemServer 依赖顺序很重要：服务启动过早会拿不到依赖，过晚又会影响系统可用性。因此源码中常按 bootstrap、core、other services 分组启动。
+- `init` 是用户空间 PID 1，是 rc action/service、属性触发和子进程生命周期的管理者；它不是 Java Framework Service。
+- `init` 启动 Zygote，Zygote fork `system_server`；不要把直接父子关系说反。
+- 当前 Android Runtime 是 ART。Zygote 的价值既包括减少重复初始化，也包括通过 fork/COW 共享可共享的内存页。
+- SystemServer 的服务启动顺序和 boot phase 都在表达依赖；只背 AMS/WMS/PMS 的类名无法解释启动问题。
+- native daemon、HAL 服务、SystemServer 中的 Java Service 和普通应用分属不同进程边界，但主要通过 Binder 组成一个系统。
+- “进程已存在”“服务已 ready”“boot completed”“首帧可见”“用户可交互”是不同的验证目标。
 
 ### 高频追问：Zygote 为什么能加快应用启动？
 
-它把运行时初始化与常用类/资源预加载提前到 fork 之前。fork 之后，父子进程先共享物理页；只有某一方写入时才复制（Copy-on-Write）。这样既减少冷启动初始化，也节省了可共享内存。代价是 Zygote 的预加载内容必须谨慎：预加载过多会延长开机、占用内存并增加写时复制。
+它把 ART runtime 的公共初始化以及常用类、资源和共享库的预加载提前到 fork 之前。fork 后父子进程先共享未修改的物理页，某一方写入时才发生 Copy-on-Write，因此既减少每个应用重复执行的初始化，也能共享一部分内存。代价是预加载内容必须按设备类型调优：预加载过多会增加开机工作和未使用内存，预加载过少则会把初始化和私有内存成本重新推给应用。官方配置入口见 [Configure ART：preloaded classes](https://source.android.com/docs/core/runtime/configure#boot_classpath_configuration)。
 
 ### 常见误区
 
-- “每启动一个 App 都重新启动虚拟机”：不准确。App 进程通常由 Zygote fork 出来，随后再执行 App 入口。
-- “init 启动所有 Android 服务”：不准确。init 启动 Zygote，Java 系统服务主要由 SystemServer 再启动。
+- “init 直接启动 system_server”：不准确。init 启动带 `--start-system-server` 参数的 Zygote，再由 Zygote fork system_server。
+- “每启动一个 App 都从零创建并初始化虚拟机”：不准确。App 进程通常由 Zygote/USAP fork 并 specialization，随后进入 `RuntimeInit`、`ActivityThread.main()` 等应用侧入口。
+- “init 启动所有 Android 服务”：不准确。init 管理 native service 与 Zygote；大量 Java System Service 由 SystemServer/SystemServiceManager 创建。
+- “SystemServer 启动完成就等于桌面已经显示”：不准确。Home 启动、Boot Animation、boot completed、首帧与可交互状态是不同里程碑。
+- “所有设备只有一个 64 位 Zygote”：不准确。Zygote 数量取决于 ABI、产品配置和专用进程需求。
+- “rc 文件就是一份顺序执行的 shell 脚本”：不准确。Android init language 由 action、service、event/property trigger 驱动，也不是通用 shell。
 
 ### 源码入口与验证
 
 ```text
-system/core/rootdir/init*.rc
+system/core/init/README.md
+system/core/init/first_stage_init.cpp
+system/core/init/selinux.cpp
+system/core/init/init.cpp
+system/core/rootdir/init.rc
+system/core/rootdir/init.zygote*.rc
+frameworks/base/cmds/app_process/app_main.cpp
 frameworks/base/core/java/com/android/internal/os/ZygoteInit.java
 frameworks/base/services/java/com/android/server/SystemServer.java
+frameworks/base/services/core/java/com/android/server/SystemServiceManager.java
+frameworks/base/services/core/java/com/android/server/am/ActivityManagerService.java
+frameworks/base/services/core/java/com/android/server/am/UserController.java
+frameworks/base/services/core/java/com/android/server/wm/RootWindowContainer.java
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java
 ```
 
+先明确要验证哪个里程碑，再选择命令。以下命令只读，但不同 Android 版本或厂商 user build 可能限制字段、日志和 dumpsys 输出：
+
 ```bash
-adb shell ps -A | grep -E 'init|zygote|system_server|surfaceflinger'
+adb shell ps -A -o PID,PPID,USER,NAME | grep -E 'init|zygote|system_server|surfaceflinger|servicemanager'
+adb shell getprop ro.zygote
 adb shell getprop sys.boot_completed
-adb logcat -b system -d | grep -i 'SystemServer'
+adb shell getprop | grep -E 'ro\.boottime\.(init|zygote|system_server)'
+adb shell dumpsys activity activities | grep -E 'mResumedActivity|topResumedActivity'
+adb shell dumpsys window windows | grep -E 'mCurrentFocus|mFocusedApp'
+adb logcat -b all -d | grep -Ei 'Zygote|SystemServer|boot_progress|boot_completed'
 ```
+
+- `PID/PPID` 用于验证进程父子关系，但 Zygote 或 SystemServer 重启后需要结合日志判断本次启动链。
+- `ro.boottime.init.first_stage`、`ro.boottime.init.selinux`、`ro.boottime.<service>` 可用于观察 init 记录的阶段和服务启动时间；单位与字段定义以当前 [init README 的 Boot timing](https://android.googlesource.com/platform/system/core/+/refs/heads/main/init/README.md#Boot-timing) 为准。
+- `dumpsys activity/window` 更接近“当前 Home/Activity 是否 resumed、有无焦点窗口”，但仍不等于首帧已由 SurfaceFlinger 合成或用户已经可以操作。
+- 分析耗时时优先采集 boot trace/Perfetto，并把 Bootloader、Kernel、init、Zygote、SystemServer、Home 首帧分别设为测量区间；不要只比较一条 `sys.boot_completed` 时间。
 
 ### 面试回答练习
 
 **问：Android 从开机到桌面可用，大致发生了什么？**  
-答：Bootloader 加载 Kernel，Kernel 启动 init。init 根据 rc 脚本挂载和初始化系统，启动 Zygote 等关键进程。Zygote 预加载运行时资源并 fork SystemServer；SystemServer 顺序启动 AMS、WMS、PMS 等核心服务。之后 Launcher 作为普通应用被启动，系统才呈现桌面。不同 Android 版本和厂商的服务细节会不同，但这条进程主线不变。
+答：Bootloader 完成启动校验、选择启动目标并加载 Kernel 和 ramdisk；Kernel 初始化后启动 PID 1 的 init。init 经历 first stage、SELinux setup 和 second stage，根据 rc trigger 挂载分区、建立属性系统、启动 native daemon 与 Zygote。Zygote 在 ART 中预加载公共类和资源，然后 fork system_server；SystemServer 创建 SystemServiceManager，按 bootstrap、core、other、APEX 等阶段启动 Framework 服务。AMS/ATMS 在系统 ready 后解析并启动当前设备的 Home，随后还要经历 Boot Animation 退出、boot completed 和首帧可交互等不同里程碑。手机上 Home 通常是 Launcher，但设备形态和厂商实现可能不同。
 
 ---
 
