@@ -1,0 +1,224 @@
+{
+  "$schema": "../../../schema/evidence-manifest.schema.json",
+  "schema_version": 1,
+  "topic_id": "android.framework.update-ui",
+  "topic_document": "../../../../knowledge/android/framework/系统更新UI与Home无缝切换.md",
+  "verified_at": "2026-08-18",
+  "baseline_note": "Frameworks/base is pinned to 1cdfff555f4a21f71ccc978290e2e212e2f8b168, the same immutable revision as the Android boot, Home/SystemUI, and system-app-update evidence packages. The recovery repository was resolved from main to immutable revision 9565b5ee790a4ae7acd0c6c04a2b3e0c7eeced3c on 2026-08-18. The install-side mechanisms (staged commit at systemReady, package freeze and kill) are covered by the sibling system-app-update evidence package and are not duplicated here; the sibling package asserts the disable side of the disabled-system-copy mechanism, while this package asserts the enable/revert side used by uninstall. Google's closed-source update screen is recorded as an industry observation in the document, not as an evidence source.",
+  "claims": [
+    {
+      "id": "upd-ui-001",
+      "section": "开机动画何时退场（核心机制）",
+      "statement": "The boot animation does not exit on its own: BootAnimation polls the service.bootanim.exit property and requests exit when it is set, and WindowManagerService sets that property during screen enable together with SurfaceControl.bootFinished() and the ActivityManager bootAnimationComplete() notification.",
+      "source_ids": ["aosp-bootanimation", "aosp-bootanim-rc", "aosp-wms", "aosp-surface-control"]
+    },
+    {
+      "id": "upd-ui-002",
+      "section": "开机动画何时退场（核心机制）",
+      "statement": "ActivityManager marks the boot animation complete in bootAnimationComplete and, when boot completes, ensureBootCompleted enables the screen through ActivityTaskManagerInternal.enableScreenAfterBoot.",
+      "source_ids": ["aosp-ams"]
+    },
+    {
+      "id": "upd-ui-003",
+      "section": "Framework 的防闪机制：ThemeHomeDelay",
+      "statement": "ActivityManagerService can delay the Home launch until ThemeOverlayController reports readiness (ThemeHomeDelay), with a 15000 ms HOME_LAUNCH_TIMEOUT_MS fallback.",
+      "source_ids": ["aosp-ams"]
+    },
+    {
+      "id": "upd-ui-004",
+      "section": "Windows 式更新屏的 Android 对应物",
+      "statement": "Recovery's ScreenRecoveryUI selects the localized installing_text or installing_security_text bitmap to display while a system update is being installed.",
+      "source_ids": ["aosp-screen-ui"]
+    },
+    {
+      "id": "upd-ui-005",
+      "section": "兜底与回滚",
+      "statement": "The pm uninstall command removes a data-app update of a system app, and the package delete path reinstates the disabled system copy through Settings.enableSystemPackageLPw, restoring the previous system version.",
+      "source_ids": ["aosp-pm-shell", "aosp-install-helper-enable", "aosp-settings-enable"]
+    }
+  ],
+  "sources": [
+    {
+      "id": "aosp-wms",
+      "source_class": "official_source",
+      "title": "WindowManagerService boot animation exit chain",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-18",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/core/java/com/android/server/wm/WindowManagerService.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/wm/WindowManagerService.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/wm/WindowManagerService.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "3f0d900dc87d402d3d072223c934bd5f58c27f630290b781d506a2ac04ae77a0",
+      "assertions": [
+        "public void enableScreenAfterBoot() {",
+        "SystemProperties.set(\"service.bootanim.exit\", \"1\");",
+        "if (!SurfaceControl.bootFinished()) {",
+        "mActivityManager.bootAnimationComplete();"
+      ]
+    },
+    {
+      "id": "aosp-ams",
+      "source_class": "official_source",
+      "title": "ActivityManagerService boot completion and ThemeHomeDelay",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-18",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/core/java/com/android/server/am/ActivityManagerService.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/am/ActivityManagerService.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/am/ActivityManagerService.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "54137cc45a5e4bffdd58c2f40fbb57c168a9b1d3d6721bcd3574c253b18a2cf7",
+      "assertions": [
+        "public void bootAnimationComplete() {",
+        "mBootAnimationComplete = true;",
+        "final void ensureBootCompleted() {",
+        "mAtmInternal.enableScreenAfterBoot(mBooted);",
+        "private static final long HOME_LAUNCH_TIMEOUT_MS = 15000;",
+        "private final AtomicBoolean mHasHomeDelay = new AtomicBoolean(false);",
+        "public void setThemeOverlayReady(@UserIdInt int userId) {"
+      ]
+    },
+    {
+      "id": "aosp-surface-control",
+      "source_class": "official_source",
+      "title": "SurfaceControl boot finished API",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-18",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "core/java/android/view/SurfaceControl.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/core/java/android/view/SurfaceControl.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/core/java/android/view/SurfaceControl.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "81edede2cd9d618d8195c882b9d0e82106e30c625d8f23ed416171988c06ac1f",
+      "assertions": [
+        "public static boolean bootFinished() {"
+      ]
+    },
+    {
+      "id": "aosp-bootanimation",
+      "source_class": "official_source",
+      "title": "BootAnimation exit property polling",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-18",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "cmds/bootanimation/BootAnimation.cpp",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/cmds/bootanimation/BootAnimation.cpp",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/cmds/bootanimation/BootAnimation.cpp?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "5d5911656f716f32b9073ddfd20eed306819e2061f4892a02910b8dc87c87e41",
+      "assertions": [
+        "static const char EXIT_PROP_NAME[] = \"service.bootanim.exit\";",
+        "void BootAnimation::checkExit() {",
+        "property_get(EXIT_PROP_NAME, value, \"0\");",
+        "mSession = new SurfaceComposerClient();"
+      ]
+    },
+    {
+      "id": "aosp-bootanim-rc",
+      "source_class": "official_source",
+      "title": "Boot animation service definition",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-18",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "cmds/bootanimation/bootanim.rc",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/cmds/bootanimation/bootanim.rc",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/cmds/bootanimation/bootanim.rc?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "d7854acbd566ba7985fefa5aa87602c42814ed5a7ea5904d2628ac4f9444f77f",
+      "assertions": [
+        "service bootanim /system/bin/bootanimation",
+        "disabled",
+        "oneshot"
+      ]
+    },
+    {
+      "id": "aosp-pm-shell",
+      "source_class": "official_source",
+      "title": "PackageManagerShellCommand uninstall and install-existing semantics",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-18",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/core/java/com/android/server/pm/PackageManagerShellCommand.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/PackageManagerShellCommand.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/PackageManagerShellCommand.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "f51101a2d5c4cd9df4283d9da73707b4d0edc189b75a391285a816931ad3e004",
+      "assertions": [
+        "case \"uninstall\":",
+        "private int runUninstall() throws RemoteException {",
+        "Installs an existing application for a new user."
+      ]
+    },
+    {
+      "id": "aosp-install-helper-enable",
+      "source_class": "official_source",
+      "title": "Package delete path reinstating the disabled system copy",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-18",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/core/java/com/android/server/pm/InstallPackageHelper.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/InstallPackageHelper.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/InstallPackageHelper.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "d8733ca11726c7e06e8b42d1eab956ff394b95b99b411f783cd1eebc6e84f0ae",
+      "assertions": [
+        "// Reinstate the old system package",
+        "mPm.mSettings.enableSystemPackageLPw(disabledPs.getPkg().getPackageName());"
+      ]
+    },
+    {
+      "id": "aosp-settings-enable",
+      "source_class": "official_source",
+      "title": "Settings enable system package revert path",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-18",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/core/java/com/android/server/pm/Settings.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/Settings.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/Settings.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "0cc3ff5ba9ef31fde423cbd728e1130d589df66b9707bdcad2b7853dd3bf138f",
+      "assertions": [
+        "PackageSetting enableSystemPackageLPw(String name) {",
+        "p.getPkgState().setUpdatedSystemApp(false);"
+      ]
+    },
+    {
+      "id": "aosp-screen-ui",
+      "source_class": "official_source",
+      "title": "Recovery screen UI system update text",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-18",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/bootable/recovery",
+      "revision": "9565b5ee790a4ae7acd0c6c04a2b3e0c7eeced3c",
+      "path": "recovery_ui/screen_ui.cpp",
+      "web_url": "https://android.googlesource.com/platform/bootable/recovery/+/9565b5ee790a4ae7acd0c6c04a2b3e0c7eeced3c/recovery_ui/screen_ui.cpp",
+      "raw_url": "https://android.googlesource.com/platform/bootable/recovery/+show/9565b5ee790a4ae7acd0c6c04a2b3e0c7eeced3c/recovery_ui/screen_ui.cpp?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "a4062d59eaf513c672ed2eec8dfd4f2cd0c097694e97407f997a889d3299e9df",
+      "assertions": [
+        "void ScreenRecoveryUI::SetSystemUpdateText(bool security_update) {",
+        "installing_text_ = LoadLocalizedBitmap(\"installing_text\");",
+        "installing_text_ = LoadLocalizedBitmap(\"installing_security_text\");"
+      ]
+    }
+  ]
+}
