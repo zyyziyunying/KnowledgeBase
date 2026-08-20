@@ -3,8 +3,8 @@
   "schema_version": 1,
   "topic_id": "android.framework.system-app-update",
   "topic_document": "../../../../knowledge/android/framework/系统应用更新与OTA.md",
-  "verified_at": "2026-08-18",
-  "baseline_note": "Frameworks/base is pinned to 1cdfff555f4a21f71ccc978290e2e212e2f8b168, the same immutable revision as the Android boot and Home/SystemUI evidence packages. The Permission module, which now hosts the android.app.role framework sources, was resolved from main to immutable revision 26231a7eac744c7d2a8fea4740926620f56b20c6 on 2026-08-18. In this revision the default Home is resolved through the ROLE_HOME default app provider; the document makes no claim about any PackageManager API that persisted the default Home in older releases.",
+  "verified_at": "2026-08-20",
+  "baseline_note": "Frameworks/base is pinned to 1cdfff555f4a21f71ccc978290e2e212e2f8b168, the same immutable revision as the Android boot and Home/SystemUI evidence packages. The Permission module, which now hosts the android.app.role framework sources, was resolved from main to immutable revision 26231a7eac744c7d2a8fea4740926620f56b20c6 on 2026-08-18. In this revision the default Home is resolved through the ROLE_HOME default app provider; the document makes no claim about any PackageManager API that persisted the default Home in older releases. The legacy A/B, Virtual A/B, and APK signature-scheme pages are dynamic official documents and therefore record their update and retrieval dates instead of content hashes. OTA slot or snapshot updates, PackageInstaller staged sessions, and recovery-based installs remain distinct mechanisms. For staged sessions containing APEX, apexd activation precedes the PackageManager systemReady restore path; StagingManager verifies the activation result before installing any APK portion.",
   "claims": [
     {
       "id": "upd-001",
@@ -27,7 +27,7 @@
     {
       "id": "upd-004",
       "section": "Framework 内部链路",
-      "statement": "StagingManager is the component dedicated to staged install sessions that require a reboot, and PackageManagerService applies staged packages at the end of systemReady via restoreAndApplyStagedSessionIfNeeded.",
+      "statement": "StagingManager is the component dedicated to staged install sessions that require a reboot, and PackageManagerService invokes restoreAndApplyStagedSessionIfNeeded at the end of systemReady to restore and continue those sessions.",
       "source_ids": ["aosp-staging-manager", "aosp-package-manager-service"]
     },
     {
@@ -59,6 +59,36 @@
       "section": "Framework 的设计支撑",
       "statement": "Privileged permission allowlists for privileged apps are read by SystemConfig from privapp-permissions XML files in the system image.",
       "source_ids": ["aosp-system-config"]
+    },
+    {
+      "id": "upd-010",
+      "section": "决策起点：包类别决定自由度",
+      "statement": "APK Signature Scheme v3 introduced proof-of-rotation and v3.1 added SDK-targeted rotation; current AOSP verifies an updated system app against the pre-installed system copy or its signing lineage through INSTALLED_DATA and ROLLBACK capabilities rather than categorically forbidding key rotation.",
+      "source_ids": ["android-apk-signing-v3-doc", "android-apk-signing-v31-doc", "aosp-package-manager-service-utils"]
+    },
+    {
+      "id": "upd-011",
+      "section": "更新路线与取舍",
+      "statement": "In A/B OTA, update_engine writes the unused slot while the current system is running and instructs the bootloader to boot the new system on the next reboot; PackageManagerService then initializes system apps from the selected system partitions during normal startup, which is distinct from restoring a PackageInstaller staged session at systemReady.",
+      "source_ids": ["android-ab-ota-doc", "aosp-package-manager-service"]
+    },
+    {
+      "id": "upd-012",
+      "section": "决策起点：包类别决定自由度",
+      "statement": "Privileged-permission allowlist violations are collected for system-image privileged apps during boot and can block permission-policy systemReady in enforce mode, while updated system apps skip the duplicate privileged allowlist check and can receive a privileged or OEM permission only when the disabled original system package requested and qualified for that permission.",
+      "source_ids": ["aosp-app-id-permission-policy"]
+    },
+    {
+      "id": "upd-013",
+      "section": "更新路线与取舍",
+      "statement": "For a staged session containing APEX, StagingManager checks that the APEX session is already activated or successful and then proceeds with installation of the APK portion; this PackageManager-side path therefore verifies apexd activation rather than activating APEX itself.",
+      "source_ids": ["aosp-staging-manager"]
+    },
+    {
+      "id": "upd-014",
+      "section": "更新路线与取舍",
+      "statement": "Virtual A/B writes boot-critical physical partitions to their new slot and writes dynamic-partition deltas to Android COW snapshots, then merges those snapshots after reboot, while legacy A/B uses an unused slot.",
+      "source_ids": ["android-virtual-ab-doc", "android-ab-ota-doc"]
     }
   ],
   "sources": [
@@ -67,7 +97,7 @@
       "source_class": "official_source",
       "title": "Package settings and disabled system package set",
       "publisher": "Android Open Source Project",
-      "retrieved_at": "2026-08-18",
+      "retrieved_at": "2026-08-20",
       "license": "Apache-2.0",
       "repository_url": "https://android.googlesource.com/platform/frameworks/base",
       "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
@@ -179,6 +209,9 @@
       "assertions": [
         "* This class handles staged install sessions, i.e. install sessions that require packages to",
         "* be installed only after a reboot.",
+        "else if (apexSession.isActivated || apexSession.isSuccess) {",
+        "// The APEX part of the session is activated, proceed with the installation of APKs.",
+        "installApksInSession(session);",
         "if (phase == SystemService.PHASE_BOOT_COMPLETED && sStagingManager != null) {",
         "void commitSession(@NonNull StagedSession session) {"
       ]
@@ -198,6 +231,7 @@
       "raw_encoding": "gitiles-base64",
       "sha256": "fd51222123d26cc26d9bd018c8da36f973507546175300ac0c1f5fa450fe679f",
       "assertions": [
+        "mOverlayConfig = mInitAppsHelper.initSystemApps(packageParser, packageSettings, userIds,",
         "// Installer service might attempt to install some packages that have been staged for",
         "mInstallerService.restoreAndApplyStagedSessionIfNeeded();"
       ]
@@ -277,6 +311,93 @@
         "case \"privapp-permissions\": {",
         "readPermissionAllowlist(parser, allowlist, \"privapp-permissions\");"
       ]
+    },
+    {
+      "id": "aosp-package-manager-service-utils",
+      "source_class": "official_source",
+      "title": "Updated system app signing lineage verification",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-20",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/core/java/com/android/server/pm/PackageManagerServiceUtils.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/PackageManagerServiceUtils.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/PackageManagerServiceUtils.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "7766697f12e00c3db2c976facc1ca763ba0b3536c855878d557bd984515d62cd",
+      "assertions": [
+        "* Verifies the updated system app has a signature that is consistent with the pre-installed",
+        "* version or the signing lineage.",
+        "SigningDetails.CertCapabilities.INSTALLED_DATA)",
+        "SigningDetails.CertCapabilities.ROLLBACK))"
+      ]
+    },
+    {
+      "id": "aosp-app-id-permission-policy",
+      "source_class": "official_source",
+      "title": "Updated system app privileged-permission policy",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-20",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/permission/java/com/android/server/permission/access/permission/AppIdPermissionPolicy.kt",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/permission/java/com/android/server/permission/access/permission/AppIdPermissionPolicy.kt",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/permission/java/com/android/server/permission/access/permission/AppIdPermissionPolicy.kt?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "ab586a0728d49d381fb9c7e51b82cf6036b13130c004abcd4f74941fda33f5c5",
+      "assertions": [
+        "// Updated system apps do not need to be allowlisted",
+        "// Only enforce the privileged permission allowlist on boot",
+        "// For updated system applications, a privileged/oem permission",
+        "permission.name in disabledSystemPackage.requestedPermissions &&",
+        "throw IllegalStateException("
+      ]
+    },
+    {
+      "id": "android-ab-ota-doc",
+      "source_class": "official_document",
+      "title": "A/B seamless system updates",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-20",
+      "license": "CC-BY-4.0",
+      "url": "https://source.android.com/docs/core/ota/ab",
+      "last_updated": "2026-06-17",
+      "applies_to": "Legacy A/B slot-based system-update architecture; Virtual A/B snapshot behavior is covered separately, and non-A/B recovery installation and PackageInstaller staged sessions are separate mechanisms."
+    },
+    {
+      "id": "android-virtual-ab-doc",
+      "source_class": "official_document",
+      "title": "Virtual A/B overview",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-20",
+      "license": "CC-BY-4.0",
+      "url": "https://source.android.com/docs/core/ota/virtual_ab",
+      "last_updated": "2026-07-13",
+      "applies_to": "Virtual A/B physical-partition slot updates, dynamic-partition Android COW snapshots, reboot verification, rollback, and snapshot merge behavior."
+    },
+    {
+      "id": "android-apk-signing-v3-doc",
+      "source_class": "official_document",
+      "title": "APK Signature Scheme v3",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-20",
+      "license": "CC-BY-4.0",
+      "url": "https://source.android.com/docs/security/features/apksigning/v3",
+      "last_updated": "2026-07-16",
+      "applies_to": "Android 9 and later APK signing lineage and proof-of-rotation; shared UID, signature permissions, and platform-key migrations need additional compatibility checks."
+    },
+    {
+      "id": "android-apk-signing-v31-doc",
+      "source_class": "official_document",
+      "title": "APK Signature Scheme v3.1",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-20",
+      "license": "CC-BY-4.0",
+      "url": "https://source.android.com/docs/security/features/apksigning/v3-1",
+      "last_updated": "2026-07-16",
+      "applies_to": "Android 13 and later SDK-targeted APK signing-key rotation, with older-platform fallback behavior described by the official document."
     }
   ]
 }

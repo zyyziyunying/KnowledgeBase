@@ -3,8 +3,8 @@
   "schema_version": 1,
   "topic_id": "android.framework.update-ui",
   "topic_document": "../../../../knowledge/android/framework/系统更新UI与Home无缝切换.md",
-  "verified_at": "2026-08-18",
-  "baseline_note": "Frameworks/base is pinned to 1cdfff555f4a21f71ccc978290e2e212e2f8b168, the same immutable revision as the Android boot, Home/SystemUI, and system-app-update evidence packages. The recovery repository was resolved from main to immutable revision 9565b5ee790a4ae7acd0c6c04a2b3e0c7eeced3c on 2026-08-18. The install-side mechanisms (staged commit at systemReady, package freeze and kill) are covered by the sibling system-app-update evidence package and are not duplicated here; the sibling package asserts the disable side of the disabled-system-copy mechanism, while this package asserts the enable/revert side used by uninstall. Google's closed-source update screen is recorded as an industry observation in the document, not as an evidence source.",
+  "verified_at": "2026-08-20",
+  "baseline_note": "Frameworks/base is pinned to 1cdfff555f4a21f71ccc978290e2e212e2f8b168, the same immutable revision as the Android boot, Home/SystemUI, and system-app-update evidence packages. The recovery repository was resolved from main to immutable revision 9565b5ee790a4ae7acd0c6c04a2b3e0c7eeced3c on 2026-08-18. The install-side mechanisms are owned by the sibling system-app-update evidence package, which now keeps A/B OTA slot updates distinct from PackageInstaller staged sessions. This package additionally pins the platform permission declarations, PackageInstallerSession update-permission check, and system-developer permission model used to bound the candidate UpdateCoordinator and TransitionRenderer architecture; the architecture and device behavior remain proposals, not AOSP-provided or device-verified facts. Recovery minui is evidence only for paths that actually enter recovery, not for the normal A/B reboot path. The sibling package asserts the disable side of the disabled-system-copy mechanism, while this package asserts the enable/revert side used by uninstall. Google's closed-source update screen is recorded as an industry observation in the document, not as an evidence source.",
   "claims": [
     {
       "id": "upd-ui-001",
@@ -27,7 +27,7 @@
     {
       "id": "upd-ui-004",
       "section": "Windows 式更新屏的 Android 对应物",
-      "statement": "Recovery's ScreenRecoveryUI selects the localized installing_text or installing_security_text bitmap to display while a system update is being installed.",
+      "statement": "When an update path actually enters recovery, Recovery's ScreenRecoveryUI selects the localized installing_text or installing_security_text bitmap; this claim does not describe the normal A/B OTA reboot path.",
       "source_ids": ["aosp-screen-ui"]
     },
     {
@@ -35,13 +35,37 @@
       "section": "兜底与回滚",
       "statement": "The pm uninstall command removes a data-app update of a system app, and the package delete path reinstates the disabled system copy through Settings.enableSystemPackageLPw, restoring the previous system version.",
       "source_ids": ["aosp-pm-shell", "aosp-install-helper-enable", "aosp-settings-enable"]
+    },
+    {
+      "id": "upd-ui-006",
+      "section": "开机动画何时退场（核心机制）",
+      "statement": "WindowManagerService normally waits for required system-decor windows and boot-animation completion before enabling the display, but enableScreenAfterBoot schedules a nominal 30-second boot timeout scaled by Build.HW_TIMEOUT_MULTIPLIER whose handler forces display enablement, so the source establishes a normal anti-flash path and a failure fallback rather than an absolute no-black-frame guarantee.",
+      "source_ids": ["aosp-wms"]
+    },
+    {
+      "id": "upd-ui-007",
+      "section": "候选架构：最小权限的运行态交接",
+      "statement": "At the pinned AOSP revision, INSTALL_PACKAGES, INSTALL_PACKAGE_UPDATES, and MANAGE_ROLLBACKS are signature|privileged permissions, while MANAGE_ROLE_HOLDERS is signature|installer|module; PackageInstallerSession counts INSTALL_PACKAGE_UPDATES toward its install-permission decision only when the target is an update of an existing package.",
+      "source_ids": ["aosp-platform-permission-declarations", "aosp-package-installer-session"]
+    },
+    {
+      "id": "upd-ui-008",
+      "section": "权限高度与最小化边界",
+      "statement": "At the pinned AOSP revision, INTERNAL_SYSTEM_WINDOW is signature|module|recents, while FREEZE_SCREEN, INJECT_EVENTS, and FILTER_EVENTS are signature permissions; privileged-app status alone therefore does not satisfy these signature-only or non-privileged system-window and input permissions.",
+      "source_ids": ["aosp-platform-permission-declarations", "aosp-system-developer-permissions"]
+    },
+    {
+      "id": "upd-ui-009",
+      "section": "权限高度与最小化边界",
+      "statement": "AOSP's system-developer permission model defines a platform signature permission as requiring the platform signing certificate, and defines combined protection flags as an OR relationship, so signature|privileged can be satisfied either by platform signing or qualified privileged-app status.",
+      "source_ids": ["aosp-system-developer-permissions"]
     }
   ],
   "sources": [
     {
       "id": "aosp-wms",
       "source_class": "official_source",
-      "title": "WindowManagerService boot animation exit chain",
+      "title": "WindowManagerService boot animation exit and timeout chain",
       "publisher": "Android Open Source Project",
       "retrieved_at": "2026-08-18",
       "license": "Apache-2.0",
@@ -54,6 +78,10 @@
       "sha256": "3f0d900dc87d402d3d072223c934bd5f58c27f630290b781d506a2ac04ae77a0",
       "assertions": [
         "public void enableScreenAfterBoot() {",
+        "mH.sendEmptyMessageDelayed(H.BOOT_TIMEOUT, 30 * 1000 * Build.HW_TIMEOUT_MULTIPLIER);",
+        "public void performBootTimeout() {",
+        "mForceDisplayEnabled = true;",
+        "shouldWaitForSystemDecorWindowsOnBoot()",
         "SystemProperties.set(\"service.bootanim.exit\", \"1\");",
         "if (!SurfaceControl.bootFinished()) {",
         "mActivityManager.bootAnimationComplete();"
@@ -198,6 +226,76 @@
       "assertions": [
         "PackageSetting enableSystemPackageLPw(String name) {",
         "p.getPkgState().setUpdatedSystemApp(false);"
+      ]
+    },
+    {
+      "id": "aosp-platform-permission-declarations",
+      "source_class": "official_source",
+      "title": "Platform permission protection-level declarations",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-20",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "core/res/AndroidManifest.xml",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/core/res/AndroidManifest.xml",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/core/res/AndroidManifest.xml?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "336cc3ed0c0182b9a6d9345f6003e042285b9bfbd67d74c5c5959d01186280fc",
+      "assertions": [
+        "<permission android:name=\"android.permission.INSTALL_PACKAGES\"",
+        "<permission android:name=\"android.permission.INSTALL_PACKAGE_UPDATES\"",
+        "<permission android:name=\"android.permission.MANAGE_ROLE_HOLDERS\"",
+        "android:protectionLevel=\"signature|installer|module\" />",
+        "<permission android:name=\"android.permission.MANAGE_ROLLBACKS\"",
+        "<permission android:name=\"android.permission.INTERNAL_SYSTEM_WINDOW\"",
+        "android:protectionLevel=\"signature|module|recents\" />",
+        "<permission android:name=\"android.permission.FREEZE_SCREEN\"",
+        "<permission android:name=\"android.permission.INJECT_EVENTS\"",
+        "<permission android:name=\"android.permission.FILTER_EVENTS\""
+      ]
+    },
+    {
+      "id": "aosp-system-developer-permissions",
+      "source_class": "official_source",
+      "title": "Android permissions for system developers",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-20",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "core/java/android/permission/Permissions.md",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/core/java/android/permission/Permissions.md",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/core/java/android/permission/Permissions.md?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "079f25b37b36d1b7ec9f89af7e32bb7948c6a730463de0298b3c899187734729",
+      "assertions": [
+        "If the permission is a platform permission,",
+        "it means those apps need to be platform-signed.",
+        "The permission will be granted to an app if it meets _any_ of the protection or protection flags",
+        "`signature|privileged` allows the permission to be granted to",
+        "platform-signed apps as well as privileged apps."
+      ]
+    },
+    {
+      "id": "aosp-package-installer-session",
+      "source_class": "official_source",
+      "title": "PackageInstallerSession update permission check",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-08-20",
+      "license": "Apache-2.0",
+      "repository_url": "https://android.googlesource.com/platform/frameworks/base",
+      "revision": "1cdfff555f4a21f71ccc978290e2e212e2f8b168",
+      "path": "services/core/java/com/android/server/pm/PackageInstallerSession.java",
+      "web_url": "https://android.googlesource.com/platform/frameworks/base/+/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/PackageInstallerSession.java",
+      "raw_url": "https://android.googlesource.com/platform/frameworks/base/+show/1cdfff555f4a21f71ccc978290e2e212e2f8b168/services/core/java/com/android/server/pm/PackageInstallerSession.java?format=TEXT",
+      "raw_encoding": "gitiles-base64",
+      "sha256": "2e2e49cb0d7fd9f60d4732053b1d73d5fb4367cf5511ab5819b915a0ebfda6fd",
+      "assertions": [
+        "final boolean isUpdatePermissionGranted =",
+        "android.Manifest.permission.INSTALL_PACKAGE_UPDATES,",
+        "final boolean isPermissionGranted = isInstallPermissionGranted",
+        "|| (isUpdatePermissionGranted && isUpdate)"
       ]
     },
     {
