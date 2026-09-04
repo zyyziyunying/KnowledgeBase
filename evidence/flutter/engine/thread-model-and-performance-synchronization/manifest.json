@@ -1,0 +1,317 @@
+{
+  "$schema": "../../../schema/evidence-manifest.schema.json",
+  "schema_version": 1,
+  "topic_id": "flutter.engine.thread-model-and-performance-synchronization",
+  "topic_document": "../../../../knowledge/flutter/engine/线程模型与性能同步.md",
+  "verified_at": "2026-09-04",
+  "baseline_note": "Flutter Engine main was resolved to immutable revision ae5c3603d013477d37ae301993fc0967d4ad7ed2 on 2026-09-04. This is a source-reading and evidence-validation baseline, not a claim that an arbitrary Flutter SDK, Android embedding, device, or application uses this exact runtime topology. The Flutter documentation pages are dynamic, so their publication and retrieval metadata are recorded instead of content hashes.",
+  "claims": [
+    {
+      "id": "flutter-thread-sync-001",
+      "section": "四个概念，不能互换",
+      "statement": "TaskRunners holds separate platform, raster, UI, and IO TaskRunner references. The Android implementation may deliberately assign the same TaskRunner object to more than one role, so role names do not by themselves establish a count of native threads.",
+      "source_ids": [
+        "engine-task-runners",
+        "engine-android-shell-holder"
+      ]
+    },
+    {
+      "id": "flutter-thread-sync-002",
+      "section": "默认拓扑：platform 与 UI 静态合并",
+      "statement": "The pinned Engine Settings default merged_platform_ui_thread to true. AndroidShellHolder uses the current MessageLoop TaskRunner for platform work, always creates raster and IO thread-host members, and assigns the UI runner to the platform runner when that setting is true; it creates a UI thread only when the setting is false.",
+      "source_ids": [
+        "engine-settings",
+        "engine-android-shell-holder"
+      ]
+    },
+    {
+      "id": "flutter-thread-sync-003",
+      "section": "Dart UI root isolate 在哪里运行",
+      "statement": "DartIsolate assigns a non-platform isolate's message-handling task runner to the UI TaskRunner. The same source explicitly compares platform and UI task runners when assigning Dart VM Service labels, labelling the platform runner as UI when they are equal, while documenting that this does not change the underlying OS thread names; therefore a UI label alone is not proof of distinct platform and UI runners.",
+      "source_ids": [
+        "engine-dart-isolate",
+        "flutter-isolates-doc"
+      ]
+    },
+    {
+      "id": "flutter-thread-sync-004",
+      "section": "同一 runner 时，输入派发怎样执行",
+      "statement": "Shell's pointer handler runs on the platform TaskRunner and invokes RunNowAndFlushMessages on the UI TaskRunner. RunNowAndFlushMessages executes the task immediately when its runner is current, then posts an empty task for message-loop observers; otherwise it posts the task to the target runner.",
+      "source_ids": [
+        "engine-shell",
+        "engine-fml-task-runner"
+      ]
+    },
+    {
+      "id": "flutter-thread-sync-005",
+      "section": "VSync 与 UI→raster：这不是同一类等待",
+      "statement": "Animator posts AwaitVSync work to the UI TaskRunner. When it cannot obtain a FramePipeline producer continuation, it records PipelineFull because the consumer is too slow; once a pipeline is ready, Shell posts its draw work to the raster TaskRunner.",
+      "source_ids": [
+        "engine-animator",
+        "engine-shell"
+      ]
+    },
+    {
+      "id": "flutter-thread-sync-006",
+      "section": "另一种合并：Platform View 的动态 raster/platform merger",
+      "statement": "Rasterizer creates a RasterThreadMerger only when an external view embedder supports dynamic thread merging. AndroidExternalViewEmbedder reports that support, but its PostPrerollAction returns without merging when a frame has no platform layers; otherwise it requests a merge lease and returns a skip-and-retry result for the transition.",
+      "source_ids": [
+        "engine-raster-thread-merger",
+        "engine-rasterizer",
+        "engine-android-external-view-embedder"
+      ]
+    },
+    {
+      "id": "flutter-thread-sync-007",
+      "section": "诊断协议：先同步拓扑，再看耗时",
+      "statement": "Flutter's documentation describes the UI role of the main isolate and message-based helper-isolate communication. Its Performance view documentation presents UI and raster frame information, while the profiling guidance recommends profile mode for representative performance measurement.",
+      "source_ids": [
+        "flutter-isolates-doc",
+        "flutter-devtools-performance-doc",
+        "flutter-performance-profiling-doc"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "engine-task-runners",
+      "source_class": "official_source",
+      "title": "Flutter Engine TaskRunners",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/engine",
+      "revision": "ae5c3603d013477d37ae301993fc0967d4ad7ed2",
+      "path": "common/task_runners.h",
+      "web_url": "https://github.com/flutter/engine/blob/ae5c3603d013477d37ae301993fc0967d4ad7ed2/common/task_runners.h",
+      "raw_url": "https://raw.githubusercontent.com/flutter/engine/ae5c3603d013477d37ae301993fc0967d4ad7ed2/common/task_runners.h",
+      "raw_encoding": "identity",
+      "sha256": "81316ff477b1cd90527f39e2dda79abf642fd715af79970d0460535dfb69d9d5",
+      "assertions": [
+        "fml::RefPtr<fml::TaskRunner> platform,",
+        "fml::RefPtr<fml::TaskRunner> raster,",
+        "fml::RefPtr<fml::TaskRunner> ui,",
+        "fml::RefPtr<fml::TaskRunner> io);"
+      ]
+    },
+    {
+      "id": "engine-settings",
+      "source_class": "official_source",
+      "title": "Flutter Engine Settings",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/engine",
+      "revision": "ae5c3603d013477d37ae301993fc0967d4ad7ed2",
+      "path": "common/settings.h",
+      "web_url": "https://github.com/flutter/engine/blob/ae5c3603d013477d37ae301993fc0967d4ad7ed2/common/settings.h",
+      "raw_url": "https://raw.githubusercontent.com/flutter/engine/ae5c3603d013477d37ae301993fc0967d4ad7ed2/common/settings.h",
+      "raw_encoding": "identity",
+      "sha256": "b1ea7db1736675d463aa34e0bd7e7f6c1ddde9f4883d0886c85d6cbd18fde531",
+      "assertions": [
+        "bool merged_platform_ui_thread = true;"
+      ]
+    },
+    {
+      "id": "engine-android-shell-holder",
+      "source_class": "official_source",
+      "title": "Flutter AndroidShellHolder task-runner setup",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/engine",
+      "revision": "ae5c3603d013477d37ae301993fc0967d4ad7ed2",
+      "path": "shell/platform/android/android_shell_holder.cc",
+      "web_url": "https://github.com/flutter/engine/blob/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/platform/android/android_shell_holder.cc",
+      "raw_url": "https://raw.githubusercontent.com/flutter/engine/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/platform/android/android_shell_holder.cc",
+      "raw_encoding": "identity",
+      "sha256": "52a5a1a296da8d10cb3f8b12da0b108f99eb3487f5939ebac357776dc7547233",
+      "assertions": [
+        "auto mask = ThreadHost::Type::kRaster | ThreadHost::Type::kIo;",
+        "if (!settings.merged_platform_ui_thread) {",
+        "fml::MessageLoop::GetCurrent().GetTaskRunner();",
+        "ui_runner = platform_runner;",
+        "ui_runner = thread_host_->ui_thread->GetTaskRunner();"
+      ]
+    },
+    {
+      "id": "engine-dart-isolate",
+      "source_class": "official_source",
+      "title": "Flutter Engine DartIsolate scheduling",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/engine",
+      "revision": "ae5c3603d013477d37ae301993fc0967d4ad7ed2",
+      "path": "runtime/dart_isolate.cc",
+      "web_url": "https://github.com/flutter/engine/blob/ae5c3603d013477d37ae301993fc0967d4ad7ed2/runtime/dart_isolate.cc",
+      "raw_url": "https://raw.githubusercontent.com/flutter/engine/ae5c3603d013477d37ae301993fc0967d4ad7ed2/runtime/dart_isolate.cc",
+      "raw_encoding": "identity",
+      "sha256": "8dd1d149973c425e781fc436c259ab5dc45fe1b92a4bb0e45a8c8689389f76f3",
+      "assertions": [
+        "SetMessageHandlingTaskRunner(GetTaskRunners().GetUITaskRunner(), false);",
+        "// Updating thread names here does not change the underlying OS thread names.",
+        "bool is_merged_platform_ui_thread =",
+        "label = task_runners.GetLabel() + std::string{\".ui\"};"
+      ]
+    },
+    {
+      "id": "engine-fml-task-runner",
+      "source_class": "official_source",
+      "title": "Flutter Engine TaskRunner",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/engine",
+      "revision": "ae5c3603d013477d37ae301993fc0967d4ad7ed2",
+      "path": "fml/task_runner.cc",
+      "web_url": "https://github.com/flutter/engine/blob/ae5c3603d013477d37ae301993fc0967d4ad7ed2/fml/task_runner.cc",
+      "raw_url": "https://raw.githubusercontent.com/flutter/engine/ae5c3603d013477d37ae301993fc0967d4ad7ed2/fml/task_runner.cc",
+      "raw_encoding": "identity",
+      "sha256": "15262835b0b221f4ae3b165b9d036621555263d75b660268b5de8b0539e40f1b",
+      "assertions": [
+        "void TaskRunner::RunNowAndFlushMessages(",
+        "if (runner->RunsTasksOnCurrentThread()) {",
+        "runner->PostTask([] {});"
+      ]
+    },
+    {
+      "id": "engine-shell",
+      "source_class": "official_source",
+      "title": "Flutter Shell task-runner handoffs",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/engine",
+      "revision": "ae5c3603d013477d37ae301993fc0967d4ad7ed2",
+      "path": "shell/common/shell.cc",
+      "web_url": "https://github.com/flutter/engine/blob/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/common/shell.cc",
+      "raw_url": "https://raw.githubusercontent.com/flutter/engine/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/common/shell.cc",
+      "raw_encoding": "identity",
+      "sha256": "86cb17b88e24e04b826d464243e728db6c1e96eeae583f55f7331bb8166fc9bd",
+      "assertions": [
+        "void Shell::OnPlatformViewDispatchPointerDataPacket(",
+        "FML_DCHECK(task_runners_.GetPlatformTaskRunner()->RunsTasksOnCurrentThread());",
+        "fml::TaskRunner::RunNowAndFlushMessages(",
+        "task_runners_.GetRasterTaskRunner()->PostTask(fml::MakeCopyable("
+      ]
+    },
+    {
+      "id": "engine-animator",
+      "source_class": "official_source",
+      "title": "Flutter Engine Animator VSync and pipeline flow",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/engine",
+      "revision": "ae5c3603d013477d37ae301993fc0967d4ad7ed2",
+      "path": "shell/common/animator.cc",
+      "web_url": "https://github.com/flutter/engine/blob/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/common/animator.cc",
+      "raw_url": "https://raw.githubusercontent.com/flutter/engine/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/common/animator.cc",
+      "raw_encoding": "identity",
+      "sha256": "8454701fbc99fb3ac4d34a7774c54b14faebc9d16a515e6d83eb141c7460f7f0",
+      "assertions": [
+        "producer_continuation_ = layer_tree_pipeline_->Produce();",
+        "// full because the consumer is being too slow. Try again at the next",
+        "TRACE_EVENT0(\"flutter\", \"PipelineFull\");",
+        "task_runners_.GetUITaskRunner()->PostTask(",
+        "self->AwaitVSync();"
+      ]
+    },
+    {
+      "id": "engine-raster-thread-merger",
+      "source_class": "official_source",
+      "title": "Flutter Engine RasterThreadMerger",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/engine",
+      "revision": "ae5c3603d013477d37ae301993fc0967d4ad7ed2",
+      "path": "fml/raster_thread_merger.h",
+      "web_url": "https://github.com/flutter/engine/blob/ae5c3603d013477d37ae301993fc0967d4ad7ed2/fml/raster_thread_merger.h",
+      "raw_url": "https://raw.githubusercontent.com/flutter/engine/ae5c3603d013477d37ae301993fc0967d4ad7ed2/fml/raster_thread_merger.h",
+      "raw_encoding": "identity",
+      "sha256": "223d93c7dcd3ef91fab502cd06031d67d22a36c9a30b669a86e5094e2ed43137",
+      "assertions": [
+        "Merges the raster thread into platform thread for the duration of",
+        "void MergeWithLease(size_t lease_term);",
+        "bool IsOnRasterizingThread();"
+      ]
+    },
+    {
+      "id": "engine-rasterizer",
+      "source_class": "official_source",
+      "title": "Flutter Engine Rasterizer thread-merger setup",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/engine",
+      "revision": "ae5c3603d013477d37ae301993fc0967d4ad7ed2",
+      "path": "shell/common/rasterizer.cc",
+      "web_url": "https://github.com/flutter/engine/blob/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/common/rasterizer.cc",
+      "raw_url": "https://raw.githubusercontent.com/flutter/engine/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/common/rasterizer.cc",
+      "raw_encoding": "identity",
+      "sha256": "27b83558457620414cee22ff3596a71d6d965ccb30873f826550375d4e9b724e",
+      "assertions": [
+        "external_view_embedder_->SupportsDynamicThreadMerging()",
+        "raster_thread_merger_ = fml::RasterThreadMerger::CreateOrShareThreadMerger(",
+        "!raster_thread_merger_->IsOnRasterizingThread()"
+      ]
+    },
+    {
+      "id": "engine-android-external-view-embedder",
+      "source_class": "official_source",
+      "title": "Flutter AndroidExternalViewEmbedder dynamic merge",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/engine",
+      "revision": "ae5c3603d013477d37ae301993fc0967d4ad7ed2",
+      "path": "shell/platform/android/external_view_embedder/external_view_embedder.cc",
+      "web_url": "https://github.com/flutter/engine/blob/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/platform/android/external_view_embedder/external_view_embedder.cc",
+      "raw_url": "https://raw.githubusercontent.com/flutter/engine/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/platform/android/external_view_embedder/external_view_embedder.cc",
+      "raw_encoding": "identity",
+      "sha256": "3112042a7ce080f05d43d624c65c19adba8a2c011d625a650795b5de3bbdc9d7",
+      "assertions": [
+        "if (!FrameHasPlatformLayers()) {",
+        "raster_thread_merger->MergeWithLease(kDefaultMergedLeaseDuration);",
+        "return PostPrerollResult::kSkipAndRetryFrame;",
+        "// At that point, the raster tasks are handled on the platform thread.",
+        "bool AndroidExternalViewEmbedder::SupportsDynamicThreadMerging() {"
+      ]
+    },
+    {
+      "id": "flutter-isolates-doc",
+      "source_class": "official_document",
+      "title": "Concurrency and isolates",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "CC-BY-4.0",
+      "url": "https://docs.flutter.dev/perf/isolates",
+      "last_updated": "2026-07-31",
+      "applies_to": "Flutter documentation page stated to reflect Flutter 3.47.2; used for the main-isolate UI boundary and helper-isolate messaging model."
+    },
+    {
+      "id": "flutter-devtools-performance-doc",
+      "source_class": "official_document",
+      "title": "Use the Performance view",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "CC-BY-4.0",
+      "url": "https://docs.flutter.dev/tools/devtools/performance",
+      "last_updated": "2026-07-31",
+      "applies_to": "Flutter documentation page stated to reflect Flutter 3.47.2; used for Performance view, UI/raster-frame, Timeline, and tracing guidance."
+    },
+    {
+      "id": "flutter-performance-profiling-doc",
+      "source_class": "official_document",
+      "title": "Flutter performance profiling",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "CC-BY-4.0",
+      "url": "https://docs.flutter.dev/perf/ui-performance",
+      "last_updated": "2026-07-31",
+      "applies_to": "Flutter documentation page stated to reflect Flutter 3.47.2; used for profile-mode and UI-performance measurement guidance."
+    }
+  ]
+}

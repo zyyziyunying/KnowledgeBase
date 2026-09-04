@@ -1,0 +1,458 @@
+{
+  "$schema": "../../../schema/evidence-manifest.schema.json",
+  "schema_version": 1,
+  "topic_id": "flutter.engine.android-input-to-route-first-frame",
+  "topic_document": "../../../../knowledge/flutter/engine/Android-输入到路由首帧.md",
+  "verified_at": "2026-09-04",
+  "baseline_note": "Flutter Framework main and Flutter Engine main were independently resolved to immutable revisions on 2026-09-04. They are source-reading baselines for the documented call chain, not a claim that a particular Flutter SDK ships this exact Framework/Engine pairing. Android documents remain dynamic and therefore record their published update and retrieval dates instead of content hashes.",
+  "claims": [
+    {
+      "id": "flutter-android-nav-001",
+      "section": "Android MotionEvent 到 Dart 指针包",
+      "statement": "On Android, FlutterView forwards touch MotionEvents through AndroidTouchProcessor, FlutterRenderer, FlutterJNI, JNI and PlatformView; Shell transfers the packet to the UI task runner, where Engine dispatches it to the runtime controller.",
+      "source_ids": [
+        "engine-flutter-view",
+        "engine-android-touch-processor",
+        "engine-flutter-renderer",
+        "engine-flutter-jni",
+        "engine-platform-view-android-jni",
+        "engine-platform-view",
+        "engine-shell",
+        "engine-core"
+      ]
+    },
+    {
+      "id": "flutter-android-nav-002",
+      "section": "一次交互的跨层链路",
+      "statement": "In the AOSP input architecture, EventHub reads kernel evdev events, InputReader decodes them into Android input events, and InputDispatcher forwards them to the appropriate window.",
+      "source_ids": ["android-input-doc"]
+    },
+    {
+      "id": "flutter-android-nav-003",
+      "section": "指针包到 onTap",
+      "statement": "GestureBinding receives pointer data packets through PlatformDispatcher and expands them into logical PointerEvents before hit-testing pointer down events; it sweeps the gesture arena on pointer up. TapGestureRecognizer's onTapDown occurs only after its short deadline or after it wins the arena, while a successful recognizer invokes onTap after onTapUp while processing the up event.",
+      "source_ids": ["framework-gestures-binding", "framework-gestures-tap"]
+    },
+    {
+      "id": "flutter-android-nav-004",
+      "section": "指针包到 onTap",
+      "statement": "The pinned Framework baseline declares touch resampling disabled by default and documents that enabling it trades some added latency for smoother touch-event processing.",
+      "source_ids": ["framework-gestures-binding"]
+    },
+    {
+      "id": "flutter-android-nav-005",
+      "section": "onTap 到 Route 状态",
+      "statement": "NavigatorState.push adds a route entry and flushes history updates; route installation precedes didPush, and TransitionRoute creates its animation controller during install and drives it forward from didPush.",
+      "source_ids": ["framework-navigator", "framework-routes"]
+    },
+    {
+      "id": "flutter-android-nav-006",
+      "section": "Route 状态到 Scene",
+      "statement": "SchedulerBinding schedules a PlatformDispatcher frame that is serviced from VSync; WidgetsBinding builds dirty elements, while RendererBinding flushes layout/compositing/paint and sends RenderView composite frames to the engine.",
+      "source_ids": [
+        "framework-scheduler-binding",
+        "framework-widgets-binding",
+        "framework-rendering-binding"
+      ]
+    },
+    {
+      "id": "flutter-android-nav-008",
+      "section": "Scene 到屏幕",
+      "statement": "Android graphics surfaces are BufferQueue producers commonly consumed by SurfaceFlinger, which composites visible surfaces and uses Hardware Composer for display work; this lies beyond Flutter's build and raster timing endpoints.",
+      "source_ids": ["android-graphics-doc", "engine-platform-dispatcher"]
+    },
+    {
+      "id": "flutter-android-nav-009",
+      "section": "诊断：先设置端点，再谈优化",
+      "statement": "FrameTiming exposes vsync, UI build and raster phase timestamps, including a wall-time raster-finish timestamp for system-trace correlation; the Framework-recommended SchedulerBinding callback permits multiple timing observers.",
+      "source_ids": ["engine-platform-dispatcher"]
+    },
+    {
+      "id": "flutter-android-nav-010",
+      "section": "诊断：先设置端点，再谈优化",
+      "statement": "Flutter's Performance view reports UI and raster frame work and should be used with profile builds because debug frame timing is not representative of profile or release behavior.",
+      "source_ids": ["flutter-devtools-performance-doc", "flutter-performance-profiling-doc"]
+    },
+    {
+      "id": "flutter-android-nav-011",
+      "section": "常见错误归因",
+      "statement": "Flutter UI work is coupled to the main isolate, while helper isolates communicate through messages; moving work to an isolate is applicable to suitably separable computation rather than a replacement for UI-thread diagnosis.",
+      "source_ids": ["flutter-isolates-doc"]
+    }
+  ],
+  "sources": [
+    {
+      "id": "framework-gestures-binding",
+      "source_class": "official_source",
+      "title": "Flutter GestureBinding",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "abee5f5d5648fb6bb6ad55a5b153188e5dc9f055",
+      "path": "packages/flutter/lib/src/gestures/binding.dart",
+      "web_url": "https://github.com/flutter/flutter/blob/abee5f5d5648fb6bb6ad55a5b153188e5dc9f055/packages/flutter/lib/src/gestures/binding.dart",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/abee5f5d5648fb6bb6ad55a5b153188e5dc9f055/packages/flutter/lib/src/gestures/binding.dart",
+      "raw_encoding": "identity",
+      "sha256": "c797c6e29ca3b78d786486e6c38ddb1e63d9fb76c902c39b2993ef0d92b40187",
+      "assertions": [
+        "..onPointerDataPacket = _handlePointerDataPacket",
+        "void _handlePointerDataPacket(ui.PointerDataPacket packet) {",
+        "PointerEventConverter.expand(packet.data, _devicePixelRatioForView),",
+        "gestureArena.sweep(event.pointer);",
+        "Resampling results in smoother touch event processing at the",
+        "bool resamplingEnabled = false;"
+      ]
+    },
+    {
+      "id": "framework-gestures-tap",
+      "source_class": "official_source",
+      "title": "Flutter TapGestureRecognizer",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "abee5f5d5648fb6bb6ad55a5b153188e5dc9f055",
+      "path": "packages/flutter/lib/src/gestures/tap.dart",
+      "web_url": "https://github.com/flutter/flutter/blob/abee5f5d5648fb6bb6ad55a5b153188e5dc9f055/packages/flutter/lib/src/gestures/tap.dart",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/abee5f5d5648fb6bb6ad55a5b153188e5dc9f055/packages/flutter/lib/src/gestures/tap.dart",
+      "raw_encoding": "identity",
+      "sha256": "130d2eb3bcc58b19ffb048f866e13cdcc6a4bfe449fa78f02ca8bec696a08266",
+      "assertions": [
+        "This triggers after the down event, once a short timeout ([deadline]) has",
+        "elapsed, or once the gestures has won the arena, whichever comes first.",
+        "This triggers on the up event, if the recognizer wins the arena with it",
+        "invokeCallback<void>('onTap', onTap!);"
+      ]
+    },
+    {
+      "id": "framework-navigator",
+      "source_class": "official_source",
+      "title": "Flutter NavigatorState",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "abee5f5d5648fb6bb6ad55a5b153188e5dc9f055",
+      "path": "packages/flutter/lib/src/widgets/navigator.dart",
+      "web_url": "https://github.com/flutter/flutter/blob/abee5f5d5648fb6bb6ad55a5b153188e5dc9f055/packages/flutter/lib/src/widgets/navigator.dart",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/abee5f5d5648fb6bb6ad55a5b153188e5dc9f055/packages/flutter/lib/src/widgets/navigator.dart",
+      "raw_encoding": "identity",
+      "sha256": "bf1352c47b01f092fb4d7ddfbdbec11e708687a518c1f21b7b7b46fc876226ba",
+      "assertions": [
+        "Future<T?> push<T extends Object?>(Route<T> route) {",
+        "_history.add(entry);",
+        "_flushHistoryUpdates();",
+        "route.install();",
+        "final TickerFuture routeFuture = route.didPush();",
+        "return route.popped;"
+      ]
+    },
+    {
+      "id": "framework-routes",
+      "source_class": "official_source",
+      "title": "Flutter TransitionRoute",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "abee5f5d5648fb6bb6ad55a5b153188e5dc9f055",
+      "path": "packages/flutter/lib/src/widgets/routes.dart",
+      "web_url": "https://github.com/flutter/flutter/blob/abee5f5d5648fb6bb6ad55a5b153188e5dc9f055/packages/flutter/lib/src/widgets/routes.dart",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/abee5f5d5648fb6bb6ad55a5b153188e5dc9f055/packages/flutter/lib/src/widgets/routes.dart",
+      "raw_encoding": "identity",
+      "sha256": "02765236ca65fa006a4c96d9ee067526b6929107aa92f23a10071a0549ec0a25",
+      "assertions": [
+        "_controller = createAnimationController();",
+        "return _controller!.forward();"
+      ]
+    },
+    {
+      "id": "framework-scheduler-binding",
+      "source_class": "official_source",
+      "title": "Flutter SchedulerBinding",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "abee5f5d5648fb6bb6ad55a5b153188e5dc9f055",
+      "path": "packages/flutter/lib/src/scheduler/binding.dart",
+      "web_url": "https://github.com/flutter/flutter/blob/abee5f5d5648fb6bb6ad55a5b153188e5dc9f055/packages/flutter/lib/src/scheduler/binding.dart",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/abee5f5d5648fb6bb6ad55a5b153188e5dc9f055/packages/flutter/lib/src/scheduler/binding.dart",
+      "raw_encoding": "identity",
+      "sha256": "1331b99fd756dd6aa037c9b47dcddb624e20016fdb59b42f942039f6cfe12683",
+      "assertions": [
+        "platformDispatcher.scheduleFrame();",
+        "Scheduled frames are serviced when triggered by a \"Vsync\" signal provided",
+        "void handleDrawFrame()"
+      ]
+    },
+    {
+      "id": "framework-widgets-binding",
+      "source_class": "official_source",
+      "title": "Flutter WidgetsBinding frame production",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "abee5f5d5648fb6bb6ad55a5b153188e5dc9f055",
+      "path": "packages/flutter/lib/src/widgets/binding.dart",
+      "web_url": "https://github.com/flutter/flutter/blob/abee5f5d5648fb6bb6ad55a5b153188e5dc9f055/packages/flutter/lib/src/widgets/binding.dart",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/abee5f5d5648fb6bb6ad55a5b153188e5dc9f055/packages/flutter/lib/src/widgets/binding.dart",
+      "raw_encoding": "identity",
+      "sha256": "fb342b704a7dc860eadcd0f5c67c7cd01cd74a88f94402f8f88a06cd4c620cd6",
+      "assertions": [
+        "buildOwner!.buildScope(rootElement!);",
+        "super.drawFrame();",
+        "buildOwner!.finalizeTree();"
+      ]
+    },
+    {
+      "id": "framework-rendering-binding",
+      "source_class": "official_source",
+      "title": "Flutter RendererBinding frame pipeline",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "abee5f5d5648fb6bb6ad55a5b153188e5dc9f055",
+      "path": "packages/flutter/lib/src/rendering/binding.dart",
+      "web_url": "https://github.com/flutter/flutter/blob/abee5f5d5648fb6bb6ad55a5b153188e5dc9f055/packages/flutter/lib/src/rendering/binding.dart",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/abee5f5d5648fb6bb6ad55a5b153188e5dc9f055/packages/flutter/lib/src/rendering/binding.dart",
+      "raw_encoding": "identity",
+      "sha256": "a428a2423a54a11ecdab6969abf3df5c8870dccf88b1c43441f40d71b2e89d33",
+      "assertions": [
+        "rootPipelineOwner.flushLayout();",
+        "rootPipelineOwner.flushPaint();",
+        "renderView.compositeFrame(); // this sends the bits to the GPU"
+      ]
+    },
+    {
+      "id": "engine-flutter-view",
+      "source_class": "official_source",
+      "title": "Flutter Android FlutterView input forwarding",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/engine",
+      "revision": "ae5c3603d013477d37ae301993fc0967d4ad7ed2",
+      "path": "shell/platform/android/io/flutter/embedding/android/FlutterView.java",
+      "web_url": "https://github.com/flutter/engine/blob/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/platform/android/io/flutter/embedding/android/FlutterView.java",
+      "raw_url": "https://raw.githubusercontent.com/flutter/engine/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/platform/android/io/flutter/embedding/android/FlutterView.java",
+      "raw_encoding": "identity",
+      "sha256": "23edc726875cc4fd6805cf2d6a30e13b035c8cbf607ad0c65f9cd16360803641",
+      "assertions": [
+        "public boolean onTouchEvent(@NonNull MotionEvent event) {",
+        "return androidTouchProcessor.onTouchEvent(event);"
+      ]
+    },
+    {
+      "id": "engine-android-touch-processor",
+      "source_class": "official_source",
+      "title": "Flutter AndroidTouchProcessor",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/engine",
+      "revision": "ae5c3603d013477d37ae301993fc0967d4ad7ed2",
+      "path": "shell/platform/android/io/flutter/embedding/android/AndroidTouchProcessor.java",
+      "web_url": "https://github.com/flutter/engine/blob/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/platform/android/io/flutter/embedding/android/AndroidTouchProcessor.java",
+      "raw_url": "https://raw.githubusercontent.com/flutter/engine/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/platform/android/io/flutter/embedding/android/AndroidTouchProcessor.java",
+      "raw_encoding": "identity",
+      "sha256": "73415875b9e14e873059339992c903a563256eb11a1274836eac7a0dc4cba95e",
+      "assertions": [
+        "renderer.dispatchPointerDataPacket(packet, packet.position());"
+      ]
+    },
+    {
+      "id": "engine-flutter-renderer",
+      "source_class": "official_source",
+      "title": "Flutter Android FlutterRenderer pointer dispatch",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/engine",
+      "revision": "ae5c3603d013477d37ae301993fc0967d4ad7ed2",
+      "path": "shell/platform/android/io/flutter/embedding/engine/renderer/FlutterRenderer.java",
+      "web_url": "https://github.com/flutter/engine/blob/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/platform/android/io/flutter/embedding/engine/renderer/FlutterRenderer.java",
+      "raw_url": "https://raw.githubusercontent.com/flutter/engine/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/platform/android/io/flutter/embedding/engine/renderer/FlutterRenderer.java",
+      "raw_encoding": "identity",
+      "sha256": "600e392de3a5ad02f1450a9346ae5697b2a986193b87c2c7ee63acc372c98ef4",
+      "assertions": [
+        "flutterJNI.dispatchPointerDataPacket(buffer, position);"
+      ]
+    },
+    {
+      "id": "engine-flutter-jni",
+      "source_class": "official_source",
+      "title": "Flutter Android FlutterJNI pointer dispatch",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/engine",
+      "revision": "ae5c3603d013477d37ae301993fc0967d4ad7ed2",
+      "path": "shell/platform/android/io/flutter/embedding/engine/FlutterJNI.java",
+      "web_url": "https://github.com/flutter/engine/blob/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/platform/android/io/flutter/embedding/engine/FlutterJNI.java",
+      "raw_url": "https://raw.githubusercontent.com/flutter/engine/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/platform/android/io/flutter/embedding/engine/FlutterJNI.java",
+      "raw_encoding": "identity",
+      "sha256": "376866012dcb6e1251a8c831d8e86e947573c6bc5f4e51430eee8faa3efc2e2e",
+      "assertions": [
+        "nativeDispatchPointerDataPacket(nativeShellHolderId, buffer, position);"
+      ]
+    },
+    {
+      "id": "engine-platform-view-android-jni",
+      "source_class": "official_source",
+      "title": "Flutter Android PlatformView JNI implementation",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/engine",
+      "revision": "ae5c3603d013477d37ae301993fc0967d4ad7ed2",
+      "path": "shell/platform/android/platform_view_android_jni_impl.cc",
+      "web_url": "https://github.com/flutter/engine/blob/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/platform/android/platform_view_android_jni_impl.cc",
+      "raw_url": "https://raw.githubusercontent.com/flutter/engine/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/platform/android/platform_view_android_jni_impl.cc",
+      "raw_encoding": "identity",
+      "sha256": "7bdea0f3624f006c593bd62e1ae36ba37e04a63bf9754a599dbefbb90e722ce7",
+      "assertions": [
+        "FlutterMain::Get().GetSettings(), jni_facade);",
+        "ANDROID_SHELL_HOLDER->GetPlatformView()->DispatchPointerDataPacket("
+      ]
+    },
+    {
+      "id": "engine-platform-view",
+      "source_class": "official_source",
+      "title": "Flutter PlatformView pointer delegation",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/engine",
+      "revision": "ae5c3603d013477d37ae301993fc0967d4ad7ed2",
+      "path": "shell/common/platform_view.cc",
+      "web_url": "https://github.com/flutter/engine/blob/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/common/platform_view.cc",
+      "raw_url": "https://raw.githubusercontent.com/flutter/engine/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/common/platform_view.cc",
+      "raw_encoding": "identity",
+      "sha256": "8ded060a886bf55325cbe57664426a282e3330bf27014b0ec9d46e4809d01945",
+      "assertions": [
+        "delegate_.OnPlatformViewDispatchPointerDataPacket(std::move(packet));"
+      ]
+    },
+    {
+      "id": "engine-shell",
+      "source_class": "official_source",
+      "title": "Flutter Shell pointer, UI, and raster task handoffs",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/engine",
+      "revision": "ae5c3603d013477d37ae301993fc0967d4ad7ed2",
+      "path": "shell/common/shell.cc",
+      "web_url": "https://github.com/flutter/engine/blob/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/common/shell.cc",
+      "raw_url": "https://raw.githubusercontent.com/flutter/engine/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/common/shell.cc",
+      "raw_encoding": "identity",
+      "sha256": "86cb17b88e24e04b826d464243e728db6c1e96eeae583f55f7331bb8166fc9bd",
+      "assertions": [
+        "void Shell::OnPlatformViewDispatchPointerDataPacket(",
+        "engine->DispatchPointerDataPacket(std::move(packet), flow_id);",
+        "void Shell::OnAnimatorDraw(std::shared_ptr<FramePipeline> pipeline)",
+        "task_runners_.GetRasterTaskRunner()->PostTask"
+      ]
+    },
+    {
+      "id": "engine-core",
+      "source_class": "official_source",
+      "title": "Flutter Engine pointer and frame dispatch",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/engine",
+      "revision": "ae5c3603d013477d37ae301993fc0967d4ad7ed2",
+      "path": "shell/common/engine.cc",
+      "web_url": "https://github.com/flutter/engine/blob/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/common/engine.cc",
+      "raw_url": "https://raw.githubusercontent.com/flutter/engine/ae5c3603d013477d37ae301993fc0967d4ad7ed2/shell/common/engine.cc",
+      "raw_encoding": "identity",
+      "sha256": "634eb554f662f0eb53845596b5f9d3bb615297131ae0d7f3f14d5bcecdadb3ec",
+      "assertions": [
+        "runtime_controller_->DispatchPointerDataPacket(*packet);",
+        "animator_->RequestFrame(regenerate_layer_trees);"
+      ]
+    },
+    {
+      "id": "engine-platform-dispatcher",
+      "source_class": "official_source",
+      "title": "dart:ui PlatformDispatcher and FrameTiming",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/engine",
+      "revision": "ae5c3603d013477d37ae301993fc0967d4ad7ed2",
+      "path": "lib/ui/platform_dispatcher.dart",
+      "web_url": "https://github.com/flutter/engine/blob/ae5c3603d013477d37ae301993fc0967d4ad7ed2/lib/ui/platform_dispatcher.dart",
+      "raw_url": "https://raw.githubusercontent.com/flutter/engine/ae5c3603d013477d37ae301993fc0967d4ad7ed2/lib/ui/platform_dispatcher.dart",
+      "raw_encoding": "identity",
+      "sha256": "e0ae5e9984629eacb8e7ee727c292db077918ac3d40b4571b1c14a8edcad853e",
+      "assertions": [
+        "It's preferred to use [SchedulerBinding.addTimingsCallback]",
+        "latencies (through [FrameTiming.totalSpan]).",
+        "rasterFinishWallTime,",
+        "Duration get buildDuration",
+        "Duration get rasterDuration"
+      ]
+    },
+    {
+      "id": "android-input-doc",
+      "source_class": "official_document",
+      "title": "Input",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-09-04",
+      "license": "CC-BY-4.0",
+      "url": "https://source.android.com/docs/core/interaction/input?hl=en",
+      "last_updated": "2025-02-12",
+      "applies_to": "AOSP input architecture. Device firmware, kernel input drivers, configuration, policy, and vendor behavior can change concrete timing."
+    },
+    {
+      "id": "android-graphics-doc",
+      "source_class": "official_document",
+      "title": "Graphics",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-09-04",
+      "license": "CC-BY-4.0",
+      "url": "https://source.android.com/docs/core/graphics?hl=en",
+      "last_updated": "2025-10-21",
+      "applies_to": "AOSP graphics architecture, including Surface, BufferQueue, SurfaceFlinger, and HWC boundaries; vendor drivers and display implementations vary."
+    },
+    {
+      "id": "flutter-devtools-performance-doc",
+      "source_class": "official_document",
+      "title": "Use the Performance view",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "CC-BY-4.0",
+      "url": "https://docs.flutter.dev/tools/devtools/performance",
+      "last_updated": "2026-07-31",
+      "applies_to": "Flutter documentation page stated to reflect Flutter 3.47.2; used for Performance view, UI/raster-frame, Timeline, and tracing guidance."
+    },
+    {
+      "id": "flutter-performance-profiling-doc",
+      "source_class": "official_document",
+      "title": "Flutter performance profiling",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "CC-BY-4.0",
+      "url": "https://docs.flutter.dev/perf/ui-performance",
+      "last_updated": "2026-07-31",
+      "applies_to": "Flutter documentation page stated to reflect Flutter 3.47.2; used for profile-mode and UI-performance measurement guidance."
+    },
+    {
+      "id": "flutter-isolates-doc",
+      "source_class": "official_document",
+      "title": "Concurrency and isolates",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "CC-BY-4.0",
+      "url": "https://docs.flutter.dev/perf/isolates",
+      "last_updated": "2026-07-31",
+      "applies_to": "Flutter documentation page stated to reflect Flutter 3.47.2; used for the main-isolate UI boundary and helper-isolate messaging model."
+    }
+  ]
+}
