@@ -1,6 +1,6 @@
 # Flutter 知识建设路线
 
-更新日期：2026-09-04
+更新日期：2026-09-10
 
 本文件是 Flutter 领域的建设顺序、延期主题和完成标准的事实源。领域索引只提供入口，不复制这里的可变计划。
 
@@ -30,6 +30,14 @@
 
 本阶段完成标准是：阅读者能给一次导航延迟设置测量点并定位到输入、UI、raster 或 Android 显示侧之一；不以某个具体应用或设备的测试结果作为通用结论。
 
+### 跨阶段：运行时验证链（通用协议已建立）
+
+- [运行时性能验证链](engine/运行时性能验证链.md)：定义 profile/release、`--trace-systrace`、应用级 ATrace、Perfetto、业务 span、SQL 和运行产物的闭环；
+- 任何实际 trace 都先建立 SDK/Engine、构建模式、设备、刷新率、runner 拓扑、Platform View 和冷/热状态的拓扑卡；
+- 把 trace、采集配置、SQL、输出和反例留在对应项目事实源，通用知识库不保存项目设备或一次运行的结论。
+
+本项完成“可复用验证协议”的入口，不代表已对某个产品、设备或 Engine 分支完成性能验收。
+
 ### 第二阶段：Android Embedding 与运行时
 
 - `embedding/android/`：`FlutterActivity` / `FlutterFragment`、`FlutterView`、Engine 生命周期、Surface、JNI 和插件边界；
@@ -44,7 +52,7 @@
 
 ### 第四阶段：可重复诊断与基准
 
-- profile/release 构建、DevTools、Timeline、Perfetto 与设备侧 trace 的证据边界；
+- 在运行时验证链上扩展 profile/release 构建、DevTools、Timeline、Perfetto 与设备侧 trace 的基准采集和回归规则；
 - 导航、列表、Platform View、图片与 shader 首次使用等可比较场景的基准设计；
 - 版本、刷新率、温控、SoC 与厂商图形栈差异的记录格式。
 

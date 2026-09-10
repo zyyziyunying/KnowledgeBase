@@ -138,6 +138,8 @@ Scene 交给 Engine 后，VSync、FramePipeline 与 raster 的 runner 语义由[
 
 ### 最小测量点
 
+以下编号是本专题的统一约定；具体采集、窗口查询、帧关联与时钟转换见[运行时性能验证链](运行时性能验证链.md)。T3 是同步区间，T5 是阶段时间戳集合，计算时必须指定所用端点。
+
 | 标记 | 应记录的位置 | 能分离的等待 | 不能证明的事情 |
 | --- | --- | --- | --- |
 | T0 | Android 系统 trace 的 input 分发（可获取时） | 硬件/系统输入到应用窗口 | Flutter 的手势是否已识别 |
@@ -153,7 +155,7 @@ Scene 交给 Engine 后，VSync、FramePipeline 与 raster 的 runner 语义由[
 - `buildStart → buildFinish` 是 UI 线程 build 时长；
 - `rasterStart → rasterFinish` 是 raster 线程时长；
 - `vsyncStart → rasterFinish` 是 Flutter 的 `totalSpan`；
-- `rasterFinishWallTime` 使用系统 wall-time，适合与系统 trace 对齐。
+- `rasterFinishWallTime` 使用系统 wall-time；与系统 trace 比较前必须核对时钟域、单位和转换关系，不能直接与 Perfetto `ts` 相减。
 
 优先通过 `SchedulerBinding.addTimingsCallback` 获取这些数据，而不是覆盖 `PlatformDispatcher.onReportTimings`；后者的源码也明确说明 `FrameTiming` 会批量上报。DevTools Performance view 能把 UI/raster frame bars、Timeline、widget build/layout/paint tracing 放在同一分析界面，但增强 tracing 本身会影响测量，需只在受控复现时开启。
 
@@ -166,7 +168,7 @@ Scene 交给 Engine 后，VSync、FramePipeline 与 raster 的 runner 语义由[
 | T2 到 T3 很晚，或 T3 内部很长 | 同步业务工作、route 构造、observer/redirect 等 Dart 代码 | Dart Timeline/CPU profile；给同步边界加 marker |
 | T3 很快、T4 很晚 | 等待 VSync，或 UI isolate 的 build/layout/paint 过重 | DevTools UI bar 与 build/layout/paint tracing |
 | UI 很短而 raster 很长 | 复杂 Scene、shader、图片上传、clip/opacity/shadow 等 raster 负担 | DevTools raster bar、shader 标记、同一场景冷热对比 |
-| T5 已完成但肉眼仍晚 | Surface、BufferQueue、SurfaceFlinger、HWC、显示刷新或厂商实现 | 用 `rasterFinishWallTime` 与 Perfetto 对齐；检查系统图形轨道 |
+| T5 已完成但肉眼仍晚 | Surface、BufferQueue、SurfaceFlinger、HWC、显示刷新或厂商实现 | 按运行时验证链确认时钟转换及同一帧关联；检查系统图形轨道 |
 | 只在第一次导航慢 | 仅首次发生的延迟初始化、shader 或资源工作 | 首次/热路径分组；不要用热路径结果否认冷路径体验 |
 
 表中的“优先怀疑”是下一轮证据的方向，不是诊断结论。例如，raster 慢可能由 Dart 侧构造的 Scene 触发；系统呈现晚也可能是前面已经错过了多次 VSync。

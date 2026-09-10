@@ -8,6 +8,8 @@
 2. [对应证据包](../../../evidence/flutter/engine/thread-model-and-performance-synchronization/manifest.json)：固定 Engine revision、线程模型断言和官方文档元数据。
 3. [Android 输入到 Flutter 路由首帧](Android-输入到路由首帧.md)：在上述模型上，从物理触摸到路由首帧的端到端链路、延迟归因和验证方法。
 4. [对应证据包](../../../evidence/flutter/engine/android-input-to-route-first-frame/manifest.json)：固定 Flutter Framework/Engine revision、输入和首帧调用链的源码哈希、关键断言和官方文档元数据。
+5. [运行时性能验证链](运行时性能验证链.md)：把静态模型转成一次可复跑的 profile/Perfetto/SQL 验证；定义应用 span、系统输入、Engine/UI/raster 与显示端点的证据边界。
+6. [对应证据包](../../../evidence/flutter/engine/runtime-performance-validation/manifest.json)：固定 Flutter tool、Dart Timeline、Perfetto ATrace/CLI/trace processor 与 FrameTiming 的来源和断言。
 
 ## 阅读边界
 

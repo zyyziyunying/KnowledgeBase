@@ -1,0 +1,280 @@
+{
+  "$schema": "../../../schema/evidence-manifest.schema.json",
+  "schema_version": 1,
+  "topic_id": "flutter.engine.runtime-performance-validation",
+  "topic_document": "../../../../knowledge/flutter/engine/运行时性能验证链.md",
+  "verified_at": "2026-09-10",
+  "baseline_note": "Flutter tool source is pinned to the Flutter 3.44.1 Framework revision used to verify the --trace-systrace launch path. Dart Timeline is pinned to the Dart 3.12.1 tag. Perfetto documentation sources are pinned to an immutable official repository revision. These sources define a reusable capture protocol, not a claim about any application's device trace or measured latency. Clock synchronization and FrameTimeline sources were added on 2026-09-10 at the same pinned Perfetto revision; original source verification dates are preserved. The SQL templates are protocol examples, not device-trace validation.",
+  "claims": [
+    {
+      "id": "flutter-runtime-validation-001",
+      "section": "采集：必须启用应用级 ATrace",
+      "statement": "The Flutter run command exposes trace-systrace, and the Android device launch path passes a trace-systrace=true boolean extra when that debugging option is enabled.",
+      "source_ids": [
+        "flutter-tool-run-command",
+        "flutter-tool-android-device"
+      ]
+    },
+    {
+      "id": "flutter-runtime-validation-002",
+      "section": "给应用加入可查询的业务端点",
+      "statement": "Dart Timeline.startSync defines a synchronous operation that must finish before returning to the event queue, while Timeline.timeSync brackets its function with startSync and finishSync.",
+      "source_ids": [
+        "dart-timeline"
+      ]
+    },
+    {
+      "id": "flutter-runtime-validation-003",
+      "section": "采集：必须启用应用级 ATrace",
+      "statement": "Perfetto's ftrace configuration selects Android system categories through atrace_categories and app events through atrace_apps, and the lightweight perfetto CLI exposes -a/--app to select an Android app for app-level atrace tracing.",
+      "source_ids": [
+        "perfetto-atrace",
+        "perfetto-cli"
+      ]
+    },
+    {
+      "id": "flutter-runtime-validation-004",
+      "section": "查询：固定一次操作和有限窗口",
+      "statement": "Perfetto Trace Processor ingests traces into queryable tables, and its query subcommand loads a trace and runs one or more SQL statements.",
+      "source_ids": [
+        "perfetto-trace-processor"
+      ]
+    },
+    {
+      "id": "flutter-runtime-validation-005",
+      "section": "最小闭环：端点必须分层",
+      "statement": "FrameTiming exposes build and raster timing endpoints and recommends SchedulerBinding.addTimingsCallback for Framework users; Flutter profiling guidance distinguishes debug from profile/release measurement, while Android's graphics architecture has separate BufferQueue, SurfaceFlinger, and Hardware Composer stages. Therefore raster timing and eventual UI-state checks do not alone establish a display-present timestamp.",
+      "source_ids": [
+        "engine-platform-dispatcher",
+        "flutter-performance-profiling-doc",
+        "android-graphics-doc"
+      ]
+    },
+    {
+      "id": "flutter-runtime-validation-006",
+      "section": "时钟对齐与缺失证据",
+      "statement": "Trace Processor uses clock snapshots to synchronize known clock domains onto a global trace timeline; independently recorded wall-clock timestamps require an established clock mapping before comparison with trace timestamps.",
+      "source_ids": [
+        "perfetto-clock-sync",
+        "engine-platform-dispatcher"
+      ]
+    },
+    {
+      "id": "flutter-runtime-validation-007",
+      "section": "关联：从目标页面到系统呈现",
+      "statement": "The pinned FrameTimeline documentation requires Android 12 or higher and explicitly excludes SurfaceView support. It exposes actual/expected frame tables with surface/display tokens and layer names, relates app frames to SurfaceFlinger DisplayFrames, and distinguishes app completion from display presentation and dropped frames.",
+      "source_ids": [
+        "perfetto-frametimeline"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "flutter-tool-run-command",
+      "source_class": "official_source",
+      "title": "Flutter run command",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "924134a44c189315be2148659913dda1671cbe99",
+      "path": "packages/flutter_tools/lib/src/commands/run.dart",
+      "web_url": "https://github.com/flutter/flutter/blob/924134a44c189315be2148659913dda1671cbe99/packages/flutter_tools/lib/src/commands/run.dart",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/924134a44c189315be2148659913dda1671cbe99/packages/flutter_tools/lib/src/commands/run.dart",
+      "raw_encoding": "identity",
+      "sha256": "7add5ff27813e2f5b569fd8ee173cf26a3760da2916f19409cacf534448d8860",
+      "assertions": [
+        "'trace-systrace',",
+        "traceSystrace: boolArg('trace-systrace'),"
+      ]
+    },
+    {
+      "id": "flutter-tool-android-device",
+      "source_class": "official_source",
+      "title": "Flutter Android device launch",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "924134a44c189315be2148659913dda1671cbe99",
+      "path": "packages/flutter_tools/lib/src/android/android_device.dart",
+      "web_url": "https://github.com/flutter/flutter/blob/924134a44c189315be2148659913dda1671cbe99/packages/flutter_tools/lib/src/android/android_device.dart",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/924134a44c189315be2148659913dda1671cbe99/packages/flutter_tools/lib/src/android/android_device.dart",
+      "raw_encoding": "identity",
+      "sha256": "a0416a1e1e139a14cbdac23c97103c6888e027123511bc7e31ba4c96df08078f",
+      "assertions": [
+        "if (debuggingOptions.traceSystrace) ...<String>['--ez', 'trace-systrace', 'true'],"
+      ]
+    },
+    {
+      "id": "dart-timeline",
+      "source_class": "official_source",
+      "title": "Dart Timeline API",
+      "publisher": "Dart Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/dart-lang/sdk",
+      "revision": "fc3da898ea1664b8a8633f6ec03d2c2290bb3d01",
+      "path": "sdk/lib/developer/timeline.dart",
+      "web_url": "https://github.com/dart-lang/sdk/blob/fc3da898ea1664b8a8633f6ec03d2c2290bb3d01/sdk/lib/developer/timeline.dart",
+      "raw_url": "https://raw.githubusercontent.com/dart-lang/sdk/fc3da898ea1664b8a8633f6ec03d2c2290bb3d01/sdk/lib/developer/timeline.dart",
+      "raw_encoding": "identity",
+      "sha256": "ff07b375803b53e31a0fa8d6fd98b3da36edc206da06f2e77843b4111218bea6",
+      "assertions": [
+        "This operation must be finished before",
+        "static void startSync(String name, {Map? arguments, Flow? flow}) {",
+        "static T timeSync<T>(",
+        "startSync(name, arguments: arguments, flow: flow);",
+        "finishSync();"
+      ]
+    },
+    {
+      "id": "perfetto-atrace",
+      "source_class": "official_source",
+      "title": "Perfetto ATrace data source",
+      "publisher": "Perfetto Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "Apache-2.0",
+      "repository_url": "https://github.com/google/perfetto",
+      "revision": "0b211a121f27578be65879d4794cf1d9ee68747d",
+      "path": "docs/data-sources/atrace.md",
+      "web_url": "https://github.com/google/perfetto/blob/0b211a121f27578be65879d4794cf1d9ee68747d/docs/data-sources/atrace.md",
+      "raw_url": "https://raw.githubusercontent.com/google/perfetto/0b211a121f27578be65879d4794cf1d9ee68747d/docs/data-sources/atrace.md",
+      "raw_encoding": "identity",
+      "sha256": "f45ce3d44e876dd14abddc11d52d9f9c310a43fb6521215cc441dc2b5c246751",
+      "assertions": [
+        "ATrace events are available in the standard `slice` and",
+        "# Enables specific system events tags.",
+        "# Enables events for a specific app.",
+        "atrace_apps: \"com.google.android.apps.docs\"",
+        "atrace_apps: \"*\""
+      ]
+    },
+    {
+      "id": "perfetto-cli",
+      "source_class": "official_source",
+      "title": "Perfetto command line reference",
+      "publisher": "Perfetto Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "Apache-2.0",
+      "repository_url": "https://github.com/google/perfetto",
+      "revision": "0b211a121f27578be65879d4794cf1d9ee68747d",
+      "path": "docs/reference/perfetto-cli.md",
+      "web_url": "https://github.com/google/perfetto/blob/0b211a121f27578be65879d4794cf1d9ee68747d/docs/reference/perfetto-cli.md",
+      "raw_url": "https://raw.githubusercontent.com/google/perfetto/0b211a121f27578be65879d4794cf1d9ee68747d/docs/reference/perfetto-cli.md",
+      "raw_encoding": "identity",
+      "sha256": "acd0e7d9e1e14363aa3290fdf0471136de5f30f9328e73798e32f8f53fe4c497",
+      "assertions": [
+        "`-a`, `--app` _APP_NAME_",
+        "Specifies an Android app name for atrace app-level tracing.",
+        "adb shell perfetto [ --time TIMESPEC ]"
+      ]
+    },
+    {
+      "id": "perfetto-trace-processor",
+      "source_class": "official_source",
+      "title": "Perfetto Trace Processor",
+      "publisher": "Perfetto Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "Apache-2.0",
+      "repository_url": "https://github.com/google/perfetto",
+      "revision": "0b211a121f27578be65879d4794cf1d9ee68747d",
+      "path": "docs/analysis/trace-processor.md",
+      "web_url": "https://github.com/google/perfetto/blob/0b211a121f27578be65879d4794cf1d9ee68747d/docs/analysis/trace-processor.md",
+      "raw_url": "https://raw.githubusercontent.com/google/perfetto/0b211a121f27578be65879d4794cf1d9ee68747d/docs/analysis/trace-processor.md",
+      "raw_encoding": "identity",
+      "sha256": "7f7c7b196ededbadf44a03b60871d5923ed1f498758455784f5eccdf81e2b540",
+      "assertions": [
+        "Trace Processor is a C++ library",
+        "`query` loads a trace, runs one or more `;`-separated SQL statements, prints",
+        "trace_processor query trace.pftrace \"SELECT ts, dur, name FROM slice LIMIT 5\""
+      ]
+    },
+    {
+      "id": "engine-platform-dispatcher",
+      "source_class": "official_source",
+      "title": "dart:ui PlatformDispatcher and FrameTiming",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/engine",
+      "revision": "ae5c3603d013477d37ae301993fc0967d4ad7ed2",
+      "path": "lib/ui/platform_dispatcher.dart",
+      "web_url": "https://github.com/flutter/engine/blob/ae5c3603d013477d37ae301993fc0967d4ad7ed2/lib/ui/platform_dispatcher.dart",
+      "raw_url": "https://raw.githubusercontent.com/flutter/engine/ae5c3603d013477d37ae301993fc0967d4ad7ed2/lib/ui/platform_dispatcher.dart",
+      "raw_encoding": "identity",
+      "sha256": "e0ae5e9984629eacb8e7ee727c292db077918ac3d40b4571b1c14a8edcad853e",
+      "assertions": [
+        "It's preferred to use [SchedulerBinding.addTimingsCallback]",
+        "rasterFinishWallTime,",
+        "Duration get buildDuration",
+        "Duration get rasterDuration"
+      ]
+    },
+    {
+      "id": "flutter-performance-profiling-doc",
+      "source_class": "official_document",
+      "title": "Flutter performance profiling",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-09-04",
+      "license": "CC-BY-4.0",
+      "url": "https://docs.flutter.dev/perf/ui-performance",
+      "last_updated": "2026-07-31",
+      "applies_to": "Flutter documentation page stated to reflect Flutter 3.47.2; used for profile-mode and UI-performance measurement guidance."
+    },
+    {
+      "id": "android-graphics-doc",
+      "source_class": "official_document",
+      "title": "Graphics",
+      "publisher": "Android Open Source Project",
+      "retrieved_at": "2026-09-04",
+      "license": "CC-BY-4.0",
+      "url": "https://source.android.com/docs/core/graphics?hl=en",
+      "last_updated": "2025-10-21",
+      "applies_to": "AOSP graphics architecture, including Surface, BufferQueue, SurfaceFlinger, and HWC boundaries; vendor drivers and display implementations vary."
+    },
+    {
+      "id": "perfetto-clock-sync",
+      "source_class": "official_source",
+      "title": "Perfetto clock domain synchronization",
+      "publisher": "Perfetto Authors",
+      "retrieved_at": "2026-09-10",
+      "license": "Apache-2.0",
+      "repository_url": "https://github.com/google/perfetto",
+      "revision": "0b211a121f27578be65879d4794cf1d9ee68747d",
+      "path": "docs/concepts/clock-sync.md",
+      "web_url": "https://github.com/google/perfetto/blob/0b211a121f27578be65879d4794cf1d9ee68747d/docs/concepts/clock-sync.md",
+      "raw_url": "https://raw.githubusercontent.com/google/perfetto/0b211a121f27578be65879d4794cf1d9ee68747d/docs/concepts/clock-sync.md",
+      "raw_encoding": "identity",
+      "sha256": "3a1080dd7823f4837f0083dace10cbf83ac20bf12e1686d84a5dee28f44e2a1b",
+      "assertions": [
+        "use that to re-synchronize events on a global",
+        "ClockSnapshot",
+        "CLOCK_REALTIME",
+        "CLOCK_BOOTTIME"
+      ]
+    },
+    {
+      "id": "perfetto-frametimeline",
+      "source_class": "official_source",
+      "title": "Perfetto Android FrameTimeline",
+      "publisher": "Perfetto Authors",
+      "retrieved_at": "2026-09-10",
+      "license": "Apache-2.0",
+      "repository_url": "https://github.com/google/perfetto",
+      "revision": "0b211a121f27578be65879d4794cf1d9ee68747d",
+      "path": "docs/data-sources/frametimeline.md",
+      "web_url": "https://github.com/google/perfetto/blob/0b211a121f27578be65879d4794cf1d9ee68747d/docs/data-sources/frametimeline.md",
+      "raw_url": "https://raw.githubusercontent.com/google/perfetto/0b211a121f27578be65879d4794cf1d9ee68747d/docs/data-sources/frametimeline.md",
+      "raw_encoding": "identity",
+      "sha256": "d7e5944067a59fdadffb744a0715574a582856527f7a84d5f0fa1d7a8b4cc3a0",
+      "assertions": [
+        "FrameTimeline requires Android 12(S) or higher",
+        "are currently **not supported**",
+        "actual_frame_timeline_slice",
+        "display_frame_token",
+        "name: \"android.surfaceflinger.frametimeline\""
+      ]
+    }
+  ]
+}
