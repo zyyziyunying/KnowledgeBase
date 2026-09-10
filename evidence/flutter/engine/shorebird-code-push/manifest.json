@@ -1,0 +1,288 @@
+{
+  "$schema": "../../../schema/evidence-manifest.schema.json",
+  "schema_version": 1,
+  "topic_id": "flutter.engine.shorebird-code-push",
+  "topic_document": "../../../../knowledge/flutter/engine/Shorebird-热更新机制.md",
+  "verified_at": "2026-09-10",
+  "baseline_note": "Engine, updater and documentation revisions are independently inspected source baselines, not a tested SDK combination. Official documentation is pinned as repository source to avoid inventing a page last-update date. Blog is historical explanation. No private Dart SDK, engine build, physical-device behavior, performance or multi-engine runtime validation was performed. Updater license was not verified; only metadata, hashes and narrow assertions are stored.",
+  "claims": [
+    {
+      "id": "shorebird-001",
+      "section": "更新对象与生效时机",
+      "statement": "Platform and patch-scope declarations; distinguish application Dart output from engine and native changes.",
+      "source_ids": [
+        "docs-overview",
+        "docs-architecture",
+        "updater-install"
+      ]
+    },
+    {
+      "id": "shorebird-002",
+      "section": "差分重建与补丁生命周期",
+      "statement": "Binary diff construction and installed-artifact verification before next-boot promotion.",
+      "source_ids": [
+        "updater-diff",
+        "updater-install",
+        "docs-overview"
+      ]
+    },
+    {
+      "id": "shorebird-003",
+      "section": "Android：在启动前切换 AOT 来源",
+      "statement": "Release initialization, patch path selection and snapshot symbol resolution.",
+      "source_ids": [
+        "engine-android",
+        "engine-config",
+        "engine-snapshot"
+      ]
+    },
+    {
+      "id": "shorebird-004",
+      "section": "iOS：保留基础 AOT，加载可解释补丁",
+      "statement": "Base snapshot handoff, retained search paths and read-only vmcode ELF loading.",
+      "source_ids": [
+        "engine-config",
+        "engine-snapshot"
+      ]
+    },
+    {
+      "id": "shorebird-005",
+      "section": "编译器优化：最大化安全复用",
+      "statement": "Official description of baseline-aware compilation and per-function reuse; historical Object Pool design explanation.",
+      "source_ids": [
+        "docs-architecture",
+        "design-blog"
+      ]
+    },
+    {
+      "id": "shorebird-006",
+      "section": "差分重建与补丁生命周期",
+      "statement": "Boot lifecycle evidence and the pinned Engine success criterion; no business-success guarantee.",
+      "source_ids": [
+        "engine-config",
+        "engine-shell",
+        "updater-install"
+      ]
+    },
+    {
+      "id": "shorebird-007",
+      "section": "编译器优化：最大化安全复用",
+      "statement": "Type-flow and inlining examples explaining non-local invalidation of AOT reuse.",
+      "source_ids": [
+        "docs-performance",
+        "docs-architecture",
+        "design-blog"
+      ]
+    },
+    {
+      "id": "shorebird-008",
+      "section": "公开证据与待验证边界",
+      "statement": "Public/private source boundary for claims about interpreter internals.",
+      "source_ids": [
+        "docs-architecture"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "engine-config",
+      "source_class": "official_source",
+      "title": "Shorebird engine: shell/common/shorebird/shorebird.cc",
+      "publisher": "Shorebird / Flutter Authors",
+      "retrieved_at": "2026-09-10",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/shorebirdtech/engine",
+      "revision": "e4575c7403bd3453d04bfa03e01218e5a0bca0c6",
+      "path": "shell/common/shorebird/shorebird.cc",
+      "web_url": "https://github.com/shorebirdtech/engine/blob/e4575c7403bd3453d04bfa03e01218e5a0bca0c6/shell/common/shorebird/shorebird.cc",
+      "raw_url": "https://raw.githubusercontent.com/shorebirdtech/engine/e4575c7403bd3453d04bfa03e01218e5a0bca0c6/shell/common/shorebird/shorebird.cc",
+      "raw_encoding": "identity",
+      "sha256": "3547e8580bef2c02c99dbf46bb8fd9c15a8d16cab2fe782dc530629f2df9f6f8",
+      "assertions": [
+        "Shorebird_SetBaseSnapshots(",
+        "shorebird_next_boot_patch_path()",
+        "settings.application_library_path.clear();",
+        "SetBaseSnapshot(settings);",
+        "shorebird_start_update_thread();"
+      ]
+    },
+    {
+      "id": "engine-android",
+      "source_class": "official_source",
+      "title": "Shorebird engine: shell/platform/android/flutter_main.cc",
+      "publisher": "Shorebird / Flutter Authors",
+      "retrieved_at": "2026-09-10",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/shorebirdtech/engine",
+      "revision": "e4575c7403bd3453d04bfa03e01218e5a0bca0c6",
+      "path": "shell/platform/android/flutter_main.cc",
+      "web_url": "https://github.com/shorebirdtech/engine/blob/e4575c7403bd3453d04bfa03e01218e5a0bca0c6/shell/platform/android/flutter_main.cc",
+      "raw_url": "https://raw.githubusercontent.com/shorebirdtech/engine/e4575c7403bd3453d04bfa03e01218e5a0bca0c6/shell/platform/android/flutter_main.cc",
+      "raw_encoding": "identity",
+      "sha256": "c1112fedab5c79418348fd69511ff3789e321a6bf7c6c7452a3ed5a951dc8b29",
+      "assertions": [
+        "#if FLUTTER_RELEASE",
+        "ConfigureShorebird(code_cache_path, app_storage_path, settings,"
+      ]
+    },
+    {
+      "id": "engine-snapshot",
+      "source_class": "official_source",
+      "title": "Shorebird engine: runtime/dart_snapshot.cc",
+      "publisher": "Shorebird / Flutter Authors",
+      "retrieved_at": "2026-09-10",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/shorebirdtech/engine",
+      "revision": "e4575c7403bd3453d04bfa03e01218e5a0bca0c6",
+      "path": "runtime/dart_snapshot.cc",
+      "web_url": "https://github.com/shorebirdtech/engine/blob/e4575c7403bd3453d04bfa03e01218e5a0bca0c6/runtime/dart_snapshot.cc",
+      "raw_url": "https://raw.githubusercontent.com/shorebirdtech/engine/e4575c7403bd3453d04bfa03e01218e5a0bca0c6/runtime/dart_snapshot.cc",
+      "raw_encoding": "identity",
+      "sha256": "a3e33cbbaa3375816120250bb55875f9708c9041160c6532ccdce14525f0ad0d",
+      "assertions": [
+        "Shorebird_ReadLinkHeader(",
+        "/* load as read-only, not rx */ false",
+        "kDartIsolateSnapshotInstructions",
+        "fml::NativeLibrary::Create(path.c_str())"
+      ]
+    },
+    {
+      "id": "engine-shell",
+      "source_class": "official_source",
+      "title": "Shorebird engine: shell/common/shell.cc",
+      "publisher": "Shorebird / Flutter Authors",
+      "retrieved_at": "2026-09-10",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/shorebirdtech/engine",
+      "revision": "e4575c7403bd3453d04bfa03e01218e5a0bca0c6",
+      "path": "shell/common/shell.cc",
+      "web_url": "https://github.com/shorebirdtech/engine/blob/e4575c7403bd3453d04bfa03e01218e5a0bca0c6/shell/common/shell.cc",
+      "raw_url": "https://raw.githubusercontent.com/shorebirdtech/engine/e4575c7403bd3453d04bfa03e01218e5a0bca0c6/shell/common/shell.cc",
+      "raw_encoding": "identity",
+      "sha256": "50b56e2dca81ee2e12a9267708c7bec11f4bf93c042c6c655ff8791eb27f054c",
+      "assertions": [
+        "// FIXME: This is probably the wrong place to hook into.",
+        "if (!vm_) {",
+        "shorebird_report_launch_failure();",
+        "shorebird_report_launch_success();"
+      ]
+    },
+    {
+      "id": "updater-install",
+      "source_class": "official_source",
+      "title": "Shorebird updater: library/src/updater.rs",
+      "publisher": "Shorebird",
+      "retrieved_at": "2026-09-10",
+      "license": "Not verified in this audit; metadata and hashes only, no source redistribution.",
+      "repository_url": "https://github.com/shorebirdtech/updater",
+      "revision": "57d2e7cdf874703b2c99782cd8df8bf9cc0819cc",
+      "path": "library/src/updater.rs",
+      "web_url": "https://github.com/shorebirdtech/updater/blob/57d2e7cdf874703b2c99782cd8df8bf9cc0819cc/library/src/updater.rs",
+      "raw_url": "https://raw.githubusercontent.com/shorebirdtech/updater/57d2e7cdf874703b2c99782cd8df8bf9cc0819cc/library/src/updater.rs",
+      "raw_encoding": "identity",
+      "sha256": "3b26112fd36e91ea0ed0fbf12d333b873017b7954cc2c8fadb95f4dbab8318f1",
+      "assertions": [
+        "open_base_lib(&config.libapp_path, \"libapp.so\")",
+        "check_hash(&installed_path, &patch.hash)",
+        "promote_to_next_boot(patch.number)",
+        "bipatch::Reader::new(",
+        "handle_prior_boot_failure_if_necessary",
+        "record_boot_failure_for_patch(patch.number)"
+      ]
+    },
+    {
+      "id": "updater-diff",
+      "source_class": "official_source",
+      "title": "Shorebird updater: patch/src/lib.rs",
+      "publisher": "Shorebird",
+      "retrieved_at": "2026-09-10",
+      "license": "Not verified in this audit; metadata and hashes only, no source redistribution.",
+      "repository_url": "https://github.com/shorebirdtech/updater",
+      "revision": "57d2e7cdf874703b2c99782cd8df8bf9cc0819cc",
+      "path": "patch/src/lib.rs",
+      "web_url": "https://github.com/shorebirdtech/updater/blob/57d2e7cdf874703b2c99782cd8df8bf9cc0819cc/patch/src/lib.rs",
+      "raw_url": "https://raw.githubusercontent.com/shorebirdtech/updater/57d2e7cdf874703b2c99782cd8df8bf9cc0819cc/patch/src/lib.rs",
+      "raw_encoding": "identity",
+      "sha256": "131742801013fc1346380178a77532415afbf5a2a3bf8152d0229f97376cae30",
+      "assertions": [
+        "bidiff::simple_diff_with_params(",
+        "ZstdCompressor::new()"
+      ]
+    },
+    {
+      "id": "docs-architecture",
+      "source_class": "official_source",
+      "title": "Shorebird docs: src/content/docs/code-push/system-architecture.mdx",
+      "publisher": "Shorebird",
+      "retrieved_at": "2026-09-10",
+      "license": "MIT",
+      "repository_url": "https://github.com/shorebirdtech/docs",
+      "revision": "936848886b5f2d83b3d5dd9e7ad7f68c1710896d",
+      "path": "src/content/docs/code-push/system-architecture.mdx",
+      "web_url": "https://github.com/shorebirdtech/docs/blob/936848886b5f2d83b3d5dd9e7ad7f68c1710896d/src/content/docs/code-push/system-architecture.mdx",
+      "raw_url": "https://raw.githubusercontent.com/shorebirdtech/docs/936848886b5f2d83b3d5dd9e7ad7f68c1710896d/src/content/docs/code-push/system-architecture.mdx",
+      "raw_encoding": "identity",
+      "sha256": "9ffa1ac37ad826da9fa608102c98e3a28dda87a571275aacdc16a9c9e5829ea9",
+      "assertions": [
+        "On Android, Windows, Mac, and Linux",
+        "per-function level",
+        "Shorebird's Dart SDK fork is private currently.",
+        "libupdater.a",
+        "previous compiled output"
+      ]
+    },
+    {
+      "id": "docs-overview",
+      "source_class": "official_source",
+      "title": "Shorebird docs: src/content/docs/code-push/index.mdx",
+      "publisher": "Shorebird",
+      "retrieved_at": "2026-09-10",
+      "license": "MIT",
+      "repository_url": "https://github.com/shorebirdtech/docs",
+      "revision": "936848886b5f2d83b3d5dd9e7ad7f68c1710896d",
+      "path": "src/content/docs/code-push/index.mdx",
+      "web_url": "https://github.com/shorebirdtech/docs/blob/936848886b5f2d83b3d5dd9e7ad7f68c1710896d/src/content/docs/code-push/index.mdx",
+      "raw_url": "https://raw.githubusercontent.com/shorebirdtech/docs/936848886b5f2d83b3d5dd9e7ad7f68c1710896d/src/content/docs/code-push/index.mdx",
+      "raw_encoding": "identity",
+      "sha256": "f75dbf460e696069db6f0d0468e38f54c55711319054fcf1810f090494527f21",
+      "assertions": [
+        "restart after the update is downloaded.",
+        "Flutter engine changes",
+        "asset"
+      ]
+    },
+    {
+      "id": "docs-performance",
+      "source_class": "official_source",
+      "title": "Shorebird docs: src/content/docs/code-push/performance.mdx",
+      "publisher": "Shorebird",
+      "retrieved_at": "2026-09-10",
+      "license": "MIT",
+      "repository_url": "https://github.com/shorebirdtech/docs",
+      "revision": "936848886b5f2d83b3d5dd9e7ad7f68c1710896d",
+      "path": "src/content/docs/code-push/performance.mdx",
+      "web_url": "https://github.com/shorebirdtech/docs/blob/936848886b5f2d83b3d5dd9e7ad7f68c1710896d/src/content/docs/code-push/performance.mdx",
+      "raw_url": "https://raw.githubusercontent.com/shorebirdtech/docs/936848886b5f2d83b3d5dd9e7ad7f68c1710896d/src/content/docs/code-push/performance.mdx",
+      "raw_encoding": "identity",
+      "sha256": "4119ca80d4e8792a8a5d284637f3448cea56a820a29e695a0a243460e7f90595",
+      "assertions": [
+        "type flow analysis",
+        "inlining",
+        "null checks"
+      ]
+    },
+    {
+      "id": "design-blog",
+      "source_class": "authoritative_blog",
+      "title": "How we built Flutter code push",
+      "publisher": "Shorebird",
+      "author": "Eric Seidel",
+      "published_at": "2024-05-17",
+      "retrieved_at": "2026-09-10",
+      "license": "No redistribution license verified; link and metadata only.",
+      "url": "https://shorebird.dev/blog/how-we-built-code-push",
+      "applies_to": "Historical 2024 toolchain design explanation; not a current performance benchmark or audit of the private Dart SDK.",
+      "credibility_note": "First-party account by Shorebird founder. Used to supplement pinned architecture sources with Object Pool design motivation and historical interpreter context."
+    }
+  ]
+}
