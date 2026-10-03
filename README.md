@@ -7,7 +7,7 @@
 | 领域 | 当前内容 | 入口 |
 | --- | --- | --- |
 | Android | Framework 基础、源码阅读与面试主干 | [Android](knowledge/android/README.md) |
-| Flutter | 已预留 Framework、Engine、Embedding 与渲染知识边界 | [Flutter](knowledge/flutter/README.md) |
+| Flutter | Engine 跨层模型、原生视图集成与渲染边界 | [Flutter](knowledge/flutter/README.md) |
 
 新增领域时，在 `knowledge/<domain>/` 下建立自己的索引，并在这里增加一个入口。不要把不同领域的内容堆进同一份总文档。
 

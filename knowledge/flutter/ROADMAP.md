@@ -1,6 +1,6 @@
 # Flutter 知识建设路线
 
-更新日期：2026-09-10
+更新日期：2026-10-03
 
 本文件是 Flutter 领域的建设顺序、延期主题和完成标准的事实源。领域索引只提供入口，不复制这里的可变计划。
 
@@ -14,7 +14,7 @@
 
 ### 第零阶段：线程模型与性能同步（当前优先）
 
-- [线程模型与性能同步](engine/线程模型与性能同步.md)：native thread、task runner、Dart isolate 的边界；默认 Android platform/UI 合并；同 runner 直接执行；VSync；UI→raster 背压；Platform View 条件性 raster/platform 合并；
+- [线程模型与性能同步](engine/线程模型与性能同步.md)：native thread、task runner、Dart isolate 的边界；默认 Android platform/UI 合并；同 runner 直接执行；VSync；UI→raster 背压；传统 HC 条件性 raster/platform 合并；
 - 固定当前 Engine revision，并记录默认 Settings、AndroidShellHolder、DartIsolate、Shell、Animator、Rasterizer 与 AndroidExternalViewEmbedder 的可执行源码断言；
 - 建立 trace 拓扑卡：runner 与 native thread 的映射、Platform View 状态、动态 merger 是否激活，以及输入到呈现的端点定义；
 - 将“同 runner 串行”“跨 runner 投递”“帧节拍”“管线背压”“动态合并”作为五种独立的等待类别。
@@ -46,7 +46,8 @@
 
 ### 第三阶段：渲染与 Android 图形栈
 
-- `rendering/`：Layer tree、Scene、rasterizer、资源缓存、首帧和持续动画的差异；
+- [Rendering](rendering/README.md) 已建立入口，[Android Platform Views 与原生渲染](rendering/Android-Platform-Views与原生渲染.md)作为原生内容集成的独立事实源；其完成范围是机制、固定源码证据与验证方法，不代表设备性能验收；
+- 后续补充 Layer tree、Scene、rasterizer、资源缓存、首帧和持续动画的差异；
 - `rendering/skia/` 与 `rendering/impeller/`：后端职责、着色器、管线深度和性能证据边界；
 - 与 Android 的 Surface、BufferQueue、SurfaceFlinger、HWC、VSync 和帧时间线专题建立互链，而不在 Flutter 文档复制 Android 图形正文。
 

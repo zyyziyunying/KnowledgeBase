@@ -103,7 +103,7 @@ Scene 交给 Engine 后，VSync、FramePipeline 与 raster 的 runner 语义由[
 - T0→T1 很晚时，先从实际拓扑判断是共享 platform/UI runner 的前序同步占用，还是非合并配置中的 runner 交接；
 - T3→T4 很晚时，区分 frame request、VSync 节拍和 UI 侧 build/layout/paint；
 - T4→T5 很晚时，检查 UI→raster 的生产消费关系；`PipelineFull` 只是下游未及时消费的线索，不是独立根因；
-- 仅含 Platform View 的帧需要回到前置专题确认动态 raster/platform merger，而不能套用普通页面的拓扑。
+- 含 Platform View 的帧需要先确认实际合成模式，再回到前置专题判断动态 raster/platform merger 是否适用；不能仅凭存在原生控件就假定合并。各模式的缓冲与事务同步见 [Android Platform Views 与原生渲染](../rendering/Android-Platform-Views与原生渲染.md)。
 
 ## 帧预算与端到端延迟不是同一个数
 

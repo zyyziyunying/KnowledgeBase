@@ -1,0 +1,607 @@
+{
+  "$schema": "../../../schema/evidence-manifest.schema.json",
+  "schema_version": 1,
+  "topic_id": "flutter.rendering.android-platform-views",
+  "topic_document": "../../../../knowledge/flutter/rendering/Android-Platform-Views与原生渲染.md",
+  "verified_at": "2026-10-03",
+  "baseline_note": "Flutter release tag 3.44.0 was resolved through the official repository commit API to 559ffa3f75e7402d65a8def9c28389a9b2e6fe42 on 2026-10-03. Framework and Engine source hashes use that immutable monorepo revision. Dynamic official documents retain their own update and retrieval dates; no web-page snapshots are vendored. These are source-reading assertions, not device benchmarks, proof of a particular plugin backend, or claims about the latest SDK. Engineering selection advice in the document is labeled separately.",
+  "claims": [
+    {
+      "id": "flutter-platform-views-001",
+      "section": "术语与集成方案",
+      "statement": "The pinned implementation distinguishes VD, texture-layer composition, HC and HCPP; a backend Texture is a separate image integration contract from hosting an interactive platform View.",
+      "source_ids": [
+        "hcpp-controller",
+        "framework-widgets",
+        "framework-texture"
+      ]
+    },
+    {
+      "id": "flutter-platform-views-002",
+      "section": "TLHC 重定向 View 的绘制",
+      "statement": "TLHC attaches a wrapper to FlutterView and redirects child drawing to a render-target hardware Canvas; the controller selects among SurfaceProducer, ImageReader and SurfaceTexture targets.",
+      "source_ids": [
+        "view-wrapper",
+        "legacy-controller"
+      ]
+    },
+    {
+      "id": "flutter-platform-views-003",
+      "section": "SurfaceView 与回退",
+      "statement": "The legacy controller checks the View subtree for SurfaceView during creation and chooses requested HC fallback or non-software VD fallback when TLHC is unsupported.",
+      "source_ids": [
+        "legacy-controller",
+        "framework-services",
+        "android-platform-views-doc"
+      ]
+    },
+    {
+      "id": "flutter-platform-views-004",
+      "section": "VD 通过虚拟显示获得纹理",
+      "statement": "VD connects a render-target Surface to a VirtualDisplay and hosts the View through SingleViewPresentation; resize behavior has an Android API 31 branch.",
+      "source_ids": [
+        "virtual-display",
+        "legacy-controller"
+      ]
+    },
+    {
+      "id": "flutter-platform-views-005",
+      "section": "HC 将 Flutter 输出加入 Android View 层级",
+      "statement": "Legacy HC can convert FlutterView to an ImageReader-backed FlutterImageView and supply overlay views for Flutter content above platform Views.",
+      "source_ids": [
+        "legacy-controller",
+        "flutter-view",
+        "flutter-image-view",
+        "legacy-embedder"
+      ]
+    },
+    {
+      "id": "flutter-platform-views-006",
+      "section": "线程与叠加限制",
+      "statement": "Legacy AndroidExternalViewEmbedder supports conditional raster/platform merging; HCPP AndroidExternalViewEmbedder2 explicitly does not, while still posting platform tasks and containing initialization/teardown waits.",
+      "source_ids": [
+        "legacy-embedder",
+        "hcpp-embedder"
+      ]
+    },
+    {
+      "id": "flutter-platform-views-007",
+      "section": "HardwareBuffer 与图层事务",
+      "statement": "The Vulkan swapchain selection tries opted-in AHB presentation when supported. AHB buffers are presented through SurfaceControl with readiness and release synchronization, and Android supplies a JNI transaction callback.",
+      "source_ids": [
+        "vk-swapchain",
+        "ahb-swapchain",
+        "ahb-swapchain-impl",
+        "android-vulkan"
+      ]
+    },
+    {
+      "id": "flutter-platform-views-008",
+      "section": "HardwareBuffer 与图层事务",
+      "statement": "HCPP keeps real Views in FlutterView and merges active transactions at onEndFrame, invalidating the View and applying transactions on draw. Android distinguishes atomic ViewRoot submission from buffer readiness and safe reuse.",
+      "source_ids": [
+        "hcpp-controller",
+        "attached-surface-control-doc",
+        "surface-transaction-doc"
+      ]
+    },
+    {
+      "id": "flutter-platform-views-009",
+      "section": "线程与叠加限制",
+      "statement": "The pinned HCPP embedder uses a single overlay and difference clipping; direct SurfaceView clipping uses path bounds. Arbitrary transparent interleaving and path-accurate clipping are not implied by SurfaceView support.",
+      "source_ids": [
+        "hcpp-embedder",
+        "hcpp-controller",
+        "android-platform-views-doc"
+      ]
+    },
+    {
+      "id": "flutter-platform-views-010",
+      "section": "创建 API 与 HCPP 配置",
+      "statement": "Legacy Dart factories request TLHC with VD or HC fallback, or HC directly. PlatformViewsChannel gives enabled HCPP precedence. Official configuration requires API 34 and Impeller Vulkan; applyTransactionOnDraw itself dates to API 31.",
+      "source_ids": [
+        "framework-services",
+        "framework-widgets",
+        "platform-views-channel",
+        "hcpp-controller",
+        "android-platform-views-doc",
+        "attached-surface-control-doc"
+      ]
+    },
+    {
+      "id": "flutter-platform-views-011",
+      "section": "创建与交互的共同链路",
+      "statement": "Platform-view creation uses a registered viewType and controller. AndroidView participates in Flutter gesture arenas, and native wrappers apply mutators and intercept touch for Flutter coordination.",
+      "source_ids": [
+        "framework-services",
+        "framework-widgets",
+        "legacy-controller",
+        "mutator-view"
+      ]
+    },
+    {
+      "id": "flutter-platform-views-012",
+      "section": "外部 Texture 与 SurfaceProducer",
+      "statement": "Texture repaint can be driven by backend frames without Dart execution. SurfaceProducer exposes a Surface, physical size, availability/cleanup callbacks, release and crop/rotation responsibilities.",
+      "source_ids": [
+        "framework-texture",
+        "native-texture-registry",
+        "surface-plugins-doc"
+      ]
+    },
+    {
+      "id": "flutter-platform-views-013",
+      "section": "iOS 与其他平台边界",
+      "statement": "The iOS guide describes UIKit hierarchy-based hybrid composition and documents ShaderMask, ColorFiltered and BackdropFilter limitations; Android composition modes are not an iOS implementation taxonomy.",
+      "source_ids": [
+        "ios-platform-views-doc"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "framework-services",
+      "source_class": "official_source",
+      "title": "PlatformViewsService creation policies and controllers",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-03",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "559ffa3f75e7402d65a8def9c28389a9b2e6fe42",
+      "path": "packages/flutter/lib/src/services/platform_views.dart",
+      "web_url": "https://github.com/flutter/flutter/blob/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/packages/flutter/lib/src/services/platform_views.dart",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/packages/flutter/lib/src/services/platform_views.dart",
+      "raw_encoding": "identity",
+      "sha256": "60af3f163d0c8e4626aa438c37ca173bd0598e0030d60442ccefff7862190b9d",
+      "assertions": [
+        "static AndroidViewController initAndroidView({",
+        "static SurfaceAndroidViewController initSurfaceAndroidView({",
+        "static ExpensiveAndroidViewController initExpensiveAndroidView({",
+        "static HybridAndroidViewController initHybridAndroidView({",
+        "static Future<bool> checkIfSupported() =>",
+        "hybridFallback: true,"
+      ]
+    },
+    {
+      "id": "framework-widgets",
+      "source_class": "official_source",
+      "title": "AndroidView and AndroidViewSurface presentation and gesture contract",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-03",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "559ffa3f75e7402d65a8def9c28389a9b2e6fe42",
+      "path": "packages/flutter/lib/src/widgets/platform_view.dart",
+      "web_url": "https://github.com/flutter/flutter/blob/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/packages/flutter/lib/src/widgets/platform_view.dart",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/packages/flutter/lib/src/widgets/platform_view.dart",
+      "raw_encoding": "identity",
+      "sha256": "a33a6cd82e1c52ec32f42bdb31b83e1aabb519dc7f596457d869fd9a05afb363",
+      "assertions": [
+        "_controller = PlatformViewsService.initAndroidView(",
+        "if (widget.controller.requiresViewComposition) {",
+        "return _PlatformLayerBasedAndroidViewSurface(",
+        "return _TextureBasedAndroidViewSurface(",
+        "The widget participates in Flutter's gesture arenas"
+      ]
+    },
+    {
+      "id": "framework-texture",
+      "source_class": "official_source",
+      "title": "Texture backend-driven repaint contract",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-03",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "559ffa3f75e7402d65a8def9c28389a9b2e6fe42",
+      "path": "packages/flutter/lib/src/widgets/texture.dart",
+      "web_url": "https://github.com/flutter/flutter/blob/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/packages/flutter/lib/src/widgets/texture.dart",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/packages/flutter/lib/src/widgets/texture.dart",
+      "raw_encoding": "identity",
+      "sha256": "6ef6dc5f4942a64520c025e53ca4f05c7ad3307a010c725e14de4fca5cbd478d",
+      "assertions": [
+        "class Texture extends LeafRenderObjectWidget {",
+        "Texture widgets are repainted autonomously as dictated by the backend",
+        "executing Dart code.",
+        "TextureBox(textureId: textureId, freeze: freeze, filterQuality: filterQuality);"
+      ]
+    },
+    {
+      "id": "view-wrapper",
+      "source_class": "official_source",
+      "title": "PlatformViewWrapper redirects View drawing to a render target",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-03",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "559ffa3f75e7402d65a8def9c28389a9b2e6fe42",
+      "path": "engine/src/flutter/shell/platform/android/io/flutter/plugin/platform/PlatformViewWrapper.java",
+      "web_url": "https://github.com/flutter/flutter/blob/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/io/flutter/plugin/platform/PlatformViewWrapper.java",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/io/flutter/plugin/platform/PlatformViewWrapper.java",
+      "raw_encoding": "identity",
+      "sha256": "92a293130511b79ad926ba59b0da69ddc3ffb45192272bd8d42752e4f3654a9b",
+      "assertions": [
+        "public void draw(Canvas canvas) {",
+        "final Canvas targetCanvas = targetSurface.lockHardwareCanvas();",
+        "targetCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);",
+        "super.draw(targetCanvas);",
+        "renderTarget.scheduleFrame();",
+        "targetSurface.unlockCanvasAndPost(targetCanvas);"
+      ]
+    },
+    {
+      "id": "legacy-controller",
+      "source_class": "official_source",
+      "title": "Legacy PlatformViewsController mode fallback and target selection",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-03",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "559ffa3f75e7402d65a8def9c28389a9b2e6fe42",
+      "path": "engine/src/flutter/shell/platform/android/io/flutter/plugin/platform/PlatformViewsController.java",
+      "web_url": "https://github.com/flutter/flutter/blob/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/io/flutter/plugin/platform/PlatformViewsController.java",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/io/flutter/plugin/platform/PlatformViewsController.java",
+      "raw_encoding": "identity",
+      "sha256": "3835ea5f7d2d435475fe601e54b4f1201d34888db61274738af30339dbf01d1d",
+      "assertions": [
+        "private static Class[] VIEW_TYPES_REQUIRE_NON_TLHC = {SurfaceView.class};",
+        "!ViewUtils.hasChildViewOfType(embeddedView, VIEW_TYPES_REQUIRE_NON_TLHC);",
+        "PlatformViewCreationRequest.RequestedDisplayMode.TEXTURE_WITH_HYBRID_FALLBACK",
+        "return configureForVirtualDisplay(platformView, request);",
+        "viewWrapper.addView(embeddedView);",
+        "flutterView.addView(viewWrapper);",
+        "flutterView.convertToImageView();",
+        "return new SurfaceProducerPlatformViewRenderTarget(textureEntry);",
+        "return new ImageReaderPlatformViewRenderTarget(textureEntry);",
+        "return new SurfaceTexturePlatformViewRenderTarget(textureEntry);"
+      ]
+    },
+    {
+      "id": "virtual-display",
+      "source_class": "official_source",
+      "title": "VirtualDisplayController creates a Presentation on a texture-backed display",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-03",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "559ffa3f75e7402d65a8def9c28389a9b2e6fe42",
+      "path": "engine/src/flutter/shell/platform/android/io/flutter/plugin/platform/VirtualDisplayController.java",
+      "web_url": "https://github.com/flutter/flutter/blob/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/io/flutter/plugin/platform/VirtualDisplayController.java",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/io/flutter/plugin/platform/VirtualDisplayController.java",
+      "raw_encoding": "identity",
+      "sha256": "053c66895c0cb9745d0625f3048d38779cce5036ee2a68a43a1d1c36050de40d",
+      "assertions": [
+        "displayManager.createVirtualDisplay(",
+        "renderTarget.getSurface(),",
+        "new SingleViewPresentation(",
+        "this.virtualDisplay.getDisplay(),",
+        "presentation.show();",
+        "resize31(getView(), width, height, onNewSizeFrameAvailable);"
+      ]
+    },
+    {
+      "id": "hcpp-controller",
+      "source_class": "official_source",
+      "title": "PlatformViewsController2 native hierarchy and synchronized SurfaceControl transactions",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-03",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "559ffa3f75e7402d65a8def9c28389a9b2e6fe42",
+      "path": "engine/src/flutter/shell/platform/android/io/flutter/plugin/platform/PlatformViewsController2.java",
+      "web_url": "https://github.com/flutter/flutter/blob/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/io/flutter/plugin/platform/PlatformViewsController2.java",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/io/flutter/plugin/platform/PlatformViewsController2.java",
+      "raw_encoding": "identity",
+      "sha256": "0f9c0a071108696caeceed1c454d39245b9aafccee9971d4e2682a89f0192f2b",
+      "assertions": [
+        "parentView.addView(embeddedView);",
+        "flutterView.addView(parentView);",
+        "tx = tx.merge(activeTransactions.get(i));",
+        "flutterView.invalidate();",
+        "flutterView.getRootSurfaceControl().applyTransactionOnDraw(tx);",
+        "buildReparentTransaction(surfaceControl);",
+        "tx.setLayer(surfaceControl, 1000);",
+        "path.computeBounds(pathBounds, true);",
+        "createTransaction().setAlpha(sc, opacity).setCrop(sc, screenRect);",
+        "return flutterJNI.IsSurfaceControlEnabled();"
+      ]
+    },
+    {
+      "id": "platform-views-channel",
+      "source_class": "official_source",
+      "title": "PlatformViewsChannel prioritizes HCPP over legacy creation modes",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-03",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "559ffa3f75e7402d65a8def9c28389a9b2e6fe42",
+      "path": "engine/src/flutter/shell/platform/android/io/flutter/embedding/engine/systemchannels/PlatformViewsChannel.java",
+      "web_url": "https://github.com/flutter/flutter/blob/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/io/flutter/embedding/engine/systemchannels/PlatformViewsChannel.java",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/io/flutter/embedding/engine/systemchannels/PlatformViewsChannel.java",
+      "raw_encoding": "identity",
+      "sha256": "1067b1bb06a3ce0a32762f4f508bdcaf88480717a32b551eddc41fc45a04728a",
+      "assertions": [
+        "if (handler.isHcppEnabled()) {",
+        "PlatformViewCreationRequest.createHCPPRequest(",
+        "handler.createPlatformViewHcpp(request);",
+        "Using HCPP platform view rendering strategy.",
+        "Using legacy platform view rendering strategy.",
+        "long textureId = handler.createForTextureLayer(request);"
+      ]
+    },
+    {
+      "id": "flutter-view",
+      "source_class": "official_source",
+      "title": "FlutterView switches its render surface for legacy view composition",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-03",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "559ffa3f75e7402d65a8def9c28389a9b2e6fe42",
+      "path": "engine/src/flutter/shell/platform/android/io/flutter/embedding/android/FlutterView.java",
+      "web_url": "https://github.com/flutter/flutter/blob/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/io/flutter/embedding/android/FlutterView.java",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/io/flutter/embedding/android/FlutterView.java",
+      "raw_encoding": "identity",
+      "sha256": "52ba443553c65253229b84a48cc44c3db58665f1b96771a7969a9cd2ee9dd8eb",
+      "assertions": [
+        "public void convertToImageView() {",
+        "renderSurface = flutterImageView;",
+        "renderSurface.attachToRenderer(flutterEngine.getRenderer());",
+        "return flutterImageView.acquireLatestImage();"
+      ]
+    },
+    {
+      "id": "flutter-image-view",
+      "source_class": "official_source",
+      "title": "FlutterImageView consumes ImageReader output",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-03",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "559ffa3f75e7402d65a8def9c28389a9b2e6fe42",
+      "path": "engine/src/flutter/shell/platform/android/io/flutter/embedding/android/FlutterImageView.java",
+      "web_url": "https://github.com/flutter/flutter/blob/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/io/flutter/embedding/android/FlutterImageView.java",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/io/flutter/embedding/android/FlutterImageView.java",
+      "raw_encoding": "identity",
+      "sha256": "513b0317aad6fed857299fbbd6347eb3c450e6fbd527b0d70741ec673ed3ad01",
+      "assertions": [
+        "private static ImageReader createImageReader(int width, int height) {",
+        "HardwareBuffer.USAGE_GPU_SAMPLED_IMAGE | HardwareBuffer.USAGE_GPU_COLOR_OUTPUT",
+        "flutterRenderer.swapSurface(imageReader.getSurface());",
+        "imageReader.acquireLatestImage()"
+      ]
+    },
+    {
+      "id": "mutator-view",
+      "source_class": "official_source",
+      "title": "FlutterMutatorView applies clips, transforms and touch interception",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-03",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "559ffa3f75e7402d65a8def9c28389a9b2e6fe42",
+      "path": "engine/src/flutter/shell/platform/android/io/flutter/embedding/engine/mutatorsstack/FlutterMutatorView.java",
+      "web_url": "https://github.com/flutter/flutter/blob/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/io/flutter/embedding/engine/mutatorsstack/FlutterMutatorView.java",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/io/flutter/embedding/engine/mutatorsstack/FlutterMutatorView.java",
+      "raw_encoding": "identity",
+      "sha256": "805a6b91c542b0403d437baf22479a4c6fb7f83dc6b2ddaa05226ec110a28ee4",
+      "assertions": [
+        "canvas.clipPath(pathCopy);",
+        "canvas.concat(getPlatformViewMatrix());",
+        "public boolean onInterceptTouchEvent(MotionEvent event) {",
+        "return androidTouchProcessor.onTouchEvent(event, screenMatrix);"
+      ]
+    },
+    {
+      "id": "legacy-embedder",
+      "source_class": "official_source",
+      "title": "Legacy AndroidExternalViewEmbedder requests dynamic raster/platform merging",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-03",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "559ffa3f75e7402d65a8def9c28389a9b2e6fe42",
+      "path": "engine/src/flutter/shell/platform/android/external_view_embedder/external_view_embedder.cc",
+      "web_url": "https://github.com/flutter/flutter/blob/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/external_view_embedder/external_view_embedder.cc",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/external_view_embedder/external_view_embedder.cc",
+      "raw_encoding": "identity",
+      "sha256": "add27d6a0fc519fd09f33fa5781f63847c278756e61f96a598eec8401042ef22",
+      "assertions": [
+        "if (!FrameHasPlatformLayers()) {",
+        "raster_thread_merger->MergeWithLease(kDefaultMergedLeaseDuration);",
+        "return PostPrerollResult::kSkipAndRetryFrame;",
+        "bool AndroidExternalViewEmbedder::SupportsDynamicThreadMerging() {\n  return true;\n}"
+      ]
+    },
+    {
+      "id": "hcpp-embedder",
+      "source_class": "official_source",
+      "title": "HCPP AndroidExternalViewEmbedder2 threading and single-overlay slicing",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-03",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "559ffa3f75e7402d65a8def9c28389a9b2e6fe42",
+      "path": "engine/src/flutter/shell/platform/android/external_view_embedder/external_view_embedder_2.cc",
+      "web_url": "https://github.com/flutter/flutter/blob/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/external_view_embedder/external_view_embedder_2.cc",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/external_view_embedder/external_view_embedder_2.cc",
+      "raw_encoding": "identity",
+      "sha256": "1bd475c7d26c6fd55850ecff39dea2c9d29c9385e91064e64fd8be830b9daae0",
+      "assertions": [
+        "AndroidExternalViewEmbedder2::SubmitFlutterView(",
+        "task_runners_.GetPlatformTaskRunner()->PostTask(",
+        "latch->Wait();",
+        "overlay_canvas->ClipRect(view_rect, DlClipOp::kDifference);",
+        "jni_facade->swapTransaction();",
+        "jni_facade_->onEndFrame2();",
+        "bool AndroidExternalViewEmbedder2::SupportsDynamicThreadMerging() {\n  return false;\n}",
+        "reality there is only a single layer."
+      ]
+    },
+    {
+      "id": "ahb-swapchain",
+      "source_class": "official_source",
+      "title": "AHBSwapchainVK requires SurfaceControl and HardwareBuffer support",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-03",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "559ffa3f75e7402d65a8def9c28389a9b2e6fe42",
+      "path": "engine/src/flutter/impeller/renderer/backend/vulkan/swapchain/ahb/ahb_swapchain_vk.cc",
+      "web_url": "https://github.com/flutter/flutter/blob/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/impeller/renderer/backend/vulkan/swapchain/ahb/ahb_swapchain_vk.cc",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/impeller/renderer/backend/vulkan/swapchain/ahb/ahb_swapchain_vk.cc",
+      "raw_encoding": "identity",
+      "sha256": "02c269e357f15d90927537d081a9afbbd773d5571eab1e726158362554ba3026",
+      "assertions": [
+        "return android::SurfaceControl::IsAvailableOnPlatform() &&",
+        "android::HardwareBuffer::IsAvailableOnPlatform();",
+        "std::make_shared<android::SurfaceControl>(window, \"ImpellerSurface\")",
+        "AHBSwapchainImplVK::Create(context_"
+      ]
+    },
+    {
+      "id": "android-vulkan",
+      "source_class": "official_source",
+      "title": "Android Vulkan surface supplies a JNI transaction callback",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-03",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "559ffa3f75e7402d65a8def9c28389a9b2e6fe42",
+      "path": "engine/src/flutter/shell/platform/android/android_surface_vk_impeller.cc",
+      "web_url": "https://github.com/flutter/flutter/blob/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/android_surface_vk_impeller.cc",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/android_surface_vk_impeller.cc",
+      "raw_encoding": "identity",
+      "sha256": "ae2e7e54d167d877e464735075844e4b92891dec85944668fa9079182cea2ca1",
+      "assertions": [
+        "impeller::CreateTransactionCB cb = [jni_facade = jni_facade]() {",
+        "ASurfaceTransaction* tx = jni_facade->createTransaction();",
+        "auto swapchain = impeller::SwapchainVK::Create(",
+        "window->handle(), cb);"
+      ]
+    },
+    {
+      "id": "ahb-swapchain-impl",
+      "source_class": "official_source",
+      "title": "AHBSwapchainImplVK presents hardware buffers with readiness and release fences",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-03",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "559ffa3f75e7402d65a8def9c28389a9b2e6fe42",
+      "path": "engine/src/flutter/impeller/renderer/backend/vulkan/swapchain/ahb/ahb_swapchain_impl_vk.cc",
+      "web_url": "https://github.com/flutter/flutter/blob/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/impeller/renderer/backend/vulkan/swapchain/ahb/ahb_swapchain_impl_vk.cc",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/impeller/renderer/backend/vulkan/swapchain/ahb/ahb_swapchain_impl_vk.cc",
+      "raw_encoding": "identity",
+      "sha256": "b6590496ec1902940093749ffc678af8d37eece1723e99c67eccc1b45340be0d",
+      "assertions": [
+        "AHBSwapchainImplVK::Present(",
+        "auto present_ready = SubmitSignalForPresentReady(texture);",
+        "if (!transaction.SetContents(control.get(),",
+        "texture->GetBackingStore(),",
+        "present_ready->CreateFD()",
+        "android::CreatePreviousReleaseFence(*control, stats);",
+        "pool_->Push(std::move(old_texture), std::move(render_ready_fence));"
+      ]
+    },
+    {
+      "id": "vk-swapchain",
+      "source_class": "official_source",
+      "title": "Vulkan swapchain selects an opted-in AHB path with a KHR fallback",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-03",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "559ffa3f75e7402d65a8def9c28389a9b2e6fe42",
+      "path": "engine/src/flutter/impeller/renderer/backend/vulkan/swapchain/swapchain_vk.cc",
+      "web_url": "https://github.com/flutter/flutter/blob/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/impeller/renderer/backend/vulkan/swapchain/swapchain_vk.cc",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/impeller/renderer/backend/vulkan/swapchain/swapchain_vk.cc",
+      "raw_encoding": "identity",
+      "sha256": "6fdddf80cc09b17aa3767a74cc745293fd3f66b50af79cbe12226c0b7cff6856",
+      "assertions": [
+        "ContextVK::Cast(*context).GetShouldEnableSurfaceControlSwapchain() &&",
+        "AHBSwapchainVK::IsAvailableOnPlatform()",
+        "android_get_device_api_level() >= 34 ? cb : CreateTransactionCB({});",
+        "Could not create AHB swapchain. Falling back to KHR variant."
+      ]
+    },
+    {
+      "id": "native-texture-registry",
+      "source_class": "official_source",
+      "title": "TextureRegistry SurfaceProducer size and lifecycle contract",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-03",
+      "license": "BSD-3-Clause",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "559ffa3f75e7402d65a8def9c28389a9b2e6fe42",
+      "path": "engine/src/flutter/shell/platform/android/io/flutter/view/TextureRegistry.java",
+      "web_url": "https://github.com/flutter/flutter/blob/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/io/flutter/view/TextureRegistry.java",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/shell/platform/android/io/flutter/view/TextureRegistry.java",
+      "raw_encoding": "identity",
+      "sha256": "e63afec6521f873c2acec13fefc1493aead78925fbb06812df4b7281b5c5f8ba",
+      "assertions": [
+        "default SurfaceProducer createSurfaceProducer() {",
+        "interface SurfaceProducer extends TextureEntry {",
+        "void setSize(int width, int height);",
+        "default void onSurfaceAvailable() {",
+        "default void onSurfaceCleanup() {",
+        "boolean handlesCropAndRotation();",
+        "void release();"
+      ]
+    },
+    {
+      "id": "android-platform-views-doc",
+      "source_class": "official_document",
+      "title": "Hosting native Android views in your Flutter app with Platform Views",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-03",
+      "license": "CC-BY-4.0 (documentation); BSD-3-Clause (code samples)",
+      "url": "https://docs.flutter.dev/platform-integration/android/platform-views",
+      "last_updated": "2026-09-29",
+      "applies_to": "Dynamic documentation observed as reflecting Flutter 3.47. Used for the 3.44 experimental introduction, Android API 34 and Impeller Vulkan requirements, manifest and local-run configuration, fallback and documented limitations. Source-level mechanisms are independently pinned to 3.44.0."
+    },
+    {
+      "id": "surface-plugins-doc",
+      "source_class": "official_document",
+      "title": "New APIs for Android plugins that render to a Surface",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-03",
+      "license": "CC-BY-4.0 (documentation); BSD-3-Clause (code samples)",
+      "url": "https://docs.flutter.dev/release/breaking-changes/android-surface-plugins",
+      "last_updated": "2026-07-21",
+      "applies_to": "Historical SurfaceProducer migration guidance: usable stable API from Flutter 3.24, later lifecycle callback names and crop/rotation responsibilities. Current implementation is separately pinned to Flutter 3.44.0."
+    },
+    {
+      "id": "ios-platform-views-doc",
+      "source_class": "official_document",
+      "title": "Host native iOS views in your Flutter app with platform views",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-03",
+      "license": "CC-BY-4.0 (documentation); BSD-3-Clause (code samples)",
+      "url": "https://docs.flutter.dev/platform-integration/ios/platform-views",
+      "last_updated": "2026-08-13",
+      "applies_to": "Platform comparison only: UIKit view-hierarchy composition and documented effect limitations. No iOS runtime or engine implementation was tested."
+    },
+    {
+      "id": "attached-surface-control-doc",
+      "source_class": "official_document",
+      "title": "AttachedSurfaceControl API reference",
+      "publisher": "Android Developers",
+      "retrieved_at": "2026-10-03",
+      "license": "CC-BY-4.0 (documentation); Apache-2.0 (code samples)",
+      "url": "https://developer.android.com/reference/android/view/AttachedSurfaceControl",
+      "last_updated": "2026-08-03",
+      "applies_to": "applyTransactionOnDraw, introduced in API 31, atomically joins a transaction to the next ViewRoot buffer draw without itself scheduling a draw. This API introduction is distinct from Flutter HCPP support requirements."
+    },
+    {
+      "id": "surface-transaction-doc",
+      "source_class": "official_document",
+      "title": "SurfaceControl.Transaction API reference",
+      "publisher": "Android Developers",
+      "retrieved_at": "2026-10-03",
+      "license": "CC-BY-4.0 (documentation); Apache-2.0 (code samples)",
+      "url": "https://developer.android.com/reference/android/view/SurfaceControl.Transaction",
+      "last_updated": "2026-08-03",
+      "applies_to": "setBuffer and SyncFence/releaseCallback semantics, available from API 33 for the referenced overloads. Used for the buffer-readiness and safe-reuse contract, not a guarantee that arbitrary third-party producers join one Dart frame."
+    }
+  ]
+}
