@@ -1,0 +1,129 @@
+{
+  "$schema": "../../../schema/evidence-manifest.schema.json",
+  "schema_version": 1,
+  "topic_id": "ai.machine-learning.linear-regression",
+  "topic_document": "../../../../knowledge/ai/machine-learning/线性回归与梯度下降.md",
+  "verified_at": "2026-10-10",
+  "baseline_note": "Mechanisms reviewed against the linked primary sources. Original synthetic data, algebraic derivations and SVG illustrations; numerical curves computed by the accompanying Python standard-library scripts. Hand updates, finite-difference gradients and deterministic full-batch training were executed. Framework source baselines are evidence references, not an installed or tested PyTorch dependency combination. The PyTorch comparison snippet was not executed. No real dataset, hardware, model benchmark or deployed runtime is validated. Dynamic web dates are the displayed last-updated dates; no web-page mirror is stored.",
+  "claims": [
+    {
+      "id": "linear-regression-001",
+      "section": "1 一条直线怎样产生误差",
+      "statement": "Single-feature affine prediction, learned slope and intercept, and residual sign convention.",
+      "source_ids": [
+        "google-linear-gradient"
+      ]
+    },
+    {
+      "id": "linear-regression-002",
+      "section": "2 为什么用平方损失",
+      "statement": "Squared error aggregation and MSE; article derives its explicit half-MSE scaling.",
+      "source_ids": [
+        "google-linear-loss"
+      ]
+    },
+    {
+      "id": "linear-regression-003",
+      "section": "3 梯度怎样从误差算出来",
+      "statement": "MSE partial derivatives with respect to slope and intercept; article derives chain-rule factors and half-MSE coefficients.",
+      "source_ids": [
+        "google-linear-gradient"
+      ]
+    },
+    {
+      "id": "linear-regression-004",
+      "section": "4 手算一次参数更新",
+      "statement": "Current-gradient descent update in parameter space; local synthetic full-rank quadratic example and its unique minimizer are derived in the article.",
+      "source_ids": [
+        "google-linear-gradient"
+      ]
+    },
+    {
+      "id": "linear-regression-005",
+      "section": "5 学习率为什么会改变结果",
+      "statement": "Learning-rate magnitude, full-batch versus stochastic and mini-batch updates; optimizer naming does not prescribe batch size.",
+      "source_ids": [
+        "google-linear-hyperparameters",
+        "pytorch-optimization-tutorial"
+      ]
+    },
+    {
+      "id": "linear-regression-006",
+      "section": "6 运行最小实验",
+      "statement": "Fitting the training data is distinct from evaluation on independently held-out data.",
+      "source_ids": [
+        "google-dataset-split"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "google-linear-loss",
+      "source_class": "official_document",
+      "title": "Linear regression: Loss",
+      "publisher": "Google for Developers",
+      "retrieved_at": "2026-10-10",
+      "license": "CC-BY-4.0 content, Apache-2.0 code samples unless otherwise noted; linked page footer",
+      "url": "https://developers.google.com/machine-learning/crash-course/linear-regression/loss",
+      "last_updated": "2026-01-05",
+      "applies_to": "Stable squared-error and MSE definitions, with original half-MSE derivation in the article; no adoption of the example dataset."
+    },
+    {
+      "id": "google-linear-gradient",
+      "source_class": "official_document",
+      "title": "Linear regression: Gradient descent",
+      "publisher": "Google for Developers",
+      "retrieved_at": "2026-10-10",
+      "license": "CC-BY-4.0 content, Apache-2.0 code samples unless otherwise noted; linked page footer",
+      "url": "https://developers.google.com/machine-learning/crash-course/linear-regression/gradient-descent",
+      "last_updated": "2026-02-03",
+      "applies_to": "Single-feature linear regression, MSE derivatives and iterative updates. Article uses half-MSE and explicitly requires an appropriate step size; no universal convergence guarantee is adopted."
+    },
+    {
+      "id": "google-linear-hyperparameters",
+      "source_class": "official_document",
+      "title": "Linear regression: Hyperparameters",
+      "publisher": "Google for Developers",
+      "retrieved_at": "2026-10-10",
+      "license": "CC-BY-4.0 content, Apache-2.0 code samples unless otherwise noted; linked page footer",
+      "url": "https://developers.google.com/machine-learning/crash-course/linear-regression/hyperparameters",
+      "last_updated": "2025-12-03",
+      "applies_to": "Learning-rate role and batch/epoch terminology, independent of an application or preferred default."
+    },
+    {
+      "id": "pytorch-optimization-tutorial",
+      "source_class": "official_source",
+      "title": "PyTorch Learn the Basics: Optimizing Model Parameters",
+      "publisher": "PyTorch contributors",
+      "retrieved_at": "2026-10-10",
+      "license": "BSD-3-Clause; https://github.com/pytorch/tutorials/blob/ca960b6a7cd299ba00a644aa918bbcffdeb70152/LICENSE",
+      "repository_url": "https://github.com/pytorch/tutorials",
+      "revision": "ca960b6a7cd299ba00a644aa918bbcffdeb70152",
+      "path": "beginner_source/basics/optimization_tutorial.py",
+      "web_url": "https://github.com/pytorch/tutorials/blob/ca960b6a7cd299ba00a644aa918bbcffdeb70152/beginner_source/basics/optimization_tutorial.py",
+      "raw_url": "https://raw.githubusercontent.com/pytorch/tutorials/ca960b6a7cd299ba00a644aa918bbcffdeb70152/beginner_source/basics/optimization_tutorial.py",
+      "raw_encoding": "identity",
+      "sha256": "ae54687a9b959fbc64375974d933089e5d705492baed6235018e2dc6899fc28a",
+      "assertions": [
+        "pred = model(X)",
+        "loss = loss_fn(pred, y)",
+        "loss.backward()\n        optimizer.step()\n        optimizer.zero_grad()",
+        "Gradients by default add up",
+        "model.eval()",
+        "with torch.no_grad():",
+        "optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)"
+      ]
+    },
+    {
+      "id": "google-dataset-split",
+      "source_class": "official_document",
+      "title": "Datasets: Dividing the original dataset",
+      "publisher": "Google for Developers",
+      "retrieved_at": "2026-10-10",
+      "license": "CC-BY-4.0 for page content except where otherwise noted; Apache-2.0 for code samples. Metadata and links only.",
+      "url": "https://developers.google.com/machine-learning/crash-course/overfitting/dividing-datasets",
+      "last_updated": "2025-12-03",
+      "applies_to": "Training, validation and test set roles, duplicate leakage and evaluation independence; no universal split percentage."
+    }
+  ]
+}

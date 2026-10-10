@@ -1,0 +1,290 @@
+{
+  "$schema": "../../../schema/evidence-manifest.schema.json",
+  "schema_version": 1,
+  "topic_id": "ai.deep-learning.tiny-neural-network",
+  "topic_document": "../../../../knowledge/ai/deep-learning/小神经网络与训练循环.md",
+  "verified_at": "2026-10-10",
+  "baseline_note": "Mechanisms reviewed against the linked primary sources. Original synthetic data, algebraic derivations and SVG illustrations; numerical curves computed by the accompanying Python standard-library scripts. Hand updates, finite-difference gradients and deterministic full-batch training were executed. Framework source baselines are evidence references, not an installed or tested PyTorch dependency combination. The PyTorch comparison snippet was not executed. No real dataset, hardware, model benchmark or deployed runtime is validated. Dynamic web dates are the displayed last-updated dates; no web-page mirror is stored.",
+  "claims": [
+    {
+      "id": "tiny-network-001",
+      "section": "1 为什么需要非线性激活",
+      "statement": "Nonlinear activation changes the functions representable by stacked affine layers; ReLU is max(0,z).",
+      "source_ids": [
+        "google-neural-activation"
+      ]
+    },
+    {
+      "id": "tiny-network-002",
+      "section": "2 两个隐藏节点有哪些参数",
+      "statement": "Learned weights and biases, Linear weight layout and batch shapes; seven-parameter count follows the original 1-2-1 structure.",
+      "source_ids": [
+        "pytorch-buildmodel-tutorial",
+        "pytorch-linear-layer"
+      ]
+    },
+    {
+      "id": "tiny-network-003",
+      "section": "3 手算一次前向传播",
+      "statement": "Forward evaluation composes affine operations, ReLU and the explicitly defined regression loss.",
+      "source_ids": [
+        "pytorch-buildmodel-tutorial",
+        "pytorch-mse-loss"
+      ]
+    },
+    {
+      "id": "tiny-network-004",
+      "section": "4 手算一次反向传播",
+      "statement": "Backpropagation applies the chain rule and computes gradients; ReLU uses zero backward value at the threshold on the pinned CPU path.",
+      "source_ids": [
+        "pytorch-autograd-tutorial",
+        "pytorch-relu-derivative",
+        "pytorch-threshold-backward",
+        "pytorch-cpu-threshold-kernel"
+      ]
+    },
+    {
+      "id": "tiny-network-005",
+      "section": "5 从一个样本走到训练循环",
+      "statement": "Gradient accumulation and clearing, separate optimizer updates, training/evaluation mode and disabled gradient recording.",
+      "source_ids": [
+        "pytorch-autograd-tutorial",
+        "pytorch-optimization-tutorial"
+      ]
+    },
+    {
+      "id": "tiny-network-006",
+      "section": "5 从一个样本走到训练循环",
+      "statement": "MSELoss averages all output elements; half-MSE matches the article for one scalar output per sample.",
+      "source_ids": [
+        "pytorch-mse-loss"
+      ]
+    },
+    {
+      "id": "tiny-network-007",
+      "section": "5 从一个样本走到训练循环",
+      "statement": "Batch size, updates and epochs have distinct roles.",
+      "source_ids": [
+        "google-linear-hyperparameters"
+      ]
+    },
+    {
+      "id": "tiny-network-008",
+      "section": "6 运行两个节点的训练实验",
+      "statement": "Synthetic training fit and a few constructed unseen inputs do not establish real-task generalization.",
+      "source_ids": [
+        "google-dataset-split"
+      ]
+    },
+    {
+      "id": "tiny-network-009",
+      "section": "7 常见卡点与自测",
+      "statement": "Activation conditions and input/target shape agreement are part of interpreting numerical loss and gradients.",
+      "source_ids": [
+        "google-neural-activation",
+        "pytorch-mse-loss"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "google-neural-activation",
+      "source_class": "official_document",
+      "title": "Neural networks: Activation functions",
+      "publisher": "Google for Developers",
+      "retrieved_at": "2026-10-10",
+      "license": "CC-BY-4.0 content, Apache-2.0 code samples unless otherwise noted; linked page footer",
+      "url": "https://developers.google.com/machine-learning/crash-course/neural-networks/activation-functions",
+      "last_updated": "2025-08-25",
+      "applies_to": "Nonlinear activation and ReLU definition; original two-unit absolute-value construction is algebraically derived in the article."
+    },
+    {
+      "id": "pytorch-linear-layer",
+      "source_class": "official_source",
+      "title": "PyTorch Linear module",
+      "publisher": "PyTorch contributors",
+      "retrieved_at": "2026-10-10",
+      "license": "BSD-3-Clause; repository LICENSE at 80acc2b144797cf7135614e6696ccf660f831356",
+      "repository_url": "https://github.com/pytorch/pytorch",
+      "revision": "80acc2b144797cf7135614e6696ccf660f831356",
+      "path": "torch/nn/modules/linear.py",
+      "web_url": "https://github.com/pytorch/pytorch/blob/80acc2b144797cf7135614e6696ccf660f831356/torch/nn/modules/linear.py",
+      "raw_url": "https://raw.githubusercontent.com/pytorch/pytorch/80acc2b144797cf7135614e6696ccf660f831356/torch/nn/modules/linear.py",
+      "raw_encoding": "identity",
+      "sha256": "1961ad1a1f650e104b3c7f78d19af2d21bf977e7af6c3fdf2420aad563c9e202",
+      "assertions": [
+        "class Linear(Module):",
+        "y = xA^T + b",
+        "torch.empty((out_features, in_features), **factory_kwargs)",
+        "return F.linear(input, self.weight, self.bias)"
+      ]
+    },
+    {
+      "id": "pytorch-mse-loss",
+      "source_class": "official_source",
+      "title": "PyTorch MSELoss module",
+      "publisher": "PyTorch contributors",
+      "retrieved_at": "2026-10-10",
+      "license": "BSD-3-Clause; repository LICENSE at 80acc2b144797cf7135614e6696ccf660f831356",
+      "repository_url": "https://github.com/pytorch/pytorch",
+      "revision": "80acc2b144797cf7135614e6696ccf660f831356",
+      "path": "torch/nn/modules/loss.py",
+      "web_url": "https://github.com/pytorch/pytorch/blob/80acc2b144797cf7135614e6696ccf660f831356/torch/nn/modules/loss.py",
+      "raw_url": "https://raw.githubusercontent.com/pytorch/pytorch/80acc2b144797cf7135614e6696ccf660f831356/torch/nn/modules/loss.py",
+      "raw_encoding": "identity",
+      "sha256": "415e4ccbbab63b9cc2b79f09a338cca6fa191c07138a4fb419e3c841c4748ae0",
+      "assertions": [
+        "class MSELoss(_Loss):",
+        "The mean operation still operates over all the elements, and divides by :math:`N`.",
+        "return F.mse_loss(input, target, reduction=self.reduction)"
+      ]
+    },
+    {
+      "id": "pytorch-autograd-tutorial",
+      "source_class": "official_source",
+      "title": "PyTorch Learn the Basics: Automatic Differentiation with torch.autograd",
+      "publisher": "PyTorch contributors",
+      "retrieved_at": "2026-10-10",
+      "license": "BSD-3-Clause; https://github.com/pytorch/tutorials/blob/ca960b6a7cd299ba00a644aa918bbcffdeb70152/LICENSE",
+      "repository_url": "https://github.com/pytorch/tutorials",
+      "revision": "ca960b6a7cd299ba00a644aa918bbcffdeb70152",
+      "path": "beginner_source/basics/autogradqs_tutorial.py",
+      "web_url": "https://github.com/pytorch/tutorials/blob/ca960b6a7cd299ba00a644aa918bbcffdeb70152/beginner_source/basics/autogradqs_tutorial.py",
+      "raw_url": "https://raw.githubusercontent.com/pytorch/tutorials/ca960b6a7cd299ba00a644aa918bbcffdeb70152/beginner_source/basics/autogradqs_tutorial.py",
+      "raw_encoding": "identity",
+      "sha256": "cdcd73aa6697ac144bab9b08dc952a08e07b207f6f4031787d9fa562a3c251c6",
+      "assertions": [
+        "loss.backward()",
+        "automatically compute the gradients using the chain rule.",
+        "accumulates them in the respective tensor’s ``.grad`` attribute",
+        "with torch.no_grad():"
+      ]
+    },
+    {
+      "id": "pytorch-buildmodel-tutorial",
+      "source_class": "official_source",
+      "title": "PyTorch Learn the Basics: Build the Neural Network",
+      "publisher": "PyTorch contributors",
+      "retrieved_at": "2026-10-10",
+      "license": "BSD-3-Clause; https://github.com/pytorch/tutorials/blob/ca960b6a7cd299ba00a644aa918bbcffdeb70152/LICENSE",
+      "repository_url": "https://github.com/pytorch/tutorials",
+      "revision": "ca960b6a7cd299ba00a644aa918bbcffdeb70152",
+      "path": "beginner_source/basics/buildmodel_tutorial.py",
+      "web_url": "https://github.com/pytorch/tutorials/blob/ca960b6a7cd299ba00a644aa918bbcffdeb70152/beginner_source/basics/buildmodel_tutorial.py",
+      "raw_url": "https://raw.githubusercontent.com/pytorch/tutorials/ca960b6a7cd299ba00a644aa918bbcffdeb70152/beginner_source/basics/buildmodel_tutorial.py",
+      "raw_encoding": "identity",
+      "sha256": "d5c3abf918cd9e23a16497d3e04985e75372f75040ecf8b64721caef96c64e31",
+      "assertions": [
+        "class NeuralNetwork(nn.Module):",
+        "nn.Linear(28*28, 512)",
+        "nn.ReLU()",
+        "def forward(self, x):",
+        "logits = self.linear_relu_stack(x)",
+        "weights and biases",
+        "introduce *nonlinearity*"
+      ]
+    },
+    {
+      "id": "pytorch-optimization-tutorial",
+      "source_class": "official_source",
+      "title": "PyTorch Learn the Basics: Optimizing Model Parameters",
+      "publisher": "PyTorch contributors",
+      "retrieved_at": "2026-10-10",
+      "license": "BSD-3-Clause; https://github.com/pytorch/tutorials/blob/ca960b6a7cd299ba00a644aa918bbcffdeb70152/LICENSE",
+      "repository_url": "https://github.com/pytorch/tutorials",
+      "revision": "ca960b6a7cd299ba00a644aa918bbcffdeb70152",
+      "path": "beginner_source/basics/optimization_tutorial.py",
+      "web_url": "https://github.com/pytorch/tutorials/blob/ca960b6a7cd299ba00a644aa918bbcffdeb70152/beginner_source/basics/optimization_tutorial.py",
+      "raw_url": "https://raw.githubusercontent.com/pytorch/tutorials/ca960b6a7cd299ba00a644aa918bbcffdeb70152/beginner_source/basics/optimization_tutorial.py",
+      "raw_encoding": "identity",
+      "sha256": "ae54687a9b959fbc64375974d933089e5d705492baed6235018e2dc6899fc28a",
+      "assertions": [
+        "pred = model(X)",
+        "loss = loss_fn(pred, y)",
+        "loss.backward()\n        optimizer.step()\n        optimizer.zero_grad()",
+        "Gradients by default add up",
+        "model.eval()",
+        "with torch.no_grad():",
+        "optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)"
+      ]
+    },
+    {
+      "id": "pytorch-relu-derivative",
+      "source_class": "official_source",
+      "title": "PyTorch ReLU derivative definition",
+      "publisher": "PyTorch contributors",
+      "retrieved_at": "2026-10-10",
+      "license": "BSD-3-Clause; repository LICENSE at 80acc2b144797cf7135614e6696ccf660f831356",
+      "repository_url": "https://github.com/pytorch/pytorch",
+      "revision": "80acc2b144797cf7135614e6696ccf660f831356",
+      "path": "tools/autograd/derivatives.yaml",
+      "web_url": "https://github.com/pytorch/pytorch/blob/80acc2b144797cf7135614e6696ccf660f831356/tools/autograd/derivatives.yaml",
+      "raw_url": "https://raw.githubusercontent.com/pytorch/pytorch/80acc2b144797cf7135614e6696ccf660f831356/tools/autograd/derivatives.yaml",
+      "raw_encoding": "identity",
+      "sha256": "4a4d1ae1ddea605f57594de991da2c92e89ae11d6aa6edf348107589b548082c",
+      "assertions": [
+        "- name: relu(Tensor self) -> Tensor\n  self: threshold_backward(grad, result, 0)"
+      ]
+    },
+    {
+      "id": "pytorch-threshold-backward",
+      "source_class": "official_source",
+      "title": "PyTorch threshold backward dispatch",
+      "publisher": "PyTorch contributors",
+      "retrieved_at": "2026-10-10",
+      "license": "BSD-3-Clause; repository LICENSE at 80acc2b144797cf7135614e6696ccf660f831356",
+      "repository_url": "https://github.com/pytorch/pytorch",
+      "revision": "80acc2b144797cf7135614e6696ccf660f831356",
+      "path": "aten/src/ATen/native/Activation.cpp",
+      "web_url": "https://github.com/pytorch/pytorch/blob/80acc2b144797cf7135614e6696ccf660f831356/aten/src/ATen/native/Activation.cpp",
+      "raw_url": "https://raw.githubusercontent.com/pytorch/pytorch/80acc2b144797cf7135614e6696ccf660f831356/aten/src/ATen/native/Activation.cpp",
+      "raw_encoding": "identity",
+      "sha256": "31420664a58682c659a4fac25a716f9a18f25b122980063c75fe6973fe0e7886",
+      "assertions": [
+        "TORCH_IMPL_FUNC(threshold_backward_out)",
+        "threshold_stub(device_type(), *this, threshold, 0);"
+      ]
+    },
+    {
+      "id": "pytorch-cpu-threshold-kernel",
+      "source_class": "official_source",
+      "title": "PyTorch CPU threshold kernel",
+      "publisher": "PyTorch contributors",
+      "retrieved_at": "2026-10-10",
+      "license": "BSD-3-Clause; repository LICENSE at 80acc2b144797cf7135614e6696ccf660f831356",
+      "repository_url": "https://github.com/pytorch/pytorch",
+      "revision": "80acc2b144797cf7135614e6696ccf660f831356",
+      "path": "aten/src/ATen/native/cpu/Activation.cpp",
+      "web_url": "https://github.com/pytorch/pytorch/blob/80acc2b144797cf7135614e6696ccf660f831356/aten/src/ATen/native/cpu/Activation.cpp",
+      "raw_url": "https://raw.githubusercontent.com/pytorch/pytorch/80acc2b144797cf7135614e6696ccf660f831356/aten/src/ATen/native/cpu/Activation.cpp",
+      "raw_encoding": "identity",
+      "sha256": "66cca1278103413ab9c566585004f58213a5f870a4daa07c0bc75bd2f30b19b1",
+      "assertions": [
+        "return x <= threshold ? value : other;",
+        "REGISTER_DISPATCH(threshold_stub, &threshold_kernel)"
+      ]
+    },
+    {
+      "id": "google-linear-hyperparameters",
+      "source_class": "official_document",
+      "title": "Linear regression: Hyperparameters",
+      "publisher": "Google for Developers",
+      "retrieved_at": "2026-10-10",
+      "license": "CC-BY-4.0 content, Apache-2.0 code samples unless otherwise noted; linked page footer",
+      "url": "https://developers.google.com/machine-learning/crash-course/linear-regression/hyperparameters",
+      "last_updated": "2025-12-03",
+      "applies_to": "Learning-rate role and batch/epoch terminology, independent of an application or preferred default."
+    },
+    {
+      "id": "google-dataset-split",
+      "source_class": "official_document",
+      "title": "Datasets: Dividing the original dataset",
+      "publisher": "Google for Developers",
+      "retrieved_at": "2026-10-10",
+      "license": "CC-BY-4.0 for page content except where otherwise noted; Apache-2.0 for code samples. Metadata and links only.",
+      "url": "https://developers.google.com/machine-learning/crash-course/overfitting/dividing-datasets",
+      "last_updated": "2025-12-03",
+      "applies_to": "Training, validation and test set roles, duplicate leakage and evaluation independence; no universal split percentage."
+    }
+  ]
+}

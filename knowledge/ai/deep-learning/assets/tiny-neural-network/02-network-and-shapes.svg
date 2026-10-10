@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="790" viewBox="0 0 1200 790" role="img" aria-labelledby="title desc">
+<title id="title">一个输入，两个隐藏节点，一个输出</title><desc id="desc">Linear → ReLU → Linear；连线是权重，计算节点还带有偏置</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#718398"/></marker></defs>
+<style>text{font-family:"Hiragino Sans GB",Arial,sans-serif} .title{font-weight:600} path,line,polyline{stroke-linecap:round;stroke-linejoin:round}</style>
+<rect width="1200" height="790" fill="#F9FBFD"/>
+<text x="48" y="57" font-size="34" fill="#17324D" text-anchor="start" font-weight="600">一个输入，两个隐藏节点，一个输出</text>
+<text x="48" y="94" font-size="22" fill="#52677D" text-anchor="start" font-weight="400">Linear → ReLU → Linear；连线是权重，计算节点还带有偏置</text>
+<line x1="195" y1="337" x2="428" y2="260" stroke="#3569B2" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="521" y1="260" x2="753" y2="337" stroke="#148273" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="195" y1="337" x2="428" y2="425" stroke="#3569B2" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="521" y1="425" x2="753" y2="337" stroke="#148273" stroke-width="3" marker-end="url(#arrow)"/>
+<circle cx="150" cy="337" r="45" fill="#3569B2" stroke="white" stroke-width="2"/>
+<circle cx="475" cy="260" r="45" fill="#148273" stroke="white" stroke-width="2"/>
+<circle cx="475" cy="425" r="45" fill="#148273" stroke="white" stroke-width="2"/>
+<circle cx="800" cy="337" r="45" fill="#3569B2" stroke="white" stroke-width="2"/>
+<text x="150" y="346" font-size="30" fill="white" text-anchor="middle" font-weight="600">x</text>
+<text x="475" y="269" font-size="30" fill="white" text-anchor="middle" font-weight="600">h₁</text>
+<text x="475" y="434" font-size="30" fill="white" text-anchor="middle" font-weight="600">h₂</text>
+<text x="800" y="346" font-size="30" fill="white" text-anchor="middle" font-weight="600">ŷ</text>
+<text x="290" y="276" font-size="26" fill="#17324D" text-anchor="middle" font-weight="400">w₁</text>
+<text x="290" y="424" font-size="26" fill="#17324D" text-anchor="middle" font-weight="400">w₂</text>
+<text x="646" y="272" font-size="26" fill="#17324D" text-anchor="middle" font-weight="400">v₁</text>
+<text x="646" y="427" font-size="26" fill="#17324D" text-anchor="middle" font-weight="400">v₂</text>
+<text x="475" y="180" font-size="23" fill="#148273" text-anchor="middle" font-weight="400">z₁ → ReLU → h₁</text>
+<text x="475" y="510" font-size="23" fill="#148273" text-anchor="middle" font-weight="400">z₂ → ReLU → h₂</text>
+<rect x="922" y="221" width="232" height="239" rx="16" fill="#FFF1E4" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="1038.0" y="264" font-size="26" fill="#B76525" text-anchor="middle" font-weight="600">7 个参数</text>
+<text x="1038.0" y="303" font-size="21" fill="#17324D" text-anchor="middle" font-weight="400">隐藏层：w₁、b₁</text>
+<text x="1038.0" y="337" font-size="21" fill="#17324D" text-anchor="middle" font-weight="400">w₂、b₂，共 4 个</text>
+<text x="1038.0" y="371" font-size="21" fill="#17324D" text-anchor="middle" font-weight="400">输出层：v₁、v₂</text>
+<text x="1038.0" y="405" font-size="21" fill="#17324D" text-anchor="middle" font-weight="400">c，共 3 个</text>
+<rect x="50" y="574" width="320" height="117" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="210.0" y="617" font-size="25" fill="#3569B2" text-anchor="middle" font-weight="600">批量输入</text>
+<text x="210.0" y="660.5" font-size="24" fill="#17324D" text-anchor="middle" font-weight="400">X：(m, 1)</text>
+<rect x="440" y="574" width="320" height="117" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="600.0" y="617" font-size="25" fill="#3569B2" text-anchor="middle" font-weight="600">隐藏表示</text>
+<text x="600.0" y="660.5" font-size="24" fill="#17324D" text-anchor="middle" font-weight="400">H：(m, 2)</text>
+<rect x="830" y="574" width="320" height="117" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="990.0" y="617" font-size="25" fill="#3569B2" text-anchor="middle" font-weight="600">批量预测</text>
+<text x="990.0" y="660.5" font-size="24" fill="#17324D" text-anchor="middle" font-weight="400">预测：(m, 1)</text>
+<line x1="372" y1="632" x2="431" y2="632" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="762" y1="632" x2="821" y2="632" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="600" y="736" font-size="23" fill="#52677D" text-anchor="middle" font-weight="400">m 是一批的样本数；ReLU 本身没有可学习参数</text>
+<text x="48" y="764" font-size="20" fill="#52677D" text-anchor="start" font-weight="400">形状按 PyTorch Linear 的排列解释；本例输出为连续数值，输出层不加 ReLU。</text>
+</svg>
