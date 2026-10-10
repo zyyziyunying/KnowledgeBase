@@ -4,7 +4,7 @@
   "topic_id": "ai.deep-learning.tiny-neural-network",
   "topic_document": "../../../../knowledge/ai/deep-learning/小神经网络与训练循环.md",
   "verified_at": "2026-10-10",
-  "baseline_note": "Mechanisms reviewed against the linked primary sources. Original synthetic data, algebraic derivations and SVG illustrations; numerical curves computed by the accompanying Python standard-library scripts. Hand updates, finite-difference gradients and deterministic full-batch training were executed. Framework source baselines are evidence references, not an installed or tested PyTorch dependency combination. The PyTorch comparison snippet was not executed. No real dataset, hardware, model benchmark or deployed runtime is validated. Dynamic web dates are the displayed last-updated dates; no web-page mirror is stored.",
+  "baseline_note": "Mechanisms reviewed against the linked primary sources. Original synthetic data, algebraic derivations, SVG illustrations and Mermaid flow diagrams; numerical curves computed by the accompanying Python standard-library scripts. The local single-parameter perturbation, all seven hand-example gradients, simultaneous parameter update and subsequent forward/loss values were checked. Finite-difference gradients and deterministic full-batch training were executed. The intuitive explanations and derivations describe the same original example, not an additional source or experiment task. Framework source baselines are evidence references, not an installed or tested PyTorch dependency combination. The PyTorch comparison snippet was not executed. No real dataset, hardware, model benchmark or deployed runtime is validated. Dynamic web dates are the displayed last-updated dates; no web-page mirror is stored.",
   "claims": [
     {
       "id": "tiny-network-001",
@@ -35,7 +35,7 @@
     {
       "id": "tiny-network-004",
       "section": "4 手算一次反向传播",
-      "statement": "Backpropagation applies the chain rule and computes gradients; ReLU uses zero backward value at the threshold on the pinned CPU path.",
+      "statement": "Backpropagation applies the chain rule and computes gradients without updating parameters; local gradient interpretation and inactive-branch behavior follow the original mathematical example. ReLU uses zero backward value at the threshold on the pinned CPU path.",
       "source_ids": [
         "pytorch-autograd-tutorial",
         "pytorch-relu-derivative",
@@ -46,7 +46,7 @@
     {
       "id": "tiny-network-005",
       "section": "5 从一个样本走到训练循环",
-      "statement": "Gradient accumulation and clearing, separate optimizer updates, training/evaluation mode and disabled gradient recording.",
+      "statement": "Forward evaluation, backward gradient computation and optimizer updates have separate roles; gradients are recomputed from current parameters and samples, with explicit clearing or accumulation. Training/evaluation mode and disabled gradient recording have distinct purposes.",
       "source_ids": [
         "pytorch-autograd-tutorial",
         "pytorch-optimization-tutorial"
