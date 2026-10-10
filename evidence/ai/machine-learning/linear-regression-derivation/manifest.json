@@ -1,0 +1,64 @@
+{
+  "$schema": "../../../schema/evidence-manifest.schema.json",
+  "schema_version": 1,
+  "topic_id": "ai.machine-learning.linear-regression-derivation",
+  "topic_document": "../../../../knowledge/ai/machine-learning/线性回归的最优解与更新依据.md",
+  "verified_at": "2026-10-10",
+  "baseline_note": "Companion mathematical derivation for the existing three-point synthetic experiment. Zero-loss optimality, square-expansion derivatives and the first-order negative-gradient argument are original algebraic derivations; official documents supply squared-error definitions, partial-derivative formulas and the iterative update mechanism. Exact arithmetic checks and the existing Python standard-library training experiment were executed. Reused original figures and numerical trajectories retain the main article's baseline. No real-data generalization, PyTorch execution, hardware or deployment is validated. Official-document metadata is reused from sources read on the same date; no web-page mirror or dynamic-page hash is stored.",
+  "claims": [
+    {
+      "id": "linear-derivation-001",
+      "section": "1 最优参数如何确定",
+      "statement": "Squared-error minimization and explicit half-MSE scaling; zero-loss optimality and uniqueness for the three synthetic points are derived locally.",
+      "source_ids": ["google-linear-loss"]
+    },
+    {
+      "id": "linear-derivation-002",
+      "section": "2 初始参数如何选择",
+      "statement": "Initialization precedes repeated loss and gradient computation; the initial values in this experiment are chosen teaching settings, not the minimizer or labels.",
+      "source_ids": ["google-linear-gradient"]
+    },
+    {
+      "id": "linear-derivation-003",
+      "section": "3 从平方展开推导梯度",
+      "statement": "Slope and intercept partial derivatives, with original square-expansion and difference-quotient derivations for half-MSE.",
+      "source_ids": ["google-linear-gradient"]
+    },
+    {
+      "id": "linear-derivation-004",
+      "section": "4 负梯度为什么能降低损失",
+      "statement": "Negative-gradient updates require a suitably small step; the first-order loss-change argument is derived locally and is not an arbitrary-step or universal stationary-point optimality guarantee.",
+      "source_ids": ["google-linear-gradient"]
+    },
+    {
+      "id": "linear-derivation-005",
+      "section": "5 完整的一次更新与循环",
+      "statement": "Recompute predictions, errors and both gradients at the same current parameter point, then update and repeat without using the known reference minimizer.",
+      "source_ids": ["google-linear-gradient"]
+    }
+  ],
+  "sources": [
+    {
+      "id": "google-linear-loss",
+      "source_class": "official_document",
+      "title": "Linear regression: Loss",
+      "publisher": "Google for Developers",
+      "retrieved_at": "2026-10-10",
+      "license": "CC-BY-4.0 content, Apache-2.0 code samples unless otherwise noted; linked page footer",
+      "url": "https://developers.google.com/machine-learning/crash-course/linear-regression/loss",
+      "last_updated": "2026-01-05",
+      "applies_to": "Squared-error and MSE definitions; the article's half-MSE coefficient and zero-loss proof for synthetic data are explicit local derivations."
+    },
+    {
+      "id": "google-linear-gradient",
+      "source_class": "official_document",
+      "title": "Linear regression: Gradient descent",
+      "publisher": "Google for Developers",
+      "retrieved_at": "2026-10-10",
+      "license": "CC-BY-4.0 content, Apache-2.0 code samples unless otherwise noted; linked page footer",
+      "url": "https://developers.google.com/machine-learning/crash-course/linear-regression/gradient-descent",
+      "last_updated": "2026-02-03",
+      "applies_to": "Initialization, single-feature MSE partial derivatives and iterative negative-gradient updates. Square-expansion limits and the first-order loss-change argument are derived locally using half-MSE. Appropriate step size is required; no universal convergence or stationary-point optimality guarantee is adopted."
+    }
+  ]
+}
