@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+<title id="title">训练调整参数，推理使用参数</title><desc id="desc">上方展示普通梯度训练，下方展示普通推理</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#718398"/></marker></defs>
+<style>text{font-family:"Hiragino Sans GB",Arial,sans-serif} .title{font-weight:600} path,line,polyline{stroke-linecap:round;stroke-linejoin:round}</style>
+<rect width="1200" height="720" fill="#F9FBFD"/>
+<text x="48" y="57" font-size="34" fill="#17324D" text-anchor="start" font-weight="600">训练调整参数，推理使用参数</text>
+<text x="48" y="94" font-size="22" fill="#52677D" text-anchor="start" font-weight="400">上方展示普通梯度训练，下方展示普通推理</text>
+<text x="48" y="148" font-size="29" fill="#3569B2" text-anchor="start" font-weight="600">训练</text>
+<rect x="35" y="184" width="155" height="141" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="112.5" y="227" font-size="22" fill="#3569B2" text-anchor="middle" font-weight="600">训练数据</text>
+<text x="112.5" y="266" font-size="19" fill="#17324D" text-anchor="middle" font-weight="400">输入 x</text>
+<text x="112.5" y="300" font-size="19" fill="#17324D" text-anchor="middle" font-weight="400">真实目标 y</text>
+<line x1="190" y1="254" x2="223" y2="254" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="230" y="184" width="155" height="141" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="307.5" y="227" font-size="22" fill="#3569B2" text-anchor="middle" font-weight="600">前向计算</text>
+<text x="307.5" y="282.5" font-size="19" fill="#17324D" text-anchor="middle" font-weight="400">产生预测</text>
+<line x1="385" y1="254" x2="418" y2="254" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="425" y="184" width="155" height="141" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="502.5" y="227" font-size="22" fill="#3569B2" text-anchor="middle" font-weight="600">计算损失</text>
+<text x="502.5" y="282.5" font-size="19" fill="#17324D" text-anchor="middle" font-weight="400">比较预测与目标</text>
+<line x1="580" y1="254" x2="613" y2="254" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="620" y="184" width="155" height="141" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="697.5" y="227" font-size="22" fill="#3569B2" text-anchor="middle" font-weight="600">反向传播</text>
+<text x="697.5" y="282.5" font-size="19" fill="#17324D" text-anchor="middle" font-weight="400">计算参数梯度</text>
+<line x1="775" y1="254" x2="808" y2="254" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="815" y="184" width="155" height="141" rx="16" fill="#E7F4EF" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="892.5" y="227" font-size="22" fill="#148273" text-anchor="middle" font-weight="600">优化器</text>
+<text x="892.5" y="282.5" font-size="19" fill="#17324D" text-anchor="middle" font-weight="400">更新参数 θ</text>
+<line x1="970" y1="254" x2="1003" y2="254" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="1010" y="184" width="155" height="141" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="1087.5" y="227" font-size="22" fill="#3569B2" text-anchor="middle" font-weight="600">清除梯度</text>
+<text x="1087.5" y="282.5" font-size="19" fill="#17324D" text-anchor="middle" font-weight="400">为下一轮准备</text>
+<path d="M 112 182 V 168 H 502 V 181" fill="none" stroke="#B76525" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="306" y="157" font-size="20" fill="#B76525" text-anchor="middle" font-weight="400">真实目标 y 用于计算损失</text>
+<path d="M 1088 327 V 388 H 112 V 329" fill="none" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="600" y="379" font-size="23" fill="#52677D" text-anchor="middle" font-weight="400">下一批数据使用更新后的参数</text>
+<line x1="48" y1="426" x2="1152" y2="426" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="48" y="474" font-size="29" fill="#148273" text-anchor="start" font-weight="600">推理</text>
+<rect x="70" y="504" width="300" height="129" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="220.0" y="547" font-size="25" fill="#148273" text-anchor="middle" font-weight="600">新输入</text>
+<text x="220.0" y="596.5" font-size="23" fill="#17324D" text-anchor="middle" font-weight="400">提供当前输入</text>
+<rect x="450" y="504" width="300" height="129" rx="16" fill="#E7F4EF" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="600.0" y="547" font-size="25" fill="#148273" text-anchor="middle" font-weight="600">模型计算</text>
+<text x="600.0" y="596.5" font-size="23" fill="#17324D" text-anchor="middle" font-weight="400">使用当前参数 θ</text>
+<rect x="830" y="504" width="300" height="129" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="980.0" y="547" font-size="25" fill="#148273" text-anchor="middle" font-weight="600">输出</text>
+<text x="980.0" y="596.5" font-size="23" fill="#17324D" text-anchor="middle" font-weight="400">预测或生成结果</text>
+<line x1="370" y1="567" x2="440" y2="567" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="750" y1="567" x2="820" y2="567" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="48" y="694" font-size="20" fill="#52677D" text-anchor="start" font-weight="400">梯度累加与清除位置可因实现而异；普通推理通常不执行参数优化。</text>
+</svg>

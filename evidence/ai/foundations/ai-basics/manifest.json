@@ -1,0 +1,317 @@
+{
+  "$schema": "../../../schema/evidence-manifest.schema.json",
+  "schema_version": 1,
+  "topic_id": "ai.foundations.ai-basics",
+  "topic_document": "../../../../knowledge/ai/foundations/AI基础与知识地图.md",
+  "verified_at": "2026-10-09",
+  "baseline_note": "Introductory concepts, official tutorial/documentation source inspection and hand-calculated illustrative numbers only. PyTorch and Hugging Face are independent document baselines, not a tested dependency combination or model benchmark. PyTorch code was not executed. The Azure taxonomy document is a historical fixed source (ms.date 2024-01-19) preceding migration; only stable definitions are adopted, paired with current first-party teaching sources. Web page last_updated values are the displayed dates, not fixed snapshots; no web-page mirror is stored. No device, deployed product, model weights, or training/inference runtime was verified.",
+  "claims": [
+    {
+      "id": "ai-basics-001",
+      "section": "1 AI 与机器学习的关系",
+      "statement": "Scope and relationship of AI, ML, neural networks and deep learning; generative tasks are a separate classification axis.",
+      "source_ids": [
+        "microsoft-ai-introduction",
+        "microsoft-ai-ml-dl",
+        "google-ml-introduction",
+        "hf-transformers-overview"
+      ]
+    },
+    {
+      "id": "ai-basics-002",
+      "section": "2 数据与模型怎样配合",
+      "statement": "Input, target and learned-parameter roles in introductory prediction tasks.",
+      "source_ids": [
+        "google-ml-introduction",
+        "pytorch-optimization-tutorial"
+      ]
+    },
+    {
+      "id": "ai-basics-003",
+      "section": "3 训练与推理",
+      "statement": "Ordinary gradient training loop and the distinct roles of evaluation mode and disabled gradient recording.",
+      "source_ids": [
+        "pytorch-optimization-tutorial"
+      ]
+    },
+    {
+      "id": "ai-basics-004",
+      "section": "4 常见的学习方式",
+      "statement": "Source of training signals and self-supervised objectives computed from input data.",
+      "source_ids": [
+        "google-ml-introduction",
+        "hf-transformers-overview"
+      ]
+    },
+    {
+      "id": "ai-basics-005",
+      "section": "5 评估与泛化",
+      "statement": "Generalization and fitting terminology; limits of training-loss evidence.",
+      "source_ids": [
+        "google-overfitting"
+      ]
+    },
+    {
+      "id": "ai-basics-006",
+      "section": "5 评估与泛化",
+      "statement": "Dataset partition roles and duplicate or repeated-selection effects on evaluation independence.",
+      "source_ids": [
+        "google-dataset-split"
+      ]
+    },
+    {
+      "id": "ai-basics-007",
+      "section": "6 神经网络与深度学习",
+      "statement": "Learnable weights and biases, nonlinear activations and multilayer networks in the introductory model.",
+      "source_ids": [
+        "pytorch-buildmodel-tutorial",
+        "microsoft-ai-ml-dl"
+      ]
+    },
+    {
+      "id": "ai-basics-008",
+      "section": "7 文本大模型怎样生成回答",
+      "statement": "Tokenization, vocabulary IDs and embeddings as numeric vectors; classifier tutorial scope is distinct from autoregressive generation.",
+      "source_ids": [
+        "hf-tokenizers",
+        "hf-pipeline-model-representations"
+      ]
+    },
+    {
+      "id": "ai-basics-009",
+      "section": "7 文本大模型怎样生成回答",
+      "statement": "Attention and architecture variants; causal language modeling conditioned on earlier sequence positions.",
+      "source_ids": [
+        "google-transformers",
+        "hf-transformers-overview",
+        "hf-pipeline-model-representations"
+      ]
+    },
+    {
+      "id": "ai-basics-010",
+      "section": "7 文本大模型怎样生成回答",
+      "statement": "Pretraining and subsequent fine-tuning contrasted with ordinary prompting without parameter updates.",
+      "source_ids": [
+        "hf-transformers-overview",
+        "google-llm-tuning"
+      ]
+    },
+    {
+      "id": "ai-basics-011",
+      "section": "7 文本大模型怎样生成回答",
+      "statement": "Hallucination and bias as limitations of generated language.",
+      "source_ids": [
+        "google-transformers"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "pytorch-optimization-tutorial",
+      "source_class": "official_source",
+      "title": "PyTorch Learn the Basics: Optimizing Model Parameters",
+      "publisher": "PyTorch contributors",
+      "retrieved_at": "2026-10-09",
+      "license": "BSD-3-Clause; https://github.com/pytorch/tutorials/blob/ca960b6a7cd299ba00a644aa918bbcffdeb70152/LICENSE",
+      "repository_url": "https://github.com/pytorch/tutorials",
+      "revision": "ca960b6a7cd299ba00a644aa918bbcffdeb70152",
+      "path": "beginner_source/basics/optimization_tutorial.py",
+      "web_url": "https://github.com/pytorch/tutorials/blob/ca960b6a7cd299ba00a644aa918bbcffdeb70152/beginner_source/basics/optimization_tutorial.py",
+      "raw_url": "https://raw.githubusercontent.com/pytorch/tutorials/ca960b6a7cd299ba00a644aa918bbcffdeb70152/beginner_source/basics/optimization_tutorial.py",
+      "raw_encoding": "identity",
+      "sha256": "ae54687a9b959fbc64375974d933089e5d705492baed6235018e2dc6899fc28a",
+      "assertions": [
+        "pred = model(X)",
+        "loss = loss_fn(pred, y)",
+        "loss.backward()\n        optimizer.step()\n        optimizer.zero_grad()",
+        "Gradients by default add up",
+        "model.eval()",
+        "with torch.no_grad():",
+        "optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)"
+      ]
+    },
+    {
+      "id": "pytorch-buildmodel-tutorial",
+      "source_class": "official_source",
+      "title": "PyTorch Learn the Basics: Build the Neural Network",
+      "publisher": "PyTorch contributors",
+      "retrieved_at": "2026-10-09",
+      "license": "BSD-3-Clause; https://github.com/pytorch/tutorials/blob/ca960b6a7cd299ba00a644aa918bbcffdeb70152/LICENSE",
+      "repository_url": "https://github.com/pytorch/tutorials",
+      "revision": "ca960b6a7cd299ba00a644aa918bbcffdeb70152",
+      "path": "beginner_source/basics/buildmodel_tutorial.py",
+      "web_url": "https://github.com/pytorch/tutorials/blob/ca960b6a7cd299ba00a644aa918bbcffdeb70152/beginner_source/basics/buildmodel_tutorial.py",
+      "raw_url": "https://raw.githubusercontent.com/pytorch/tutorials/ca960b6a7cd299ba00a644aa918bbcffdeb70152/beginner_source/basics/buildmodel_tutorial.py",
+      "raw_encoding": "identity",
+      "sha256": "d5c3abf918cd9e23a16497d3e04985e75372f75040ecf8b64721caef96c64e31",
+      "assertions": [
+        "class NeuralNetwork(nn.Module):",
+        "nn.Linear(28*28, 512)",
+        "nn.ReLU()",
+        "def forward(self, x):",
+        "logits = self.linear_relu_stack(x)",
+        "weights and biases",
+        "introduce *nonlinearity*"
+      ]
+    },
+    {
+      "id": "microsoft-ai-ml-dl",
+      "source_class": "official_source",
+      "title": "Deep learning vs. machine learning — official documentation source",
+      "publisher": "Microsoft",
+      "retrieved_at": "2026-10-09",
+      "license": "CC-BY-4.0; repository LICENSE at the same revision",
+      "repository_url": "https://github.com/MicrosoftDocs/azure-docs",
+      "revision": "d3f6cad1dc6eb96ad90d7b407b9147605435952c",
+      "path": "articles/machine-learning/concept-deep-learning-vs-machine-learning.md",
+      "web_url": "https://github.com/MicrosoftDocs/azure-docs/blob/d3f6cad1dc6eb96ad90d7b407b9147605435952c/articles/machine-learning/concept-deep-learning-vs-machine-learning.md",
+      "raw_url": "https://raw.githubusercontent.com/MicrosoftDocs/azure-docs/d3f6cad1dc6eb96ad90d7b407b9147605435952c/articles/machine-learning/concept-deep-learning-vs-machine-learning.md",
+      "raw_encoding": "identity",
+      "sha256": "a12637cfe46e27506526a97fd3a83f726ca2cc7bbac584b33a6d6625c42402d0",
+      "assertions": [
+        "**Deep learning** is a subset of machine learning",
+        "**Machine learning** is a subset of artificial intelligence",
+        "**Generative AI** is a subset of artificial intelligence",
+        "Deep learning models use neural networks that have a large number of layers."
+      ]
+    },
+    {
+      "id": "hf-transformers-overview",
+      "source_class": "official_source",
+      "title": "Transformer models — official course source",
+      "publisher": "Hugging Face",
+      "retrieved_at": "2026-10-09",
+      "license": "Apache-2.0; repository LICENSE at the same revision",
+      "repository_url": "https://github.com/huggingface/course",
+      "revision": "8b893f0ede6c781045692a7f892f25a0c92b4805",
+      "path": "chapters/en/chapter1/4.mdx",
+      "web_url": "https://github.com/huggingface/course/blob/8b893f0ede6c781045692a7f892f25a0c92b4805/chapters/en/chapter1/4.mdx",
+      "raw_url": "https://raw.githubusercontent.com/huggingface/course/8b893f0ede6c781045692a7f892f25a0c92b4805/chapters/en/chapter1/4.mdx",
+      "raw_encoding": "identity",
+      "sha256": "95141044df4d7baca23bf8e0f60650ef2085a1ea043b3669567710b5bc6e7579",
+      "assertions": [
+        "Self-supervised learning is a type of training in which the objective is automatically computed from the inputs of the model.",
+        "This is called *causal language modeling*",
+        "*Fine-tuning*, on the other hand, is the training done **after** a model has been pretrained.",
+        "**Decoder-only models**: Good for generative tasks such as text generation."
+      ]
+    },
+    {
+      "id": "hf-tokenizers",
+      "source_class": "official_source",
+      "title": "Tokenizers — official course source",
+      "publisher": "Hugging Face",
+      "retrieved_at": "2026-10-09",
+      "license": "Apache-2.0; repository LICENSE at the same revision",
+      "repository_url": "https://github.com/huggingface/course",
+      "revision": "8b893f0ede6c781045692a7f892f25a0c92b4805",
+      "path": "chapters/en/chapter2/4.mdx",
+      "web_url": "https://github.com/huggingface/course/blob/8b893f0ede6c781045692a7f892f25a0c92b4805/chapters/en/chapter2/4.mdx",
+      "raw_url": "https://raw.githubusercontent.com/huggingface/course/8b893f0ede6c781045692a7f892f25a0c92b4805/chapters/en/chapter2/4.mdx",
+      "raw_encoding": "identity",
+      "sha256": "f8cd746a4e6da527c9a24fc9082857e7d813d032ece84e7c1b43d9849bde2b82",
+      "assertions": [
+        "Models can only process numbers",
+        "Encoding is done in a two-step process: the tokenization, followed by the conversion to input IDs.",
+        "parts of words, punctuation symbols, etc.",
+        "same vocabulary used when the model was pretrained."
+      ]
+    },
+    {
+      "id": "microsoft-ai-introduction",
+      "source_class": "official_source",
+      "title": "Introduction to AI — official curriculum source",
+      "publisher": "Microsoft",
+      "retrieved_at": "2026-10-09",
+      "license": "MIT; repository LICENSE at the same revision",
+      "repository_url": "https://github.com/microsoft/AI-For-Beginners",
+      "revision": "392d0df1b2647cbee104942390551f1ed9e072c8",
+      "path": "lessons/1-Intro/README.md",
+      "web_url": "https://github.com/microsoft/AI-For-Beginners/blob/392d0df1b2647cbee104942390551f1ed9e072c8/lessons/1-Intro/README.md",
+      "raw_url": "https://raw.githubusercontent.com/microsoft/AI-For-Beginners/392d0df1b2647cbee104942390551f1ed9e072c8/lessons/1-Intro/README.md",
+      "raw_encoding": "identity",
+      "sha256": "2785c84250f5711880160a588f6b54a80e293080c14f4fb1b6aa4cd4a9a00fb2",
+      "assertions": [
+        "There are two possible approaches to this problem:",
+        "This is called **symbolic reasoning**.",
+        "Early chess programs were based on search",
+        "Part of Artificial Intelligence that is based on computer learning to solve a problem based on some data is called **Machine Learning**."
+      ]
+    },
+    {
+      "id": "hf-pipeline-model-representations",
+      "source_class": "official_source",
+      "title": "Behind the pipeline — official course source",
+      "publisher": "Hugging Face",
+      "retrieved_at": "2026-10-09",
+      "license": "Apache-2.0; repository LICENSE at the same revision",
+      "repository_url": "https://github.com/huggingface/course",
+      "revision": "8b893f0ede6c781045692a7f892f25a0c92b4805",
+      "path": "chapters/en/chapter2/2.mdx",
+      "web_url": "https://github.com/huggingface/course/blob/8b893f0ede6c781045692a7f892f25a0c92b4805/chapters/en/chapter2/2.mdx",
+      "raw_url": "https://raw.githubusercontent.com/huggingface/course/8b893f0ede6c781045692a7f892f25a0c92b4805/chapters/en/chapter2/2.mdx",
+      "raw_encoding": "identity",
+      "sha256": "b931713f94cf2a00a8640f4723dd6a3d45f3f87858a7bd2c065c698f3ac66a1d",
+      "assertions": [
+        "The embeddings layer converts each input ID in the tokenized input into a vector that represents the associated token.",
+        "Those are not probabilities but *logits*, the raw, unnormalized scores",
+        "predictions = torch.nn.functional.softmax(outputs.logits, dim=-1)"
+      ]
+    },
+    {
+      "id": "google-ml-introduction",
+      "source_class": "official_document",
+      "title": "What is Machine Learning?",
+      "publisher": "Google for Developers",
+      "retrieved_at": "2026-10-09",
+      "license": "CC-BY-4.0 for page content except where otherwise noted; Apache-2.0 for code samples. Metadata and links only.",
+      "url": "https://developers.google.com/machine-learning/intro-to-ml/what-is-ml",
+      "last_updated": "2026-01-27",
+      "applies_to": "Introductory task definitions and supervised, unsupervised, reinforcement and generative examples; not an exhaustive mutually exclusive taxonomy."
+    },
+    {
+      "id": "google-dataset-split",
+      "source_class": "official_document",
+      "title": "Datasets: Dividing the original dataset",
+      "publisher": "Google for Developers",
+      "retrieved_at": "2026-10-09",
+      "license": "CC-BY-4.0 for page content except where otherwise noted; Apache-2.0 for code samples. Metadata and links only.",
+      "url": "https://developers.google.com/machine-learning/crash-course/overfitting/dividing-datasets",
+      "last_updated": "2025-12-03",
+      "applies_to": "Training, validation and test set roles, duplicate leakage and evaluation independence; no universal split percentage."
+    },
+    {
+      "id": "google-overfitting",
+      "source_class": "official_document",
+      "title": "Overfitting",
+      "publisher": "Google for Developers",
+      "retrieved_at": "2026-10-09",
+      "license": "CC-BY-4.0 for page content except where otherwise noted; Apache-2.0 for code samples. Metadata and links only.",
+      "url": "https://developers.google.com/machine-learning/crash-course/overfitting/overfitting",
+      "last_updated": "2025-12-03",
+      "applies_to": "Introductory generalization, underfitting and overfitting concepts; not a guarantee that held-out scores predict changing deployment inputs."
+    },
+    {
+      "id": "google-transformers",
+      "source_class": "official_document",
+      "title": "LLMs: What's a large language model?",
+      "publisher": "Google for Developers",
+      "retrieved_at": "2026-10-09",
+      "license": "CC-BY-4.0 for page content except where otherwise noted; Apache-2.0 for code samples. Metadata and links only.",
+      "url": "https://developers.google.com/machine-learning/crash-course/llm/transformers",
+      "last_updated": "2026-01-02",
+      "applies_to": "Attention, encoder/decoder architecture distinctions, hallucination and data bias only. Its masked-prediction teaching example is not treated as the universal objective of all LLMs."
+    },
+    {
+      "id": "google-llm-tuning",
+      "source_class": "official_document",
+      "title": "LLMs: Fine-tuning, distillation, and prompt engineering",
+      "publisher": "Google for Developers",
+      "retrieved_at": "2026-10-09",
+      "license": "CC-BY-4.0 for page content except where otherwise noted; Apache-2.0 for code samples. Metadata and links only.",
+      "url": "https://developers.google.com/machine-learning/crash-course/llm/tuning",
+      "last_updated": "2025-12-03",
+      "applies_to": "Fine-tuning as further training and ordinary prompting without parameter updates only; not an endorsement of absolute capability or resource claims."
+    }
+  ]
+}

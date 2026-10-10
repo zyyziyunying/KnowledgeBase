@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="550" viewBox="0 0 1200 550" role="img" aria-labelledby="title desc">
+<title id="title">一封邮件怎样变成判断结果</title><desc id="desc">样本提供输入，特征进入计算；真实标签用于监督训练</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#718398"/></marker></defs>
+<style>text{font-family:"Hiragino Sans GB",Arial,sans-serif} .title{font-weight:600} path,line,polyline{stroke-linecap:round;stroke-linejoin:round}</style>
+<rect width="1200" height="550" fill="#F9FBFD"/>
+<text x="48" y="57" font-size="34" fill="#17324D" text-anchor="start" font-weight="600">一封邮件怎样变成判断结果</text>
+<text x="48" y="94" font-size="22" fill="#52677D" text-anchor="start" font-weight="400">样本提供输入，特征进入计算；真实标签用于监督训练</text>
+<rect x="42" y="164" width="188" height="179" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="136.0" y="207" font-size="23" fill="#3569B2" text-anchor="middle" font-weight="600">原始邮件</text>
+<text x="136.0" y="246" font-size="21" fill="#17324D" text-anchor="middle" font-weight="400">主题：中奖通知</text>
+<text x="136.0" y="280" font-size="21" fill="#17324D" text-anchor="middle" font-weight="400">正文含领取链接</text>
+<line x1="230" y1="251" x2="267" y2="251" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="274" y="164" width="188" height="179" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="368.0" y="207" font-size="23" fill="#3569B2" text-anchor="middle" font-weight="600">数值表示</text>
+<text x="368.0" y="246" font-size="21" fill="#17324D" text-anchor="middle" font-weight="400">词与链接等特征</text>
+<text x="368.0" y="280" font-size="21" fill="#17324D" text-anchor="middle" font-weight="400">[0.2, 0.8, …]</text>
+<line x1="462" y1="251" x2="499" y2="251" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="506" y="164" width="188" height="179" rx="16" fill="#E7F4EF" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="600.0" y="207" font-size="23" fill="#148273" text-anchor="middle" font-weight="600">模型计算</text>
+<text x="600.0" y="246" font-size="21" fill="#17324D" text-anchor="middle" font-weight="400">f(x; θ)</text>
+<text x="600.0" y="280" font-size="21" fill="#17324D" text-anchor="middle" font-weight="400">使用当前参数 θ</text>
+<line x1="694" y1="251" x2="731" y2="251" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="738" y="164" width="188" height="179" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="832.0" y="207" font-size="23" fill="#3569B2" text-anchor="middle" font-weight="600">类别分数</text>
+<text x="832.0" y="246" font-size="21" fill="#17324D" text-anchor="middle" font-weight="400">垃圾邮件：2.3</text>
+<text x="832.0" y="280" font-size="21" fill="#17324D" text-anchor="middle" font-weight="400">正常邮件：−1.1</text>
+<line x1="926" y1="251" x2="963" y2="251" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="970" y="164" width="188" height="179" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="1064.0" y="207" font-size="23" fill="#3569B2" text-anchor="middle" font-weight="600">判断结果</text>
+<text x="1064.0" y="281.5" font-size="21" fill="#17324D" text-anchor="middle" font-weight="400">垃圾邮件</text>
+<rect x="47" y="391" width="297" height="90" rx="16" fill="#FFF1E4" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="195.5" y="434" font-size="22" fill="#B76525" text-anchor="middle" font-weight="600">训练时还有真实标签</text>
+<text x="195.5" y="464.0" font-size="20" fill="#17324D" text-anchor="middle" font-weight="400">例：人工标注为垃圾邮件</text>
+<text x="390" y="428" font-size="24" fill="#17324D" text-anchor="start" font-weight="400">训练：用预测和真实标签计算损失</text>
+<text x="390" y="465" font-size="24" fill="#17324D" text-anchor="start" font-weight="400">推理：先得到预测，再独立评估是否正确</text>
+<text x="48" y="524" font-size="20" fill="#52677D" text-anchor="start" font-weight="400">向量与分数仅为教学示意；类别分数并不自动等于可靠概率。</text>
+</svg>

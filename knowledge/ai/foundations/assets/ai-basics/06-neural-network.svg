@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="690" viewBox="0 0 1200 690" role="img" aria-labelledby="title desc">
+<title id="title">神经网络是多层数值计算</title><desc id="desc">一种全连接网络示意：加权变换后经过激活，再交给下一层</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#718398"/></marker></defs>
+<style>text{font-family:"Hiragino Sans GB",Arial,sans-serif} .title{font-weight:600} path,line,polyline{stroke-linecap:round;stroke-linejoin:round}</style>
+<rect width="1200" height="690" fill="#F9FBFD"/>
+<text x="48" y="57" font-size="34" fill="#17324D" text-anchor="start" font-weight="600">神经网络是多层数值计算</text>
+<text x="48" y="94" font-size="22" fill="#52677D" text-anchor="start" font-weight="400">一种全连接网络示意：加权变换后经过激活，再交给下一层</text>
+<line x1="130" y1="282" x2="304" y2="244" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="130" y1="282" x2="304" y2="326" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="130" y1="282" x2="304" y2="408" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="130" y1="282" x2="304" y2="490" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="130" y1="372" x2="304" y2="244" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="130" y1="372" x2="304" y2="326" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="130" y1="372" x2="304" y2="408" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="130" y1="372" x2="304" y2="490" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="130" y1="462" x2="304" y2="244" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="130" y1="462" x2="304" y2="326" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="130" y1="462" x2="304" y2="408" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="130" y1="462" x2="304" y2="490" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="346" y1="244" x2="538" y2="244" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="346" y1="244" x2="538" y2="326" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="346" y1="244" x2="538" y2="408" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="346" y1="244" x2="538" y2="490" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="346" y1="326" x2="538" y2="244" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="346" y1="326" x2="538" y2="326" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="346" y1="326" x2="538" y2="408" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="346" y1="326" x2="538" y2="490" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="346" y1="408" x2="538" y2="244" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="346" y1="408" x2="538" y2="326" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="346" y1="408" x2="538" y2="408" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="346" y1="408" x2="538" y2="490" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="346" y1="490" x2="538" y2="244" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="346" y1="490" x2="538" y2="326" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="346" y1="490" x2="538" y2="408" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="346" y1="490" x2="538" y2="490" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="580" y1="244" x2="737" y2="326" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="580" y1="244" x2="737" y2="408" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="580" y1="326" x2="737" y2="326" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="580" y1="326" x2="737" y2="408" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="580" y1="408" x2="737" y2="326" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="580" y1="408" x2="737" y2="408" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="580" y1="490" x2="737" y2="326" stroke="#B9CADC" stroke-width="1.5"/>
+<line x1="580" y1="490" x2="737" y2="408" stroke="#B9CADC" stroke-width="1.5"/>
+<circle cx="109" cy="282" r="23" fill="#EDF3FB" stroke="#3569B2" stroke-width="2"/>
+<text x="109" y="289" font-size="20" fill="#3569B2" text-anchor="middle" font-weight="400">x1</text>
+<circle cx="109" cy="372" r="23" fill="#EDF3FB" stroke="#3569B2" stroke-width="2"/>
+<text x="109" y="379" font-size="20" fill="#3569B2" text-anchor="middle" font-weight="400">x2</text>
+<circle cx="109" cy="462" r="23" fill="#EDF3FB" stroke="#3569B2" stroke-width="2"/>
+<text x="109" y="469" font-size="20" fill="#3569B2" text-anchor="middle" font-weight="400">x3</text>
+<circle cx="325" cy="244" r="23" fill="#E7F4EF" stroke="#148273" stroke-width="2"/>
+<circle cx="325" cy="326" r="23" fill="#E7F4EF" stroke="#148273" stroke-width="2"/>
+<circle cx="325" cy="408" r="23" fill="#E7F4EF" stroke="#148273" stroke-width="2"/>
+<circle cx="325" cy="490" r="23" fill="#E7F4EF" stroke="#148273" stroke-width="2"/>
+<circle cx="559" cy="244" r="23" fill="#E7F4EF" stroke="#148273" stroke-width="2"/>
+<circle cx="559" cy="326" r="23" fill="#E7F4EF" stroke="#148273" stroke-width="2"/>
+<circle cx="559" cy="408" r="23" fill="#E7F4EF" stroke="#148273" stroke-width="2"/>
+<circle cx="559" cy="490" r="23" fill="#E7F4EF" stroke="#148273" stroke-width="2"/>
+<circle cx="758" cy="326" r="23" fill="#EDF3FB" stroke="#3569B2" stroke-width="2"/>
+<text x="758" y="333" font-size="20" fill="#3569B2" text-anchor="middle" font-weight="400">y1</text>
+<circle cx="758" cy="408" r="23" fill="#EDF3FB" stroke="#3569B2" stroke-width="2"/>
+<text x="758" y="415" font-size="20" fill="#3569B2" text-anchor="middle" font-weight="400">y2</text>
+<text x="109" y="174" font-size="25" fill="#17324D" text-anchor="middle" font-weight="600">输入</text>
+<text x="325" y="174" font-size="25" fill="#17324D" text-anchor="middle" font-weight="600">隐藏层 1</text>
+<text x="559" y="174" font-size="25" fill="#17324D" text-anchor="middle" font-weight="600">隐藏层 2</text>
+<text x="758" y="174" font-size="25" fill="#17324D" text-anchor="middle" font-weight="600">输出</text>
+<text x="442" y="550" font-size="24" fill="#148273" text-anchor="middle" font-weight="400">加权变换 + 非线性激活</text>
+<text x="442" y="594" font-size="22" fill="#52677D" text-anchor="middle" font-weight="400">W 是权重，b 是偏置，训练会调整它们</text>
+<line x1="831" y1="158" x2="831" y2="610" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="1004" y="179" font-size="26" fill="#148273" text-anchor="middle" font-weight="600">ReLU 激活</text>
+<text x="1004" y="220" font-size="22" fill="#17324D" text-anchor="middle" font-weight="400">ReLU(x) = max(0, x)</text>
+<line x1="881" y1="456" x2="1144" y2="456" stroke="#17324D" stroke-width="2"/>
+<line x1="1010" y1="512" x2="1010" y2="281" stroke="#17324D" stroke-width="2"/>
+<text x="1147" y="485" font-size="21" fill="#17324D" text-anchor="start" font-weight="400">输入</text>
+<text x="991" y="271" font-size="21" fill="#17324D" text-anchor="end" font-weight="400">输出</text>
+<path d="M 887 456 H 1010 L 1133 321" fill="none" stroke="#148273" stroke-width="4"/>
+<circle cx="1010" cy="456" r="5" fill="#148273" stroke="white" stroke-width="2"/>
+<text x="925" y="550" font-size="23" fill="#17324D" text-anchor="middle" font-weight="400">负数 → 0</text>
+<text x="1079" y="550" font-size="23" fill="#17324D" text-anchor="middle" font-weight="400">正数 → 保留</text>
+<text x="48" y="664" font-size="20" fill="#52677D" text-anchor="start" font-weight="400">层与连线用于解释结构；不代表特定模型，也不意味着层数越多效果必然越好。</text>
+</svg>

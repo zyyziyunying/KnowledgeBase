@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="730" viewBox="0 0 1200 730" role="img" aria-labelledby="title desc">
+<title id="title">训练表现好，还要看新数据</title><desc id="desc">左侧看过拟合迹象，右侧看评估数据怎样分工</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#718398"/></marker></defs>
+<style>text{font-family:"Hiragino Sans GB",Arial,sans-serif} .title{font-weight:600} path,line,polyline{stroke-linecap:round;stroke-linejoin:round}</style>
+<rect width="1200" height="730" fill="#F9FBFD"/>
+<text x="48" y="57" font-size="34" fill="#17324D" text-anchor="start" font-weight="600">训练表现好，还要看新数据</text>
+<text x="48" y="94" font-size="22" fill="#52677D" text-anchor="start" font-weight="400">左侧看过拟合迹象，右侧看评估数据怎样分工</text>
+<line x1="94" y1="576" x2="735" y2="576" stroke="#17324D" stroke-width="2"/>
+<line x1="94" y1="576" x2="94" y2="188" stroke="#17324D" stroke-width="2"/>
+<line x1="94" y1="285.0" x2="735" y2="285.0" stroke="#D9E2EC" stroke-width="1"/>
+<line x1="94" y1="382.0" x2="735" y2="382.0" stroke="#D9E2EC" stroke-width="1"/>
+<line x1="94" y1="479.0" x2="735" y2="479.0" stroke="#D9E2EC" stroke-width="1"/>
+<text x="70" y="206" font-size="21" fill="#52677D" text-anchor="end" font-weight="400">高</text>
+<text x="70" y="576" font-size="21" fill="#52677D" text-anchor="end" font-weight="400">低</text>
+<text x="94" y="158" font-size="23" fill="#17324D" text-anchor="start" font-weight="400">损失（示意）</text>
+<text x="414.5" y="617" font-size="23" fill="#17324D" text-anchor="middle" font-weight="400">训练进度 →</text>
+<path d="M 106 224 C 180 320, 250 398, 330 432 S 560 527, 718 534" fill="none" stroke="#3569B2" stroke-width="4"/>
+<path d="M 106 231 C 190 326, 266 411, 351 446 S 468 453, 520 405 S 633 281, 718 245" fill="none" stroke="#B76525" stroke-width="4" stroke-dasharray="9 7"/>
+<circle cx="461" cy="449" r="7" fill="#B76525" stroke="white" stroke-width="2"/>
+<line x1="452" y1="488" x2="461" y2="458" stroke="#B76525" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="420" y="518" font-size="21" fill="#B76525" text-anchor="middle" font-weight="400">验证损失转而上升</text>
+<line x1="126" y1="649" x2="168" y2="649" stroke="#3569B2" stroke-width="4"/>
+<text x="181" y="657" font-size="22" fill="#17324D" text-anchor="start" font-weight="400">训练损失</text>
+<line x1="371" y1="649" x2="413" y2="649" stroke="#B76525" stroke-width="4" stroke-dasharray="9 7"/>
+<text x="426" y="657" font-size="22" fill="#17324D" text-anchor="start" font-weight="400">验证损失</text>
+<rect x="837" y="166" width="308" height="112" rx="16" fill="#EDF3FB" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="991.0" y="209" font-size="25" fill="#3569B2" text-anchor="middle" font-weight="600">训练集</text>
+<text x="991.0" y="250.0" font-size="22" fill="#17324D" text-anchor="middle" font-weight="400">学习参数</text>
+<rect x="837" y="332" width="308" height="112" rx="16" fill="#FFF1E4" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="991.0" y="375" font-size="25" fill="#B76525" text-anchor="middle" font-weight="600">验证集</text>
+<text x="991.0" y="416.0" font-size="22" fill="#17324D" text-anchor="middle" font-weight="400">比较配置、选择模型</text>
+<rect x="837" y="498" width="308" height="112" rx="16" fill="#E7F4EF" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="991.0" y="541" font-size="25" fill="#148273" text-anchor="middle" font-weight="600">测试集</text>
+<text x="991.0" y="582.0" font-size="22" fill="#17324D" text-anchor="middle" font-weight="400">配置确定后评估</text>
+<line x1="991" y1="280" x2="991" y2="324" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="991" y1="446" x2="991" y2="490" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 835 388 H 791 V 220 H 829" fill="none" stroke="#718398" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
+<text x="991" y="651" font-size="21" fill="#52677D" text-anchor="middle" font-weight="400">测试结果不反复用于调参</text>
+<text x="48" y="704" font-size="20" fill="#52677D" text-anchor="start" font-weight="400">曲线是教学示意，非实测结果；图中没有规定固定的数据划分比例。</text>
+</svg>

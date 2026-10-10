@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="780" viewBox="0 0 1200 780" role="img" aria-labelledby="title desc">
+<title id="title">AI 概念地图</title><desc id="desc">左侧按方法定位，右侧按生成任务看用途</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#718398"/></marker></defs>
+<style>text{font-family:"Hiragino Sans GB",Arial,sans-serif} .title{font-weight:600} path,line,polyline{stroke-linecap:round;stroke-linejoin:round}</style>
+<rect width="1200" height="780" fill="#F9FBFD"/>
+<text x="48" y="57" font-size="34" fill="#17324D" text-anchor="start" font-weight="600">AI 概念地图</text>
+<text x="48" y="94" font-size="22" fill="#52677D" text-anchor="start" font-weight="400">左侧按方法定位，右侧按生成任务看用途</text>
+<rect x="48" y="140" width="765" height="555" rx="16" fill="#F0F4F9" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="72" y="190" font-size="30" fill="#3569B2" text-anchor="start" font-weight="600">人工智能 AI</text>
+<text x="76" y="236" font-size="23" fill="#52677D" text-anchor="start" font-weight="400">规则</text>
+<text x="76" y="270" font-size="23" fill="#52677D" text-anchor="start" font-weight="400">搜索</text>
+<rect x="182" y="228" width="600" height="434" rx="16" fill="#EDF3FB" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="205" y="270" font-size="28" fill="#3569B2" text-anchor="start" font-weight="600">机器学习 ML</text>
+<text x="205" y="305" font-size="22" fill="#52677D" text-anchor="start" font-weight="400">线性模型、决策树等</text>
+<rect x="302" y="335" width="450" height="299" rx="16" fill="#E3EDF9" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="325" y="380" font-size="27" fill="#3569B2" text-anchor="start" font-weight="600">神经网络</text>
+<rect x="407" y="410" width="315" height="196" rx="16" fill="#E7F4EF" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="430" y="455" font-size="27" fill="#148273" text-anchor="start" font-weight="600">深度学习 DL</text>
+<rect x="440" y="500" width="246" height="75" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="563.0" y="543" font-size="23" fill="#148273" text-anchor="middle" font-weight="600">常见文本 LLM</text>
+<rect x="865" y="165" width="286" height="471" rx="16" fill="#FFF1E4" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="1008" y="216" font-size="28" fill="#B76525" text-anchor="middle" font-weight="600">生成式 AI</text>
+<text x="1008" y="254" font-size="22" fill="#52677D" text-anchor="middle" font-weight="400">按输出任务划分</text>
+<rect x="894" y="288" width="228" height="75" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="1008.0" y="331" font-size="24" fill="#B76525" text-anchor="middle" font-weight="600">生成文本</text>
+<rect x="894" y="391" width="228" height="75" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="1008.0" y="434" font-size="24" fill="#B76525" text-anchor="middle" font-weight="600">生成图像</text>
+<rect x="894" y="494" width="228" height="75" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="1008.0" y="537" font-size="24" fill="#B76525" text-anchor="middle" font-weight="600">生成音频等</text>
+<path d="M 687 539 H 835 V 326 H 892" fill="none" stroke="#148273" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="7 6"/>
+<text x="733" y="710" font-size="21" fill="#52677D" text-anchor="middle" font-weight="400">简化关系；区域面积不表示规模或比例</text>
+<text x="48" y="754" font-size="20" fill="#52677D" text-anchor="start" font-weight="400">生成任务与学习方法是不同维度；深度学习也可用于分类和数值预测。</text>
+</svg>

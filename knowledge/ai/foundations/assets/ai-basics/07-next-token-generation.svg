@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="805" viewBox="0 0 1200 805" role="img" aria-labelledby="title desc">
+<title id="title">回答是怎样逐个 token 生成的</title><desc id="desc">常见自回归文本生成：已有上下文 → 候选 → 选择 → 追加</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#718398"/></marker></defs>
+<style>text{font-family:"Hiragino Sans GB",Arial,sans-serif} .title{font-weight:600} path,line,polyline{stroke-linecap:round;stroke-linejoin:round}</style>
+<rect width="1200" height="805" fill="#F9FBFD"/>
+<text x="48" y="57" font-size="34" fill="#17324D" text-anchor="start" font-weight="600">回答是怎样逐个 token 生成的</text>
+<text x="48" y="94" font-size="22" fill="#52677D" text-anchor="start" font-weight="400">常见自回归文本生成：已有上下文 → 候选 → 选择 → 追加</text>
+<rect x="50" y="186" width="245" height="163" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="172.5" y="229" font-size="24" fill="#3569B2" text-anchor="middle" font-weight="600">① 当前文本</text>
+<text x="172.5" y="295.5" font-size="23" fill="#17324D" text-anchor="middle" font-weight="400">我喜欢</text>
+<rect x="335" y="186" width="245" height="163" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="457.5" y="229" font-size="24" fill="#3569B2" text-anchor="middle" font-weight="600">② Tokenizer</text>
+<text x="457.5" y="268" font-size="23" fill="#17324D" text-anchor="middle" font-weight="400">示意拆分</text>
+<text x="457.5" y="302" font-size="23" fill="#17324D" text-anchor="middle" font-weight="400">[我] [喜欢]</text>
+<rect x="620" y="186" width="245" height="163" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="742.5" y="229" font-size="24" fill="#3569B2" text-anchor="middle" font-weight="600">③ Token ID</text>
+<text x="742.5" y="268" font-size="23" fill="#17324D" text-anchor="middle" font-weight="400">示意索引</text>
+<text x="742.5" y="302" font-size="23" fill="#17324D" text-anchor="middle" font-weight="400">[31, 208]</text>
+<rect x="905" y="186" width="245" height="163" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="1027.5" y="229" font-size="24" fill="#3569B2" text-anchor="middle" font-weight="600">④ Embedding</text>
+<text x="1027.5" y="268" font-size="23" fill="#17324D" text-anchor="middle" font-weight="400">每个 ID</text>
+<text x="1027.5" y="302" font-size="23" fill="#17324D" text-anchor="middle" font-weight="400">映射为向量</text>
+<line x1="295" y1="267" x2="328" y2="267" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="580" y1="267" x2="613" y2="267" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="865" y1="267" x2="898" y2="267" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="1027" y1="351" x2="1027" y2="422" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="905" y="430" width="245" height="171" rx="16" fill="#E7F4EF" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="1027.5" y="473" font-size="24" fill="#148273" text-anchor="middle" font-weight="600">⑤ 模型计算</text>
+<text x="1027.5" y="512" font-size="22" fill="#17324D" text-anchor="middle" font-weight="400">使用已有 token</text>
+<text x="1027.5" y="546" font-size="22" fill="#17324D" text-anchor="middle" font-weight="400">参数 θ 通常不变</text>
+<rect x="620" y="430" width="245" height="171" rx="16" fill="#FFF1E4" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="742.5" y="473" font-size="24" fill="#B76525" text-anchor="middle" font-weight="600">⑥ 候选概率</text>
+<text x="742.5" y="512" font-size="20" fill="#17324D" text-anchor="middle" font-weight="400">学习 0.45</text>
+<text x="742.5" y="546" font-size="20" fill="#17324D" text-anchor="middle" font-weight="400">跑步 0.35 / 咖啡 0.20</text>
+<rect x="335" y="430" width="245" height="171" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="457.5" y="473" font-size="24" fill="#3569B2" text-anchor="middle" font-weight="600">⑦ 解码选择</text>
+<text x="457.5" y="512" font-size="21" fill="#17324D" text-anchor="middle" font-weight="400">按解码规则选择</text>
+<text x="457.5" y="546" font-size="21" fill="#17324D" text-anchor="middle" font-weight="400">示意选中：学习</text>
+<rect x="50" y="430" width="245" height="171" rx="16" fill="white" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="172.5" y="473" font-size="24" fill="#3569B2" text-anchor="middle" font-weight="600">⑧ 追加 token</text>
+<text x="172.5" y="512" font-size="22" fill="#17324D" text-anchor="middle" font-weight="400">我喜欢学习</text>
+<text x="172.5" y="546" font-size="22" fill="#17324D" text-anchor="middle" font-weight="400">更新当前序列</text>
+<line x1="903" y1="515" x2="872" y2="515" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="618" y1="515" x2="587" y2="515" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="333" y1="515" x2="302" y2="515" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 49 512 H 23 V 148 H 742 V 178" fill="none" stroke="#148273" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="79" y="137" font-size="21" fill="#148273" text-anchor="start" font-weight="400">继续生成：把新 token ID 加到当前序列</text>
+<line x1="172" y1="603" x2="172" y2="653" stroke="#718398" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="50" y="661" width="340" height="76" rx="16" fill="#E7F4EF" stroke="#D9E2EC" stroke-width="1.5"/>
+<text x="220.0" y="704" font-size="23" fill="#148273" text-anchor="middle" font-weight="600">满足停止条件后结束</text>
+<text x="452" y="686" font-size="23" fill="#17324D" text-anchor="start" font-weight="400">先处理已有 token，再预测下一个</text>
+<text x="452" y="725" font-size="22" fill="#52677D" text-anchor="start" font-weight="400">生成循环改变上下文，通常不更新模型参数</text>
+<text x="48" y="779" font-size="20" fill="#52677D" text-anchor="start" font-weight="400">分词、ID 与候选概率仅为示意；本图聚焦常见自回归生成，输出仍需核对事实。</text>
+</svg>
