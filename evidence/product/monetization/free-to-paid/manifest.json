@@ -1,0 +1,86 @@
+{
+  "$schema": "../../../schema/evidence-manifest.schema.json",
+  "schema_version": 1,
+  "topic_id": "product.monetization.free-to-paid",
+  "topic_document": "../../../../knowledge/product/monetization/免费与付费的边界.md",
+  "verified_at": "2026-10-14",
+  "baseline_note": "Conceptual reading baseline, not empirical conversion research. The official source establishes business-model terminology; named practitioner articles supply supplementary frameworks and experience. The five judgments, value-confirmation and paid-improvement positions, evidence distinctions, and hypothetical storage example are original conceptual synthesis. Source mappings identify relevant premises, not proof of causal effects or universally optimal boundaries. No product metrics, pricing recommendations, budgets, runtime or market experiments are included. Apple last_updated records the observed HTTP Last-Modified header (2026-01-30 23:09:36 GMT); the page does not declare an editorial publication/update date. That header and all dynamic URLs are not immutable snapshots. Only metadata and links are stored; no webpage copies or hashes are claimed.",
+  "claims": [
+    {
+      "id": "free-to-paid-001",
+      "section": "1 从创造价值到获取收入",
+      "statement": "Business-model terminology from the official document; value creation/delivery/capture attributed to Carter. The five-judgment arrangement is conceptual synthesis, not an empirically necessary funnel.",
+      "source_ids": [
+        "apple-business-models",
+        "carter-value-loop"
+      ]
+    },
+    {
+      "id": "free-to-paid-002",
+      "section": "2 总价值与增量价值；3 价值确认与付费改善怎样衔接",
+      "statement": "Conceptual distinction between overall utility, incremental paid benefits and evidence of perceived value. The storage example and two-position interpretation are explanatory deductions, not measured conversion drivers.",
+      "source_ids": [
+        "apple-business-models",
+        "carter-value-loop",
+        "revenuecat-freemium"
+      ]
+    },
+    {
+      "id": "free-to-paid-003",
+      "section": "4 怎样理解免费给得太少或太多；5 怎样判断增量价值支持购买",
+      "statement": "Free-tier utility and optional paid differentiation are the source-backed premises. No universal allocation ratio, timing threshold, causal conversion effect or profitability guarantee is adopted.",
+      "source_ids": [
+        "apple-business-models",
+        "revenuecat-freemium"
+      ]
+    },
+    {
+      "id": "free-to-paid-004",
+      "section": "6 订阅需要额外判断持续价值",
+      "statement": "Recurring access and enduring value motivate the distinction between initial purchase and renewal. Need recurrence, billing-period fit and changing expectations are conceptual interpretation, not retention forecasts.",
+      "source_ids": [
+        "apple-business-models",
+        "carter-value-loop"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "apple-business-models",
+      "source_class": "official_document",
+      "title": "Choosing a business model",
+      "publisher": "Apple Developer",
+      "retrieved_at": "2026-10-14",
+      "license": "Apple website copyright; no redistribution license established. Metadata and links only.",
+      "url": "https://developer.apple.com/app-store/business-models/",
+      "last_updated": "2026-01-30",
+      "applies_to": "Freemium, optional purchases, non-consumables and recurring access terminology. last_updated is the observed HTTP Last-Modified date, not an editorial publication date or immutable revision. Current fees and platform-specific purchase rules are outside the adopted scope."
+    },
+    {
+      "id": "carter-value-loop",
+      "source_class": "authoritative_blog",
+      "title": "The Subscription Value Loop",
+      "publisher": "Elemental Growth / Phil Carter",
+      "author": "Phil Carter",
+      "published_at": "2024-04-11",
+      "retrieved_at": "2026-10-14",
+      "license": "Author copyright; no redistribution license established. Metadata and links only.",
+      "url": "https://philgcarter.substack.com/p/the-subscription-value-loop",
+      "applies_to": "Consumer subscription value creation, delivery and capture as an attributed practitioner framework; no software version, numerical benchmark or causal performance guarantee.",
+      "credibility_note": "Original author publication of the framework discussed in the article. Adopted only as supplementary conceptual interpretation alongside official business-model definitions; examples and outcome claims are not treated as controlled evidence."
+    },
+    {
+      "id": "revenuecat-freemium",
+      "source_class": "authoritative_blog",
+      "title": "How to turn freemium users into loyal subscribers",
+      "publisher": "RevenueCat",
+      "author": "Alice Muir Kocourková",
+      "published_at": "2025-06-04",
+      "retrieved_at": "2026-10-14",
+      "license": "Author/RevenueCat copyright; no redistribution license established. Metadata and links only.",
+      "url": "https://www.revenuecat.com/blog/growth/how-to-turn-freemium-users-into-loyal-subscribers",
+      "applies_to": "Supplementary practitioner discussion of meaningful free experience, clear premium differences and user intent. Fixed free-tier percentages, first-session targets and numerical outcomes are not adopted.",
+      "credibility_note": "Named practitioner article from a subscription infrastructure provider, used to explain design tradeoffs. It is not a universal rule or a causal study; conceptual synthesis remains separately qualified."
+    }
+  ]
+}

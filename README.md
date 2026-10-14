@@ -1,6 +1,6 @@
 # 个人知识库
 
-这是一个长期维护的个人知识库。仓库只沉淀可复用的技术知识，并按知识领域组织；Android 是当前建设重点，但不是整个仓库的边界。
+这是一个长期维护的个人知识库。仓库沉淀可复用的通用知识，并按知识领域组织；Android 是当前建设重点，但不是整个仓库的边界。
 
 ## 知识地图
 
@@ -9,6 +9,7 @@
 | Android | Framework 基础、源码阅读与面试主干 | [Android](knowledge/android/README.md) |
 | Flutter | Engine 跨层模型、原生视图集成与渲染边界 | [Flutter](knowledge/flutter/README.md) |
 | AI | 基础概念、模型学习机制与大模型入门 | [AI](knowledge/ai/README.md) |
+| 产品 | 用户价值、免费增值与商业化基础 | [产品](knowledge/product/README.md) |
 
 新增领域时，在 `knowledge/<domain>/` 下建立自己的索引，并在这里增加一个入口。不要把不同领域的内容堆进同一份总文档。
 
