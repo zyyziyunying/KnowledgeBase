@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="680" viewBox="0 0 1000 680" role="img" aria-labelledby="title desc">
+<title id="title">免费范围要放回用户需要里看</title><desc id="desc">两种不同问题：用户尚未得到可评价的结果；某类用户已全部满足。边界不是固定百分比，需要分别理解基础价值和进一步需要。</desc>
+<style>text{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}line,path{stroke-linecap:round;stroke-linejoin:round}</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10" fill="#7D8D99"/></marker></defs>
+<rect width="1000" height="680" rx="18" fill="#F7FAFC"/>
+<text x="40" y="56" font-size="32" fill="#19364A" font-weight="600">免费范围要放回用户需要里看</text>
+<text x="40" y="96" font-size="22" fill="#536978" font-weight="400">不能仅凭“用了多少免费功能”判断边界</text>
+<rect x="40" y="128" width="440" height="250" rx="14" fill="#FFF3ED" stroke="#FFF3ED"/>
+<text x="64" y="171" font-size="26" fill="#A44E2B" font-weight="600">还没得到真实结果</text>
+<text x="64" y="222" font-size="23" fill="#19364A" font-weight="400">处理后的照片看不清</text>
+<text x="64" y="260" font-size="23" fill="#19364A" font-weight="400">不知道效果是否适合自己</text>
+<text x="64" y="337" font-size="24" fill="#A44E2B" font-weight="400">“我还不知道它行不行。”</text>
+<rect x="520" y="128" width="440" height="250" rx="14" fill="#EDF4FC" stroke="#EDF4FC"/>
+<text x="544" y="171" font-size="26" fill="#2563A6" font-weight="600">某类用户已经全部满足</text>
+<text x="544" y="222" font-size="23" fill="#19364A" font-weight="400">照片只在手机上查看</text>
+<text x="544" y="260" font-size="23" fill="#19364A" font-weight="400">不需要更高的打印清晰度</text>
+<text x="544" y="337" font-size="24" fill="#2563A6" font-weight="400">“已经够用了。”</text>
+<rect x="40" y="410" width="920" height="205" rx="14" fill="#EAF6F2" stroke="#CDE5DC"/>
+<text x="64" y="452" font-size="26" fill="#147B68" font-weight="600">判断边界时，分别看两件事</text>
+<text x="64" y="501" font-size="24" fill="#19364A" font-weight="400">基础帮助：用户能否得到并评价一个有意义的结果？</text>
+<text x="64" y="546" font-size="24" fill="#19364A" font-weight="400">进一步需要：哪些人仍需要付费带来的改善？</text>
+<text x="64" y="586" font-size="21" fill="#536978" font-weight="400">例如：手机查看已满足；想打印海报的人可能在乎高清导出。</text>
+<text x="40" y="654" font-size="22" fill="#536978" font-weight="400">允许一部分用户长期免费；没有适用于所有需求的统一免费比例。</text>
+</svg>

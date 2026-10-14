@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="660" viewBox="0 0 1000 660" role="img" aria-labelledby="title desc">
+<title id="title">同样好用，购买理由却不同</title><desc id="desc">假设免费空间为5GB。三位用户因已有容量、替代办法和进一步需要不同，对扩容的态度不同。</desc>
+<style>text{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}line,path{stroke-linecap:round;stroke-linejoin:round}</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10" fill="#7D8D99"/></marker></defs>
+<rect width="1000" height="660" rx="18" fill="#F7FAFC"/>
+<text x="40" y="56" font-size="32" fill="#19364A" font-weight="600">同样好用，购买理由却不同</text>
+<text x="40" y="96" font-size="22" fill="#536978" font-weight="400">假设免费空间为 5GB，付费增加容量</text>
+<rect x="40" y="126" width="920" height="132" rx="14" fill="#FFFFFF" stroke="#DCE5EC"/>
+<text x="62" y="166" font-size="26" fill="#2563A6" font-weight="600">小林</text>
+<text x="172" y="166" font-size="23" fill="#19364A" font-weight="400">已用 2GB</text>
+<rect x="172" y="186" width="250" height="17" rx="8" fill="#E6EDF2"/>
+<rect x="172" y="186" width="100.0" height="17" rx="8" fill="#2563A6"/>
+<text x="172" y="234" font-size="19" fill="#536978" font-weight="400">免费容量 5GB</text>
+<text x="468" y="169" font-size="25" fill="#19364A" font-weight="400">“现在够用了。”</text>
+<rect x="468" y="187" width="460" height="49" rx="14" fill="#EDF4FC" stroke="#EDF4FC"/>
+<text x="486" y="220" font-size="23" fill="#2563A6" font-weight="600">暂时不需要额外空间</text>
+<rect x="40" y="276" width="920" height="132" rx="14" fill="#FFFFFF" stroke="#DCE5EC"/>
+<text x="62" y="316" font-size="26" fill="#98601C" font-weight="600">小周</text>
+<text x="172" y="316" font-size="23" fill="#19364A" font-weight="400">快用满了</text>
+<rect x="172" y="336" width="250" height="17" rx="8" fill="#E6EDF2"/>
+<rect x="172" y="336" width="240.0" height="17" rx="8" fill="#98601C"/>
+<text x="172" y="384" font-size="19" fill="#536978" font-weight="400">免费容量 5GB</text>
+<text x="468" y="319" font-size="25" fill="#19364A" font-weight="400">“删掉旧文件就行。”</text>
+<rect x="468" y="337" width="460" height="49" rx="14" fill="#FFF6E8" stroke="#FFF6E8"/>
+<text x="486" y="370" font-size="23" fill="#98601C" font-weight="600">有可接受的替代办法</text>
+<rect x="40" y="426" width="920" height="132" rx="14" fill="#FFFFFF" stroke="#DCE5EC"/>
+<text x="62" y="466" font-size="26" fill="#147B68" font-weight="600">小陈</text>
+<text x="172" y="466" font-size="23" fill="#19364A" font-weight="400">想搬入更多资料</text>
+<rect x="172" y="486" width="250" height="17" rx="8" fill="#E6EDF2"/>
+<rect x="172" y="486" width="240.0" height="17" rx="8" fill="#147B68"/>
+<text x="172" y="534" font-size="19" fill="#536978" font-weight="400">免费容量 5GB</text>
+<text x="468" y="469" font-size="25" fill="#19364A" font-weight="400">“重要资料都想留着。”</text>
+<rect x="468" y="487" width="460" height="49" rx="14" fill="#EAF6F2" stroke="#EAF6F2"/>
+<text x="486" y="520" font-size="23" fill="#147B68" font-weight="600">有了考虑购买的理由</text>
+<text x="40" y="617" font-size="22" fill="#536978" font-weight="400">有购买理由，仍要比较价格与其他条件。容量数字仅用于举例。</text>
+</svg>
