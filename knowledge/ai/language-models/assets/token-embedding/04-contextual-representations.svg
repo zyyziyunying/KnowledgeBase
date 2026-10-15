@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="810" viewBox="0 0 1200 810" role="img" aria-labelledby="title desc">
+<title id="title">相同的初始向量，不同的上下文</title>
+<desc id="desc">假设两处“苹果”是同一个 Token；模型参数保持不变。原创教学示意，不对应实际分词器、训练向量或模型输出。</desc>
+<rect width="1200" height="810" fill="#f9fbfd"/>
+<text x="50" y="46" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="34" fill="#182b42" text-anchor="start" dominant-baseline="central">相同的初始向量，不同的上下文</text>
+<text x="50" y="96" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="21" fill="#52657a" text-anchor="start" dominant-baseline="central">假设两处“苹果”是同一个 Token；模型参数保持不变</text>
+<rect x="350" y="145" width="500" height="96" rx="15" fill="#e8f1fb"/>
+<text x="600.0" y="174.5" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="25" fill="#182b42" text-anchor="middle" dominant-baseline="central">“苹果”的同一个 Token ID</text>
+<text x="600.0" y="211.5" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="25" fill="#182b42" text-anchor="middle" dominant-baseline="central">查出相同的初始向量</text>
+<rect x="60" y="300" width="500" height="80" rx="15" fill="#ffffff"/>
+<text x="310.0" y="340.0" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="28" fill="#182b42" text-anchor="middle" dominant-baseline="central">我咬了一口苹果。</text>
+<rect x="640" y="300" width="500" height="80" rx="15" fill="#ffffff"/>
+<text x="890.0" y="340.0" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="28" fill="#182b42" text-anchor="middle" dominant-baseline="central">我长期投资苹果。</text>
+<polyline points="350,193 30,193 30,490 60,490" fill="none" stroke="#276aab" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon points="60.00,490.00 50.47,495.50 50.47,484.50" fill="#276aab"/>
+<polyline points="850,193 1170,193 1170,490 1140,490" fill="none" stroke="#276aab" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon points="1140.00,490.00 1149.53,484.50 1149.53,495.50" fill="#276aab"/>
+<polyline points="310,380 310,430" fill="none" stroke="#8093a7" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon points="310.00,430.00 304.50,420.47 315.50,420.47" fill="#8093a7"/>
+<polyline points="890,380 890,430" fill="none" stroke="#8093a7" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon points="890.00,430.00 884.50,420.47 895.50,420.47" fill="#8093a7"/>
+<rect x="60" y="430" width="500" height="122" rx="15" fill="#e5f3eb"/>
+<text x="310.0" y="470.5" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="25" fill="#182b42" text-anchor="middle" dominant-baseline="central">后续网络</text>
+<text x="310.0" y="511.5" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="25" fill="#182b42" text-anchor="middle" dominant-baseline="central">结合“咬了一口”等可见上下文</text>
+<rect x="640" y="430" width="500" height="122" rx="15" fill="#e5f3eb"/>
+<text x="890.0" y="470.5" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="25" fill="#182b42" text-anchor="middle" dominant-baseline="central">后续网络</text>
+<text x="890.0" y="511.5" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="25" fill="#182b42" text-anchor="middle" dominant-baseline="central">结合“长期投资”等可见上下文</text>
+<polyline points="310,552 310,617" fill="none" stroke="#27734b" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon points="310.00,617.00 304.50,607.47 315.50,607.47" fill="#27734b"/>
+<polyline points="890,552 890,617" fill="none" stroke="#27734b" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon points="890.00,617.00 884.50,607.47 895.50,607.47" fill="#27734b"/>
+<rect x="60" y="617" width="500" height="91" rx="15" fill="#e5f3eb"/>
+<text x="310.0" y="662.5" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="25" fill="#27734b" text-anchor="middle" dominant-baseline="central">水果相关的上下文表示（示意）</text>
+<rect x="640" y="617" width="500" height="91" rx="15" fill="#e5f3eb"/>
+<text x="890.0" y="662.5" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="25" fill="#27734b" text-anchor="middle" dominant-baseline="central">公司相关的上下文表示（示意）</text>
+<text x="600" y="765" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="23" fill="#52657a" text-anchor="middle" dominant-baseline="central">初始查表结果相同；后续表示可以结合上下文而不同。</text>
+</svg>

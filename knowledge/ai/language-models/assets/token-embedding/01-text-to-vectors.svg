@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="820" viewBox="0 0 1200 820" role="img" aria-labelledby="title desc">
+<title id="title">从一句话到网络输入</title>
+<desc id="desc">分词、编号与向量查表是不同步骤；以下数值均为教学设定。原创教学示意，不对应实际分词器、训练向量或模型输出。</desc>
+<rect width="1200" height="820" fill="#f9fbfd"/>
+<text x="50" y="46" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="34" fill="#182b42" text-anchor="start" dominant-baseline="central">从一句话到网络输入</text>
+<text x="50" y="96" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="21" fill="#52657a" text-anchor="start" dominant-baseline="central">分词、编号与向量查表是不同步骤；以下数值均为教学设定</text>
+<text x="50" y="176" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="24" fill="#52657a" text-anchor="start" dominant-baseline="central">原始文字</text>
+<rect x="225" y="136" width="920" height="80" rx="15" fill="#ffffff"/>
+<text x="685.0" y="176.0" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="30" fill="#182b42" text-anchor="middle" dominant-baseline="central">我喜欢猫</text>
+<polyline points="685,216 685,238 365,238 365,265" fill="none" stroke="#8093a7" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon points="365.00,265.00 359.50,255.47 370.50,255.47" fill="#8093a7"/>
+<polyline points="685,216 685,238 675,238 675,265" fill="none" stroke="#8093a7" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon points="675.00,265.00 669.50,255.47 680.50,255.47" fill="#8093a7"/>
+<polyline points="685,216 685,238 985,238 985,265" fill="none" stroke="#8093a7" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon points="985.00,265.00 979.50,255.47 990.50,255.47" fill="#8093a7"/>
+<text x="50" y="307" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="24" fill="#52657a" text-anchor="start" dominant-baseline="central">Token</text>
+<text x="50" y="439" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="24" fill="#52657a" text-anchor="start" dominant-baseline="central">Token ID</text>
+<text x="50" y="571" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="24" fill="#52657a" text-anchor="start" dominant-baseline="central">Embedding</text>
+<rect x="225" y="265" width="280" height="84" rx="15" fill="#e8f1fb"/>
+<text x="365.0" y="307.0" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="30" fill="#182b42" text-anchor="middle" dominant-baseline="central">我</text>
+<polyline points="365,349 365,397" fill="none" stroke="#8093a7" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon points="365.00,397.00 359.50,387.47 370.50,387.47" fill="#8093a7"/>
+<rect x="225" y="397" width="280" height="84" rx="15" fill="#e8f1fb"/>
+<text x="365.0" y="439.0" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="30" fill="#276aab" text-anchor="middle" dominant-baseline="central">12</text>
+<polyline points="365,481 365,529" fill="none" stroke="#8093a7" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon points="365.00,529.00 359.50,519.47 370.50,519.47" fill="#8093a7"/>
+<rect x="225" y="529" width="280" height="84" rx="15" fill="#e5f3eb"/>
+<text x="365.0" y="571.0" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="24" fill="#27734b" text-anchor="middle" dominant-baseline="central">[0.2, -0.1, 0.7]</text>
+<polyline points="365,613 365,643 685,643 685,677" fill="none" stroke="#8093a7" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon points="685.00,677.00 679.50,667.47 690.50,667.47" fill="#8093a7"/>
+<rect x="535" y="265" width="280" height="84" rx="15" fill="#e8f1fb"/>
+<text x="675.0" y="307.0" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="30" fill="#182b42" text-anchor="middle" dominant-baseline="central">喜欢</text>
+<polyline points="675,349 675,397" fill="none" stroke="#8093a7" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon points="675.00,397.00 669.50,387.47 680.50,387.47" fill="#8093a7"/>
+<rect x="535" y="397" width="280" height="84" rx="15" fill="#e8f1fb"/>
+<text x="675.0" y="439.0" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="30" fill="#276aab" text-anchor="middle" dominant-baseline="central">85</text>
+<polyline points="675,481 675,529" fill="none" stroke="#8093a7" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon points="675.00,529.00 669.50,519.47 680.50,519.47" fill="#8093a7"/>
+<rect x="535" y="529" width="280" height="84" rx="15" fill="#e5f3eb"/>
+<text x="675.0" y="571.0" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="24" fill="#27734b" text-anchor="middle" dominant-baseline="central">[0.8, 0.3, -0.2]</text>
+<polyline points="675,613 675,643 685,643 685,677" fill="none" stroke="#8093a7" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon points="685.00,677.00 679.50,667.47 690.50,667.47" fill="#8093a7"/>
+<rect x="845" y="265" width="280" height="84" rx="15" fill="#e8f1fb"/>
+<text x="985.0" y="307.0" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="30" fill="#182b42" text-anchor="middle" dominant-baseline="central">猫</text>
+<polyline points="985,349 985,397" fill="none" stroke="#8093a7" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon points="985.00,397.00 979.50,387.47 990.50,387.47" fill="#8093a7"/>
+<rect x="845" y="397" width="280" height="84" rx="15" fill="#e8f1fb"/>
+<text x="985.0" y="439.0" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="30" fill="#276aab" text-anchor="middle" dominant-baseline="central">37</text>
+<polyline points="985,481 985,529" fill="none" stroke="#8093a7" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon points="985.00,529.00 979.50,519.47 990.50,519.47" fill="#8093a7"/>
+<rect x="845" y="529" width="280" height="84" rx="15" fill="#e5f3eb"/>
+<text x="985.0" y="571.0" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="24" fill="#27734b" text-anchor="middle" dominant-baseline="central">[-0.4, 0.9, 0.1]</text>
+<polyline points="985,613 985,643 685,643 685,677" fill="none" stroke="#8093a7" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon points="685.00,677.00 679.50,667.47 690.50,667.47" fill="#8093a7"/>
+<rect x="225" y="677" width="920" height="76" rx="15" fill="#ffffff"/>
+<text x="685.0" y="715.0" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="27" fill="#182b42" text-anchor="middle" dominant-baseline="central">后续神经网络</text>
+<text x="685" y="790" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="22" fill="#52657a" text-anchor="middle" dominant-baseline="central">每个 Token 取出一行向量，并保留原来的顺序</text>
+</svg>

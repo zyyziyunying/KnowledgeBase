@@ -1,0 +1,177 @@
+{
+  "$schema": "../../../schema/evidence-manifest.schema.json",
+  "schema_version": 1,
+  "topic_id": "ai.language-models.token-embedding",
+  "topic_document": "../../../../knowledge/ai/language-models/Token与Embedding入门.md",
+  "verified_at": "2026-10-15",
+  "baseline_note": "Primary-source mechanism review and original teaching diagrams only. Chinese segmentation, vocabulary IDs, vector values and the two senses of apple are illustrative; no actual tokenizer, trained embedding, contextual model output or model training was executed. The diagrams omit special tokens, positional mechanisms and other model inputs. Pinned Hugging Face and PyTorch files are independent reading baselines, not a tested dependency combination. Dynamic page last_updated is the displayed date and no page mirror is stored. The arbitrary lookup examples do not establish semantic similarity or trained model capability.",
+  "claims": [
+    {
+      "id": "token-embedding-001",
+      "section": "1 从一句话到数字",
+      "statement": "Tokenization, vocabulary IDs and input embedding lookup form separate stages. The Chinese segmentation, ID mapping and three-dimensional vectors are original teaching examples.",
+      "source_ids": [
+        "hf-tokenizers",
+        "pytorch-embedding-layer"
+      ]
+    },
+    {
+      "id": "token-embedding-002",
+      "section": "2 Token 和 ID 各自的作用",
+      "statement": "Token boundaries depend on the tokenizer and the vocabulary must match the model. ID proximity has no inherent semantic meaning; this explanation follows the indexing mechanism.",
+      "source_ids": [
+        "hf-tokenizers",
+        "pytorch-embedding-layer"
+      ]
+    },
+    {
+      "id": "token-embedding-003",
+      "section": "3 Embedding 怎样查表",
+      "statement": "Embedding retrieves fixed-length vectors by integer index from a parameter table; interpreting each dimension as a named human property is not generally justified.",
+      "source_ids": [
+        "pytorch-embedding-layer",
+        "google-obtaining-embeddings"
+      ]
+    },
+    {
+      "id": "token-embedding-004",
+      "section": "4 Embedding 怎样学出来",
+      "statement": "Embedding weights can be initialized and trained or loaded and optionally frozen; learning the table is distinct from changing a fixed tokenizer vocabulary.",
+      "source_ids": [
+        "pytorch-embedding-layer",
+        "google-obtaining-embeddings",
+        "hf-tokenizers"
+      ]
+    },
+    {
+      "id": "token-embedding-005",
+      "section": "4 Embedding 怎样学出来",
+      "statement": "Causal language modeling constructs prediction targets from text. Forward computation, loss evaluation, backward gradient computation and optimizer update have separate roles; token IDs are categorical targets, not a numerical-distance regression objective.",
+      "source_ids": [
+        "hf-transformers-overview",
+        "pytorch-optimization-tutorial"
+      ]
+    },
+    {
+      "id": "token-embedding-006",
+      "section": "4 Embedding 怎样学出来",
+      "statement": "Ordinary inference evaluates current parameters without an optimizer training update.",
+      "source_ids": [
+        "pytorch-optimization-tutorial"
+      ]
+    },
+    {
+      "id": "token-embedding-007",
+      "section": "5 从初始向量到上下文表示",
+      "statement": "The same token lookup under unchanged parameters returns the same initial vector; subsequent network computation can incorporate visible context. Causal prediction excludes unseen future tokens.",
+      "source_ids": [
+        "pytorch-embedding-layer",
+        "google-obtaining-embeddings",
+        "hf-transformers-overview"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "hf-tokenizers",
+      "source_class": "official_source",
+      "title": "Tokenizers — official course source",
+      "publisher": "Hugging Face",
+      "retrieved_at": "2026-10-15",
+      "license": "Apache-2.0; repository LICENSE at the same revision",
+      "repository_url": "https://github.com/huggingface/course",
+      "revision": "8b893f0ede6c781045692a7f892f25a0c92b4805",
+      "path": "chapters/en/chapter2/4.mdx",
+      "web_url": "https://github.com/huggingface/course/blob/8b893f0ede6c781045692a7f892f25a0c92b4805/chapters/en/chapter2/4.mdx",
+      "raw_url": "https://raw.githubusercontent.com/huggingface/course/8b893f0ede6c781045692a7f892f25a0c92b4805/chapters/en/chapter2/4.mdx",
+      "raw_encoding": "identity",
+      "sha256": "f8cd746a4e6da527c9a24fc9082857e7d813d032ece84e7c1b43d9849bde2b82",
+      "assertions": [
+        "Models can only process numbers",
+        "Encoding is done in a two-step process: the tokenization, followed by the conversion to input IDs.",
+        "parts of words, punctuation symbols, etc.",
+        "same vocabulary used when the model was pretrained."
+      ]
+    },
+    {
+      "id": "hf-transformers-overview",
+      "source_class": "official_source",
+      "title": "Transformer models — official course source",
+      "publisher": "Hugging Face",
+      "retrieved_at": "2026-10-15",
+      "license": "Apache-2.0; repository LICENSE at the same revision",
+      "repository_url": "https://github.com/huggingface/course",
+      "revision": "8b893f0ede6c781045692a7f892f25a0c92b4805",
+      "path": "chapters/en/chapter1/4.mdx",
+      "web_url": "https://github.com/huggingface/course/blob/8b893f0ede6c781045692a7f892f25a0c92b4805/chapters/en/chapter1/4.mdx",
+      "raw_url": "https://raw.githubusercontent.com/huggingface/course/8b893f0ede6c781045692a7f892f25a0c92b4805/chapters/en/chapter1/4.mdx",
+      "raw_encoding": "identity",
+      "sha256": "95141044df4d7baca23bf8e0f60650ef2085a1ea043b3669567710b5bc6e7579",
+      "assertions": [
+        "Self-supervised learning is a type of training in which the objective is automatically computed from the inputs of the model.",
+        "This is called *causal language modeling*",
+        "*Fine-tuning*, on the other hand, is the training done **after** a model has been pretrained.",
+        "**Decoder-only models**: Good for generative tasks such as text generation."
+      ]
+    },
+    {
+      "id": "pytorch-optimization-tutorial",
+      "source_class": "official_source",
+      "title": "PyTorch Learn the Basics: Optimizing Model Parameters",
+      "publisher": "PyTorch contributors",
+      "retrieved_at": "2026-10-15",
+      "license": "BSD-3-Clause; https://github.com/pytorch/tutorials/blob/ca960b6a7cd299ba00a644aa918bbcffdeb70152/LICENSE",
+      "repository_url": "https://github.com/pytorch/tutorials",
+      "revision": "ca960b6a7cd299ba00a644aa918bbcffdeb70152",
+      "path": "beginner_source/basics/optimization_tutorial.py",
+      "web_url": "https://github.com/pytorch/tutorials/blob/ca960b6a7cd299ba00a644aa918bbcffdeb70152/beginner_source/basics/optimization_tutorial.py",
+      "raw_url": "https://raw.githubusercontent.com/pytorch/tutorials/ca960b6a7cd299ba00a644aa918bbcffdeb70152/beginner_source/basics/optimization_tutorial.py",
+      "raw_encoding": "identity",
+      "sha256": "ae54687a9b959fbc64375974d933089e5d705492baed6235018e2dc6899fc28a",
+      "assertions": [
+        "pred = model(X)",
+        "loss = loss_fn(pred, y)",
+        "loss.backward()\n        optimizer.step()\n        optimizer.zero_grad()",
+        "Gradients by default add up",
+        "model.eval()",
+        "with torch.no_grad():",
+        "optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)"
+      ]
+    },
+    {
+      "id": "pytorch-embedding-layer",
+      "source_class": "official_source",
+      "title": "PyTorch Embedding module",
+      "publisher": "PyTorch contributors",
+      "retrieved_at": "2026-10-15",
+      "license": "BSD-3-Clause; repository LICENSE at 80acc2b144797cf7135614e6696ccf660f831356",
+      "repository_url": "https://github.com/pytorch/pytorch",
+      "revision": "80acc2b144797cf7135614e6696ccf660f831356",
+      "path": "torch/nn/modules/sparse.py",
+      "web_url": "https://github.com/pytorch/pytorch/blob/80acc2b144797cf7135614e6696ccf660f831356/torch/nn/modules/sparse.py",
+      "raw_url": "https://raw.githubusercontent.com/pytorch/pytorch/80acc2b144797cf7135614e6696ccf660f831356/torch/nn/modules/sparse.py",
+      "raw_encoding": "identity",
+      "sha256": "c0b654b23a16e743935909247f78bcb9fd73129ee0fadd475f772cd297728790",
+      "assertions": [
+        "class Embedding(Module):",
+        "A simple lookup table that stores embeddings of a fixed dictionary and size.",
+        "the learnable weights of the module of shape (num_embeddings, embedding_dim)",
+        "torch.empty((num_embeddings, embedding_dim), **factory_kwargs)",
+        "requires_grad=not _freeze",
+        "init.normal_(self.weight)",
+        "return F.embedding("
+      ]
+    },
+    {
+      "id": "google-obtaining-embeddings",
+      "source_class": "official_document",
+      "title": "Embeddings: Obtaining embeddings",
+      "publisher": "Google for Developers",
+      "retrieved_at": "2026-10-15",
+      "license": "CC-BY-4.0 content, Apache-2.0 code samples unless otherwise noted; linked page footer. Metadata and links only.",
+      "url": "https://developers.google.com/machine-learning/crash-course/embeddings/obtaining-embeddings",
+      "last_updated": "2026-02-17",
+      "applies_to": "Task-trained embeddings, limits of intuitive per-dimension labels, and static versus contextual representations. No universal semantic-distance guarantee or positional-encoding implementation is adopted."
+    }
+  ]
+}

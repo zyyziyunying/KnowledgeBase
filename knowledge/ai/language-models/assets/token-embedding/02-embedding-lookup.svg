@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
+<title id="title">Embedding 查表：按编号取出一行</title>
+<desc id="desc">只展示 ID 12、37、85 三个条目，其余编号省略。原创教学示意，不对应实际分词器、训练向量或模型输出。</desc>
+<rect width="1200" height="680" fill="#f9fbfd"/>
+<text x="50" y="46" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="34" fill="#182b42" text-anchor="start" dominant-baseline="central">Embedding 查表：按编号取出一行</text>
+<text x="50" y="96" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="21" fill="#52657a" text-anchor="start" dominant-baseline="central">只展示 ID 12、37、85 三个条目，其余编号省略</text>
+<rect x="50" y="284" width="180" height="130" rx="15" fill="#e8f1fb"/>
+<text x="140.0" y="328.0" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="29" fill="#276aab" text-anchor="middle" dominant-baseline="central">输入 ID</text>
+<text x="140.0" y="370.0" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="29" fill="#276aab" text-anchor="middle" dominant-baseline="central">37</text>
+<rect x="300" y="155" width="840" height="62" rx="8" fill="#e8f1fb"/>
+<text x="362" y="186" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="23" fill="#52657a" text-anchor="middle" dominant-baseline="central">ID</text>
+<text x="500" y="186" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="23" fill="#52657a" text-anchor="middle" dominant-baseline="central">Token</text>
+<text x="850" y="186" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="23" fill="#52657a" text-anchor="middle" dominant-baseline="central">Embedding 向量</text>
+<rect x="300" y="226" width="840" height="74" rx="8" fill="#ffffff"/>
+<text x="362" y="263" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="27" fill="#182b42" text-anchor="middle" dominant-baseline="central">12</text>
+<text x="500" y="263" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="27" fill="#182b42" text-anchor="middle" dominant-baseline="central">我</text>
+<text x="850" y="263" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="27" fill="#182b42" text-anchor="middle" dominant-baseline="central">[0.2, -0.1, 0.7]</text>
+<rect x="300" y="312" width="840" height="74" rx="8" fill="#e5f3eb"/>
+<text x="362" y="349" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="27" fill="#27734b" text-anchor="middle" dominant-baseline="central">37</text>
+<text x="500" y="349" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="27" fill="#27734b" text-anchor="middle" dominant-baseline="central">猫</text>
+<text x="850" y="349" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="27" fill="#27734b" text-anchor="middle" dominant-baseline="central">[-0.4, 0.9, 0.1]</text>
+<rect x="300" y="398" width="840" height="74" rx="8" fill="#ffffff"/>
+<text x="362" y="435" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="27" fill="#182b42" text-anchor="middle" dominant-baseline="central">85</text>
+<text x="500" y="435" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="27" fill="#182b42" text-anchor="middle" dominant-baseline="central">喜欢</text>
+<text x="850" y="435" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="27" fill="#182b42" text-anchor="middle" dominant-baseline="central">[0.8, 0.3, -0.2]</text>
+<polyline points="230,349 300,349" fill="none" stroke="#27734b" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon points="300.00,349.00 290.47,354.50 290.47,343.50" fill="#27734b"/>
+<rect x="300" y="535" width="840" height="90" rx="15" fill="#e5f3eb"/>
+<text x="720.0" y="580.0" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="28" fill="#27734b" text-anchor="middle" dominant-baseline="central">查表结果：[-0.4, 0.9, 0.1]</text>
+<text x="50" y="488" font-family="Hiragino Sans GB, PingFang SC, sans-serif" font-size="24" fill="#52657a" text-anchor="start" dominant-baseline="central">37 用来定位；取出的三个数用于后续计算。</text>
+</svg>
