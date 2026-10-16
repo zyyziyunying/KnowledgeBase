@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="626" viewBox="0 0 1000 626" role="img" aria-labelledby="title desc">
+<title id="title">同样的 100 人，平均日活可以相差 10 倍</title>
+<desc id="desc">假设一个30天月份，始终为同样100名用户。每人使用1天时平均日活约3.3，每人使用10天时约33.3，月活都是100。</desc>
+<style>text{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}line,path{stroke-linecap:round;stroke-linejoin:round}</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10" fill="#91A2AF"/></marker></defs>
+<rect x="0" y="0" width="1000" height="626" rx="18" fill="#F6F8FB" stroke="none"/>
+<text x="40" y="58" font-size="32" fill="#19364A" font-weight="600" text-anchor="start">同样的 100 人，平均日活可以相差 10 倍</text>
+<text x="40" y="99" font-size="21" fill="#596F7D" font-weight="400" text-anchor="start">假设一个 30 天月份 · 只改变使用频率，月内去重人数保持 100</text>
+<rect x="40" y="135" width="920" height="182" rx="14" fill="#FFFFFF" stroke="none"/>
+<text x="64" y="173" font-size="26" fill="#2E68BD" font-weight="600" text-anchor="start">每人活跃 1 天</text>
+<rect x="65" y="200" width="23" height="38" rx="5" fill="#2E68BD" stroke="none"/>
+<rect x="94" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="123" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="152" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="181" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="210" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="239" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="268" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="297" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="326" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="355" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="384" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="413" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="442" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="471" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="500" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="529" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="558" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="587" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="616" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="645" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="674" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="703" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="732" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="761" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="790" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="819" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="848" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="877" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="906" y="200" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<text x="65" y="261" font-size="17" fill="#596F7D" font-weight="400" text-anchor="start">第 1 天</text>
+<text x="326" y="261" font-size="17" fill="#596F7D" font-weight="400" text-anchor="start">第 10 天</text>
+<text x="906" y="261" font-size="17" fill="#596F7D" font-weight="400" text-anchor="end">30</text>
+<text x="64" y="295" font-size="26" fill="#19364A" font-weight="600" text-anchor="start">MAU 100</text>
+<text x="360" y="295" font-size="26" fill="#2E68BD" font-weight="600" text-anchor="start">平均 DAU ≈ 3.3</text>
+<text x="714" y="293" font-size="22" fill="#596F7D" font-weight="400" text-anchor="start">100 ÷ 30</text>
+<rect x="40" y="338" width="920" height="182" rx="14" fill="#FFFFFF" stroke="none"/>
+<text x="64" y="376" font-size="26" fill="#167C68" font-weight="600" text-anchor="start">每人活跃 10 天</text>
+<rect x="65" y="403" width="23" height="38" rx="5" fill="#167C68" stroke="none"/>
+<rect x="94" y="403" width="23" height="38" rx="5" fill="#167C68" stroke="none"/>
+<rect x="123" y="403" width="23" height="38" rx="5" fill="#167C68" stroke="none"/>
+<rect x="152" y="403" width="23" height="38" rx="5" fill="#167C68" stroke="none"/>
+<rect x="181" y="403" width="23" height="38" rx="5" fill="#167C68" stroke="none"/>
+<rect x="210" y="403" width="23" height="38" rx="5" fill="#167C68" stroke="none"/>
+<rect x="239" y="403" width="23" height="38" rx="5" fill="#167C68" stroke="none"/>
+<rect x="268" y="403" width="23" height="38" rx="5" fill="#167C68" stroke="none"/>
+<rect x="297" y="403" width="23" height="38" rx="5" fill="#167C68" stroke="none"/>
+<rect x="326" y="403" width="23" height="38" rx="5" fill="#167C68" stroke="none"/>
+<rect x="355" y="403" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="384" y="403" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="413" y="403" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="442" y="403" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="471" y="403" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="500" y="403" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="529" y="403" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="558" y="403" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="587" y="403" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="616" y="403" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="645" y="403" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="674" y="403" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="703" y="403" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="732" y="403" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="761" y="403" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="790" y="403" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="819" y="403" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="848" y="403" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="877" y="403" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<rect x="906" y="403" width="23" height="38" rx="5" fill="#E5EAF0" stroke="none"/>
+<text x="65" y="464" font-size="17" fill="#596F7D" font-weight="400" text-anchor="start">第 1 天</text>
+<text x="326" y="464" font-size="17" fill="#596F7D" font-weight="400" text-anchor="start">第 10 天</text>
+<text x="906" y="464" font-size="17" fill="#596F7D" font-weight="400" text-anchor="end">30</text>
+<text x="64" y="498" font-size="26" fill="#19364A" font-weight="600" text-anchor="start">MAU 100</text>
+<text x="360" y="498" font-size="26" fill="#167C68" font-weight="600" text-anchor="start">平均 DAU ≈ 33.3</text>
+<text x="714" y="496" font-size="22" fill="#596F7D" font-weight="400" text-anchor="start">1000 ÷ 30</text>
+<text x="40" y="562" font-size="20" fill="#596F7D" font-weight="400" text-anchor="start">每格代表 1 天；用同一种日历示意这 100 人各自的活跃情况。</text>
+<text x="40" y="602" font-size="22" fill="#19364A" font-weight="600" text-anchor="start">更常使用提高平均日活；月活人数增长，还需要更多不同的人进入活跃集合。</text>
+</svg>

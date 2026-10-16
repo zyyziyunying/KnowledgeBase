@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="710" viewBox="0 0 1000 710" role="img" aria-labelledby="title desc">
+<title id="title">相关性提供线索，实验继续检验</title>
+<desc id="desc">观察到收藏用户更常回来，可能存在共同原因，例如更强兴趣。可随机分配原体验和更方便收藏及接续阅读的体验，比较全部分组用户的后续核心行为留存。</desc>
+<style>text{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}line,path{stroke-linecap:round;stroke-linejoin:round}</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10" fill="#91A2AF"/></marker></defs>
+<rect x="0" y="0" width="1000" height="710" rx="18" fill="#F6F8FB" stroke="none"/>
+<text x="40" y="58" font-size="32" fill="#19364A" font-weight="600" text-anchor="start">相关性提供线索，实验继续检验</text>
+<text x="40" y="99" font-size="21" fill="#596F7D" font-weight="400" text-anchor="start">收藏可能帮助人回来，也可能只是原本兴趣更强的表现</text>
+<rect x="40" y="132" width="920" height="238" rx="14" fill="#FFFFFF" stroke="none"/>
+<text x="61" y="169" font-size="21" fill="#596F7D" font-weight="400" text-anchor="start">一种可能的解释</text>
+<rect x="379" y="154" width="242" height="62" rx="14" fill="#F0EAF9" stroke="none"/>
+<text x="500" y="193" font-size="25" fill="#7754B2" font-weight="600" text-anchor="middle">原本兴趣更强</text>
+<rect x="85" y="267" width="280" height="62" rx="14" fill="#EAF1FC" stroke="none"/>
+<text x="225" y="307" font-size="25" fill="#2E68BD" font-weight="600" text-anchor="middle">更愿意收藏</text>
+<rect x="635" y="267" width="280" height="62" rx="14" fill="#E8F4EF" stroke="none"/>
+<text x="775" y="307" font-size="25" fill="#167C68" font-weight="600" text-anchor="middle">更愿意回来</text>
+<path d="M450 225L232 256" fill="none" stroke="#91A2AF" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M550 225L768 256" fill="none" stroke="#91A2AF" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="500" y="306" font-size="21" fill="#596F7D" font-weight="400" text-anchor="middle">相关，尚未证明因果</text>
+<text x="61" y="353" font-size="19" fill="#596F7D" font-weight="400" text-anchor="start">观察到的两件事一起发生，不能单凭这一点认定其中一件导致另一件。</text>
+<rect x="40" y="399" width="920" height="225" rx="14" fill="#FFFFFF" stroke="none"/>
+<text x="64" y="439" font-size="21" fill="#596F7D" font-weight="400" text-anchor="start">进一步检验</text>
+<text x="64" y="500" font-size="27" fill="#19364A" font-weight="600" text-anchor="start">随机分配</text>
+<text x="64" y="538" font-size="21" fill="#596F7D" font-weight="400" text-anchor="start">全部合格用户</text>
+<rect x="340" y="430" width="255" height="62" rx="14" fill="#EAF1FC" stroke="none"/>
+<text x="467" y="469" font-size="24" fill="#2E68BD" font-weight="600" text-anchor="middle">A  原体验</text>
+<rect x="340" y="533" width="255" height="62" rx="14" fill="#E8F4EF" stroke="none"/>
+<text x="467" y="571" font-size="21" fill="#167C68" font-weight="600" text-anchor="middle">B  收藏和接续更方便</text>
+<path d="M230 510H275V461H329" fill="none" stroke="#91A2AF" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M275 510V564H329" fill="none" stroke="#91A2AF" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="701" y="441" width="237" height="143" rx="14" fill="#E8EDF3" stroke="none"/>
+<text x="819" y="493" font-size="22" fill="#19364A" font-weight="600" text-anchor="middle">比较两组全体用户</text>
+<text x="819" y="535" font-size="22" fill="#19364A" font-weight="600" text-anchor="middle">后续核心行为留存</text>
+<path d="M604 461H645V483H690" fill="none" stroke="#91A2AF" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M604 564H645V544H690" fill="none" stroke="#91A2AF" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="40" y="672" font-size="23" fill="#19364A" font-weight="600" text-anchor="start">看最初分组后的整体效果，不能只挑点击或收藏过的人来比较。</text>
+</svg>

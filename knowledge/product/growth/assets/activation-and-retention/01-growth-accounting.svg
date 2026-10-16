@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="650" viewBox="0 0 1000 650" role="img" aria-labelledby="title desc">
+<title id="title">活跃增长 10 人，也可能有 30 人没回来</title>
+<desc id="desc">假设上周活跃100人，其中70人本周继续活跃，30人本周沉默；本周另有25名新用户和15名回流用户，共110人活跃。</desc>
+<style>text{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}line,path{stroke-linecap:round;stroke-linejoin:round}</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10" fill="#91A2AF"/></marker></defs>
+<rect x="0" y="0" width="1000" height="650" rx="18" fill="#F6F8FB" stroke="none"/>
+<text x="40" y="58" font-size="32" fill="#19364A" font-weight="600" text-anchor="start">活跃增长 10 人，也可能有 30 人没回来</text>
+<text x="40" y="99" font-size="21" fill="#596F7D" font-weight="400" text-anchor="start">假设示例 · 同一用户身份、活跃条件与周周期</text>
+<rect x="40" y="155" width="250" height="148" rx="14" fill="#FFFFFF" stroke="none"/>
+<text x="62" y="192" font-size="24" fill="#19364A" font-weight="600" text-anchor="start">上周活跃</text>
+<text x="62" y="246" font-size="46" fill="#19364A" font-weight="600" text-anchor="start">100</text>
+<text x="62" y="280" font-size="20" fill="#596F7D" font-weight="400" text-anchor="start">上周达到活跃条件</text>
+<rect x="375" y="155" width="250" height="148" rx="14" fill="#E8F4EF" stroke="none"/>
+<text x="397" y="192" font-size="24" fill="#167C68" font-weight="600" text-anchor="start">持续使用</text>
+<text x="397" y="246" font-size="46" fill="#167C68" font-weight="600" text-anchor="start">70</text>
+<text x="397" y="280" font-size="20" fill="#596F7D" font-weight="400" text-anchor="start">上周、本周都活跃</text>
+<rect x="710" y="155" width="250" height="148" rx="14" fill="#EAF1FC" stroke="none"/>
+<text x="732" y="192" font-size="24" fill="#2E68BD" font-weight="600" text-anchor="start">本周活跃</text>
+<text x="732" y="246" font-size="46" fill="#2E68BD" font-weight="600" text-anchor="start">110</text>
+<text x="732" y="280" font-size="20" fill="#596F7D" font-weight="400" text-anchor="start">持续 + 新增 + 回流</text>
+<path d="M299 230H364" fill="none" stroke="#91A2AF" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M634 230H699" fill="none" stroke="#91A2AF" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="40" y="365" width="250" height="112" rx="14" fill="#FBECEF" stroke="none"/>
+<text x="62" y="405" font-size="24" fill="#BB5267" font-weight="600" text-anchor="start">本期沉默 30 人</text>
+<text x="62" y="446" font-size="21" fill="#596F7D" font-weight="400" text-anchor="start">本周没有活跃</text>
+<path d="M165 313V354" fill="none" stroke="#91A2AF" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="375" y="365" width="585" height="112" rx="14" fill="#FFFFFF" stroke="none"/>
+<text x="399" y="399" font-size="21" fill="#596F7D" font-weight="400" text-anchor="start">另有 40 人进入本期活跃</text>
+<text x="399" y="449" font-size="30" fill="#167C68" font-weight="600" text-anchor="start">新增 25 人</text>
+<text x="684" y="449" font-size="30" fill="#7754B2" font-weight="600" text-anchor="start">回流 15 人</text>
+<path d="M835 354V314" fill="none" stroke="#91A2AF" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="40" y="519" width="920" height="74" rx="14" fill="#E8EDF3" stroke="none"/>
+<text x="65" y="566" font-size="29" fill="#19364A" font-weight="600" text-anchor="start">净增长 10 = 新增 25 + 回流 15 − 沉默 30</text>
+<text x="40" y="626" font-size="20" fill="#596F7D" font-weight="400" text-anchor="start">“本期沉默”是上周活跃者的流出，不是所有历史沉默用户的总数。</text>
+</svg>

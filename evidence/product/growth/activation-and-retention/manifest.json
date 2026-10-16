@@ -1,0 +1,97 @@
+{
+  "$schema": "../../../schema/evidence-manifest.schema.json",
+  "schema_version": 1,
+  "topic_id": "product.growth.activation-and-retention",
+  "topic_document": "../../../../knowledge/product/growth/用户增长与留存.md",
+  "verified_at": "2026-10-16",
+  "baseline_note": "Conceptual reading baseline for the two user-supplied Amplitude references, supplemented by official definitions of lifecycle classification, retention calculation and correlation. The playbook chapter text was inspected in the public page's embedded chapter data because its initial HTML view displays the introduction. All last_updated dates below are observed structured-page dateModified values; the playbook's datePublished is 2023-08-23. Book-level metadata does not establish a revision date for each chapter. Dynamic URLs are not immutable snapshots. No webpage copies, redistributed attachments or content hashes are stored. Set-accounting equations, hypothetical numbers, the DAU/MAU example, candidate value events, channel interpretation, metric templates, experiment designs and five original SVG diagrams are conceptual synthesis, not observed product data or evidence of a causal growth effect. No actual product bottleneck, experiment duration, notification lift or channel profitability has been established.",
+  "claims": [
+    {
+      "id": "growth-retention-001",
+      "section": "1 两篇资料分别解决什么问题",
+      "statement": "Reading roles and chapter navigation for the lifecycle chart and retention playbook; the framework distinguishes stages of active users and seeks ongoing engagement. This is a conceptual framework, not a diagnosis of a specific product.",
+      "source_ids": ["amplitude-lifecycle-setup", "amplitude-retention-playbook"]
+    },
+    {
+      "id": "growth-retention-002",
+      "section": "2 活跃总量为什么会掩盖问题",
+      "statement": "Lifecycle groups, dormant flow, first-seen classification caveats and Pulse use the current official tool definitions. The stable-population accounting identities, worked example and frequency-versus-distinct-reach distinction are deductions; daily flows cannot simply be substituted into rolling monthly accounting.",
+      "source_ids": ["amplitude-lifecycle-interpret"]
+    },
+    {
+      "id": "growth-retention-003",
+      "section": "3 第一次获得价值要落到真实结果；4 回访理由要接得上实际价值",
+      "statement": "Critical events, natural usage cadence, early value discovery and subsequent engagement supply the conceptual premises. Candidate social, content and companionship events and return reasons are hypothetical interpretations. Observational behavior correlations do not establish that inducing the behavior improves retention.",
+      "source_ids": ["amplitude-lifecycle-setup", "amplitude-retention-playbook", "amplitude-compass-correlation"]
+    },
+    {
+      "id": "growth-retention-004",
+      "section": "5 先统一指标 再比较渠道和改动",
+      "statement": "Return On, Return On or After and incomplete-observation treatment follow official calculation definitions. First-week reuse, time-to-value, repeat usage, seven-complete-day average DAU and acquisition-cohort channel comparisons are explicitly defined synthesis, not universal benchmark definitions or profitability evidence.",
+      "source_ids": ["amplitude-retention-calculation", "amplitude-lifecycle-setup", "amplitude-retention-playbook"]
+    },
+    {
+      "id": "growth-retention-005",
+      "section": "6 两项实验怎样形成可检验的问题",
+      "statement": "Correlation requires testing, and returning users must be assessed beyond an immediate activity spike. Randomized comparison, assigned-population denominators, candidate guardrails and conditional investigation directions are proposed generic verification methods; no product experiment or priority has been validated.",
+      "source_ids": ["amplitude-compass-correlation", "amplitude-retention-playbook", "amplitude-retention-calculation"]
+    }
+  ],
+  "sources": [
+    {
+      "id": "amplitude-lifecycle-setup",
+      "source_class": "official_document",
+      "title": "Lifecycle: track the growth of your product's user base",
+      "publisher": "Amplitude Docs",
+      "retrieved_at": "2026-10-16",
+      "license": "Amplitude website copyright; no redistribution license established. Metadata and links only.",
+      "url": "https://amplitude.com/docs/analytics/charts/lifecycle/lifecycle-track-growth",
+      "last_updated": "2026-09-22",
+      "applies_to": "Official lifecycle overview, critical-event choice and usage-interval prerequisites as retrieved. last_updated is the page's structured dateModified, not an immutable revision. UI instructions and plan availability are not adopted."
+    },
+    {
+      "id": "amplitude-lifecycle-interpret",
+      "source_class": "official_document",
+      "title": "Interpret your Lifecycle chart",
+      "publisher": "Amplitude Docs",
+      "retrieved_at": "2026-10-16",
+      "license": "Amplitude website copyright; no redistribution license established. Metadata and links only.",
+      "url": "https://amplitude.com/docs/analytics/charts/lifecycle/lifecycle-interpret",
+      "last_updated": "2026-09-22",
+      "applies_to": "New/current/resurrected/dormant classification, account first-seen versus selected-event first occurrence, and Pulse formula as retrieved. last_updated is structured dateModified. Generic business grouping and accounting examples are interpretations, not a reimplementation of every tool boundary."
+    },
+    {
+      "id": "amplitude-retention-playbook",
+      "source_class": "official_document",
+      "title": "Mastering Retention: The Retention Lifecycle Framework and related chapters",
+      "publisher": "Amplitude",
+      "retrieved_at": "2026-10-16",
+      "license": "Amplitude website copyright; no redistribution license established. Metadata and links only.",
+      "url": "https://amplitude.com/books/mastering-retention/the-retention-lifecycle-framework",
+      "last_updated": "2024-01-19",
+      "applies_to": "Official book's chapters 2-7: critical events and usage intervals, lifecycle framework, analysis toolkit, new/current/resurrected retention. Public embedded chapter text was inspected. last_updated and the 2023-08-23 publication date describe the book-level structured metadata, not chapter-specific revisions. No fixed phase duration, famous behavioral threshold, case-study performance figure or guaranteed benefit is adopted."
+    },
+    {
+      "id": "amplitude-compass-correlation",
+      "source_class": "official_document",
+      "title": "Interpret your Compass chart, part 2: Correlation and cohorts",
+      "publisher": "Amplitude Docs",
+      "retrieved_at": "2026-10-16",
+      "license": "Amplitude website copyright; no redistribution license established. Metadata and links only.",
+      "url": "https://amplitude.com/docs/analytics/charts/compass/compass-interpret-2",
+      "last_updated": "2026-09-08",
+      "applies_to": "Correlation between behavioral thresholds and retained-cohort membership is not causation; hypotheses require testing. last_updated is structured dateModified. Product-specific thresholds, numerical predictive categories and experiment outcomes are outside the adopted scope."
+    },
+    {
+      "id": "amplitude-retention-calculation",
+      "source_class": "official_document",
+      "title": "How the Retention Analysis chart calculates retention",
+      "publisher": "Amplitude Docs",
+      "retrieved_at": "2026-10-16",
+      "license": "Amplitude website copyright; no redistribution license established. Metadata and links only.",
+      "url": "https://amplitude.com/docs/analytics/charts/retention-analysis/retention-analysis-calculation",
+      "last_updated": "2026-09-08",
+      "applies_to": "Return On versus Return On or After, cohort denominators and incomplete observation windows as retrieved. last_updated is structured dateModified. The article's custom first-week reuse and channel metrics are separate proposed definitions, not aliases of the tool's D7 retention."
+    }
+  ]
+}

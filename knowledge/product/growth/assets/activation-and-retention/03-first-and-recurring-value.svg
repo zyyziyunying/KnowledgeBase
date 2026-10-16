@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="782" viewBox="0 0 1000 782" role="img" aria-labelledby="title desc">
+<title id="title">第一次有用，和下一次有理由回来</title>
+<desc id="desc">三个假设场景：社交的有效互动与新回复，内容的合意阅读与话题更新，陪伴的有帮助交流与接续话题。箭头表示价值接续思路，不保证回访发生。</desc>
+<style>text{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}line,path{stroke-linecap:round;stroke-linejoin:round}</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10" fill="#91A2AF"/></marker></defs>
+<rect x="0" y="0" width="1000" height="782" rx="18" fill="#F6F8FB" stroke="none"/>
+<text x="40" y="58" font-size="32" fill="#19364A" font-weight="600" text-anchor="start">第一次有用，和下一次有理由回来</text>
+<text x="40" y="99" font-size="21" fill="#596F7D" font-weight="400" text-anchor="start">假设情境 · 左侧确认首次价值，右侧寻找下一次真实需要</text>
+<text x="141" y="153" font-size="25" fill="#2E68BD" font-weight="600" text-anchor="start">第一次得到什么</text>
+<text x="580" y="153" font-size="25" fill="#167C68" font-weight="600" text-anchor="start">下一次为什么回来</text>
+<rect x="40" y="180" width="80" height="132" rx="14" fill="#E8EDF3" stroke="none"/>
+<text x="80" y="257" font-size="25" fill="#19364A" font-weight="600" text-anchor="middle">社交</text>
+<rect x="140" y="180" width="330" height="132" rx="14" fill="#EAF1FC" stroke="none"/>
+<text x="162" y="227" font-size="25" fill="#2E68BD" font-weight="600" text-anchor="start">得到一次有效互动</text>
+<text x="162" y="271" font-size="21" fill="#596F7D" font-weight="400" text-anchor="start">能聊起来，也符合期待</text>
+<rect x="580" y="180" width="380" height="132" rx="14" fill="#E8F4EF" stroke="none"/>
+<text x="602" y="227" font-size="25" fill="#167C68" font-weight="600" text-anchor="start">有人回复，继续交流</text>
+<text x="602" y="271" font-size="21" fill="#596F7D" font-weight="400" text-anchor="start">回来就能接上已有上下文</text>
+<path d="M481 257H568" fill="none" stroke="#91A2AF" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="525" y="231" font-size="18" fill="#596F7D" font-weight="400" text-anchor="middle">新进展</text>
+<rect x="40" y="350" width="80" height="132" rx="14" fill="#E8EDF3" stroke="none"/>
+<text x="80" y="427" font-size="25" fill="#19364A" font-weight="600" text-anchor="middle">内容</text>
+<rect x="140" y="350" width="330" height="132" rx="14" fill="#EAF1FC" stroke="none"/>
+<text x="162" y="397" font-size="25" fill="#2E68BD" font-weight="600" text-anchor="start">找到想继续看的内容</text>
+<text x="162" y="441" font-size="21" fill="#596F7D" font-weight="400" text-anchor="start">有用，或符合自己的兴趣</text>
+<rect x="580" y="350" width="380" height="132" rx="14" fill="#E8F4EF" stroke="none"/>
+<text x="602" y="397" font-size="25" fill="#167C68" font-weight="600" text-anchor="start">关注的话题有更新</text>
+<text x="602" y="441" font-size="21" fill="#596F7D" font-weight="400" text-anchor="start">找到新内容，也能接着读</text>
+<path d="M481 427H568" fill="none" stroke="#91A2AF" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="525" y="401" font-size="18" fill="#596F7D" font-weight="400" text-anchor="middle">新内容</text>
+<rect x="40" y="520" width="80" height="132" rx="14" fill="#E8EDF3" stroke="none"/>
+<text x="80" y="597" font-size="25" fill="#19364A" font-weight="600" text-anchor="middle">陪伴</text>
+<rect x="140" y="520" width="330" height="132" rx="14" fill="#EAF1FC" stroke="none"/>
+<text x="162" y="567" font-size="25" fill="#2E68BD" font-weight="600" text-anchor="start">完成一次有帮助的交流</text>
+<text x="162" y="611" font-size="21" fill="#596F7D" font-weight="400" text-anchor="start">用户觉得被理解，愿意继续</text>
+<rect x="580" y="520" width="380" height="132" rx="14" fill="#E8F4EF" stroke="none"/>
+<text x="602" y="567" font-size="25" fill="#167C68" font-weight="600" text-anchor="start">继续话题，跟进计划</text>
+<text x="602" y="611" font-size="21" fill="#596F7D" font-weight="400" text-anchor="start">接续用户主动表达的背景</text>
+<path d="M481 597H568" fill="none" stroke="#91A2AF" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="525" y="571" font-size="18" fill="#596F7D" font-weight="400" text-anchor="middle">需要再现</text>
+<text x="40" y="708" font-size="27" fill="#19364A" font-weight="600" text-anchor="start">提醒帮助人发现机会，回来后的体验要兑现价值。</text>
+<text x="40" y="751" font-size="20" fill="#596F7D" font-weight="400" text-anchor="start">箭头表示价值接续的思路；这些候选场景仍需结合用户表达和后续行为验证。</text>
+</svg>

@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="655" viewBox="0 0 1000 655" role="img" aria-labelledby="title desc">
+<title id="title">首周复用、D7、D7+，回答的是不同问题</title>
+<desc id="desc">同一批假设用户统一观察到Day14。甲仅在Day1返回，乙仅在Day7返回，丙仅在Day10返回。首周再次使用包含甲乙，D7包含乙，D7或之后包含乙丙。</desc>
+<style>text{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}line,path{stroke-linecap:round;stroke-linejoin:round}</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10" fill="#91A2AF"/></marker></defs>
+<rect x="0" y="0" width="1000" height="655" rx="18" fill="#F6F8FB" stroke="none"/>
+<text x="40" y="58" font-size="32" fill="#19364A" font-weight="600" text-anchor="start">首周复用、D7、D7+，回答的是不同问题</text>
+<text x="40" y="99" font-size="21" fill="#596F7D" font-weight="400" text-anchor="start">同一批假设用户 · 统一观察到 Day 14 · 每人的 Day 0 为首次进入</text>
+<rect x="40" y="131" width="920" height="267" rx="14" fill="#FFFFFF" stroke="none"/>
+<rect x="322" y="181" width="26" height="199" rx="6" fill="#EAF1FC" stroke="none"/>
+<text x="126" y="167" font-size="19" fill="#596F7D" font-weight="400" text-anchor="start">进入后第几天</text>
+<text x="125" y="201" font-size="18" fill="#596F7D" font-weight="400" text-anchor="middle">0</text>
+<text x="155" y="201" font-size="18" fill="#596F7D" font-weight="400" text-anchor="middle">1</text>
+<text x="185" y="201" font-size="18" fill="#596F7D" font-weight="400" text-anchor="middle">2</text>
+<text x="215" y="201" font-size="18" fill="#596F7D" font-weight="400" text-anchor="middle">3</text>
+<text x="245" y="201" font-size="18" fill="#596F7D" font-weight="400" text-anchor="middle">4</text>
+<text x="275" y="201" font-size="18" fill="#596F7D" font-weight="400" text-anchor="middle">5</text>
+<text x="305" y="201" font-size="18" fill="#596F7D" font-weight="400" text-anchor="middle">6</text>
+<text x="335" y="201" font-size="18" fill="#2E68BD" font-weight="600" text-anchor="middle">7</text>
+<text x="365" y="201" font-size="18" fill="#596F7D" font-weight="400" text-anchor="middle">8</text>
+<text x="395" y="201" font-size="18" fill="#596F7D" font-weight="400" text-anchor="middle">9</text>
+<text x="425" y="201" font-size="18" fill="#596F7D" font-weight="400" text-anchor="middle">10</text>
+<text x="455" y="201" font-size="18" fill="#596F7D" font-weight="400" text-anchor="middle">11</text>
+<text x="485" y="201" font-size="18" fill="#596F7D" font-weight="400" text-anchor="middle">12</text>
+<text x="515" y="201" font-size="18" fill="#596F7D" font-weight="400" text-anchor="middle">13</text>
+<text x="545" y="201" font-size="18" fill="#596F7D" font-weight="400" text-anchor="middle">14</text>
+<text x="655" y="162" font-size="21" fill="#19364A" font-weight="600" text-anchor="middle">首周</text>
+<text x="655" y="188" font-size="18" fill="#596F7D" font-weight="400" text-anchor="middle">再次使用</text>
+<text x="780" y="177" font-size="24" fill="#2E68BD" font-weight="600" text-anchor="middle">D7</text>
+<text x="895" y="177" font-size="24" fill="#7754B2" font-weight="600" text-anchor="middle">D7+</text>
+<text x="63" y="250" font-size="24" fill="#19364A" font-weight="600" text-anchor="start">甲</text>
+<path d="M125 242H545" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="125" cy="242" r="5" fill="#2E68BD" stroke="none" stroke-width="2"/>
+<circle cx="155" cy="242" r="8" fill="#167C68" stroke="none" stroke-width="2"/>
+<circle cx="185" cy="242" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="215" cy="242" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="245" cy="242" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="275" cy="242" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="305" cy="242" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="335" cy="242" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="365" cy="242" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="395" cy="242" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="425" cy="242" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="455" cy="242" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="485" cy="242" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="515" cy="242" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="545" cy="242" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<text x="655" y="250" font-size="24" fill="#167C68" font-weight="600" text-anchor="middle">是</text>
+<text x="780" y="250" font-size="24" fill="#8B98A2" font-weight="400" text-anchor="middle">否</text>
+<text x="895" y="250" font-size="24" fill="#8B98A2" font-weight="400" text-anchor="middle">否</text>
+<text x="63" y="310" font-size="24" fill="#19364A" font-weight="600" text-anchor="start">乙</text>
+<path d="M125 302H545" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="125" cy="302" r="5" fill="#2E68BD" stroke="none" stroke-width="2"/>
+<circle cx="155" cy="302" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="185" cy="302" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="215" cy="302" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="245" cy="302" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="275" cy="302" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="305" cy="302" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="335" cy="302" r="8" fill="#167C68" stroke="none" stroke-width="2"/>
+<circle cx="365" cy="302" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="395" cy="302" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="425" cy="302" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="455" cy="302" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="485" cy="302" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="515" cy="302" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="545" cy="302" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<text x="655" y="310" font-size="24" fill="#167C68" font-weight="600" text-anchor="middle">是</text>
+<text x="780" y="310" font-size="24" fill="#167C68" font-weight="600" text-anchor="middle">是</text>
+<text x="895" y="310" font-size="24" fill="#167C68" font-weight="600" text-anchor="middle">是</text>
+<text x="63" y="370" font-size="24" fill="#19364A" font-weight="600" text-anchor="start">丙</text>
+<path d="M125 362H545" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="125" cy="362" r="5" fill="#2E68BD" stroke="none" stroke-width="2"/>
+<circle cx="155" cy="362" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="185" cy="362" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="215" cy="362" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="245" cy="362" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="275" cy="362" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="305" cy="362" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="335" cy="362" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="365" cy="362" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="395" cy="362" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="425" cy="362" r="8" fill="#167C68" stroke="none" stroke-width="2"/>
+<circle cx="455" cy="362" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="485" cy="362" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="515" cy="362" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<circle cx="545" cy="362" r="5" fill="#FFFFFF" stroke="#CDD6DE" stroke-width="2"/>
+<text x="655" y="370" font-size="24" fill="#8B98A2" font-weight="400" text-anchor="middle">否</text>
+<text x="780" y="370" font-size="24" fill="#8B98A2" font-weight="400" text-anchor="middle">否</text>
+<text x="895" y="370" font-size="24" fill="#167C68" font-weight="600" text-anchor="middle">是</text>
+<rect x="40" y="429" width="285" height="117" rx="14" fill="#E8F4EF" stroke="none"/>
+<text x="60" y="463" font-size="23" fill="#167C68" font-weight="600" text-anchor="start">首周再次使用</text>
+<text x="60" y="500" font-size="23" fill="#19364A" font-weight="400" text-anchor="start">Day 1～7 任一天</text>
+<text x="60" y="529" font-size="18" fill="#596F7D" font-weight="400" text-anchor="start">这里采用的自定义窗口</text>
+<rect x="355" y="429" width="280" height="117" rx="14" fill="#EAF1FC" stroke="none"/>
+<text x="375" y="463" font-size="23" fill="#2E68BD" font-weight="600" text-anchor="start">D7 · Return On</text>
+<text x="375" y="500" font-size="23" fill="#19364A" font-weight="400" text-anchor="start">Day 7 当天</text>
+<text x="375" y="529" font-size="18" fill="#596F7D" font-weight="400" text-anchor="start">不要求之前每天都回来</text>
+<rect x="665" y="429" width="295" height="117" rx="14" fill="#F0EAF9" stroke="none"/>
+<text x="685" y="463" font-size="23" fill="#7754B2" font-weight="600" text-anchor="start">D7+ · On or After</text>
+<text x="685" y="500" font-size="23" fill="#19364A" font-weight="400" text-anchor="start">Day 7 或之后</text>
+<text x="685" y="529" font-size="18" fill="#596F7D" font-weight="400" text-anchor="start">本例观察截至 Day 14</text>
+<circle cx="50" cy="590" r="6" fill="#2E68BD" stroke="none" stroke-width="2"/>
+<text x="65" y="597" font-size="20" fill="#596F7D" font-weight="400" text-anchor="start">首次进入</text>
+<circle cx="229" cy="590" r="8" fill="#167C68" stroke="none" stroke-width="2"/>
+<text x="245" y="597" font-size="20" fill="#596F7D" font-weight="400" text-anchor="start">完成返回事件</text>
+<text x="40" y="632" font-size="21" fill="#19364A" font-weight="600" text-anchor="start">观察窗口要一致；尚未到达对应期限的人，不能直接算作没有留存。</text>
+</svg>
