@@ -4,7 +4,7 @@
   "topic_id": "flutter.rendering.scene-coordinate-picking",
   "topic_document": "../../../../knowledge/flutter/rendering/Flutter-Scene坐标转换与射线拾取.md",
   "verified_at": "2026-10-28",
-  "baseline_note": "Pinned upstream author sources used as a teaching case for projection, unprojection and picking. Numerical examples are analytical evaluations under explicitly stated inputs, not device observations. The main worked example uses a simplified camera; the second uses the application's closed-room camera parameters with an assumed logical viewport. Geometric intersections are distinguished from petting adjustments and final rendered visibility. Both upstream MIT LICENSE files were read at the pinned revisions. Source files are not mirrored in this repository.",
+  "baseline_note": "Pinned upstream author sources used as a teaching case for projection, unprojection and picking. Numerical examples are analytical evaluations under explicitly stated inputs, not device observations. The main worked example uses a simplified camera; the second uses the application's closed-room camera parameters with an assumed logical viewport. Geometric intersections are distinguished from petting adjustments and final rendered visibility. Both upstream MIT LICENSE files were read at the pinned revisions. Source files are not mirrored in this repository. Original SVG geometric diagrams and PNG renderings illustrate the documented projection and sphere-contact examples. The offset-contact cross-section and direction-adjustment example use separately stated teaching inputs; diagrams are not application screenshots. No external source baseline changed for this illustration update.",
   "claims": [
     {
       "id": "scene-coordinate-001",

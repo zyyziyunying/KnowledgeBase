@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
+<title id="title">射线穿过球心：从球心退回一个半径</title><desc id="desc">把球沿观察射线剖开来看；下图突出前后关系，距离未按实际比例绘制。</desc>
+<defs>
+<marker id="blue" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#2865B0"/></marker>
+<marker id="teal" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#087E78"/></marker>
+<marker id="orange" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#B65B1B"/></marker>
+<marker id="muted" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#53697E"/></marker>
+<marker id="purple" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#7650A0"/></marker>
+</defs>
+<style>text{font-family:"Hiragino Sans GB","PingFang SC",Arial,sans-serif}line,path,polyline{stroke-linecap:round;stroke-linejoin:round}</style>
+<rect width="1200" height="680" fill="#F9FBFD"/>
+<text x="48" y="58" font-size="34" fill="#18324B" text-anchor="start" font-weight="600">射线穿过球心：从球心退回一个半径</text>
+<text x="48" y="98" font-size="21" fill="#53697E" text-anchor="start" font-weight="400">把球沿观察射线剖开来看；下图突出前后关系，距离未按实际比例绘制。</text>
+<circle cx="790" cy="320" r="160" fill="#EAF2FA" stroke="#2865B0" stroke-width="2"/>
+<line x1="150" y1="320" x2="630" y2="320" stroke="#2865B0" stroke-width="4"/>
+<line x1="630" y1="320" x2="1090" y2="320" stroke="#2865B0" stroke-width="3" marker-end="url(#blue)" stroke-dasharray="8 7"/>
+<circle cx="150" cy="320" r="7" fill="#18324B" stroke="#F9FBFD" stroke-width="2"/>
+<circle cx="630" cy="320" r="7" fill="#B65B1B" stroke="#F9FBFD" stroke-width="2"/>
+<circle cx="790" cy="320" r="7" fill="#087E78" stroke="#F9FBFD" stroke-width="2"/>
+<text x="150" y="280" font-size="25" fill="#18324B" text-anchor="middle" font-weight="400">射线起点 O</text>
+<text x="150" y="370" font-size="22" fill="#53697E" text-anchor="middle" font-weight="400">近端点</text>
+<line x1="310" y1="280" x2="460" y2="280" stroke="#2865B0" stroke-width="3" marker-end="url(#blue)"/>
+<text x="385" y="250" font-size="25" fill="#2865B0" text-anchor="middle" font-weight="400">单位方向 D̂</text>
+<text x="610" y="210" font-size="25" fill="#B65B1B" text-anchor="end" font-weight="600">H 前表面</text>
+<line x1="610" y1="218" x2="630" y2="228" stroke="#B65B1B" stroke-width="1.5"/>
+<line x1="630" y1="228" x2="630" y2="304" stroke="#B65B1B" stroke-width="1.5"/>
+<text x="802" y="270" font-size="26" fill="#087E78" text-anchor="start" font-weight="600">C：球心</text>
+<text x="790" y="368" font-size="23" fill="#087E78" text-anchor="middle" font-weight="400">(1, 0.5, 0)</text>
+<text x="965" y="363" font-size="23" fill="#53697E" text-anchor="start" font-weight="400">后表面</text>
+<line x1="790" y1="520" x2="630" y2="520" stroke="#B65B1B" stroke-width="3" marker-end="url(#orange)"/>
+<line x1="790" y1="490" x2="790" y2="533" stroke="#CBD8E4" stroke-width="2"/>
+<line x1="630" y1="490" x2="630" y2="533" stroke="#CBD8E4" stroke-width="2"/>
+<text x="710.0" y="563" font-size="25" fill="#B65B1B" text-anchor="middle" font-weight="600">从 C 往回走 r = 0.5</text>
+<text x="48" y="605" font-size="30" fill="#18324B" text-anchor="start" font-weight="600">H = C − rD̂</text>
+<text x="48" y="645" font-size="23" fill="#53697E" text-anchor="start" font-weight="400">H ≈ (0.902410, 0.451205, −0.487950)；它与球心投影到同一个屏幕位置。</text>
+</svg>

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+<title id="title">几何命中点，还可以经过交互修正</title><desc id="desc">当 dir.y &lt; 0.3 时，先把 y 设为 0.3，再归一化。图中取 dir.z = 0。</desc>
+<defs>
+<marker id="blue" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#2865B0"/></marker>
+<marker id="teal" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#087E78"/></marker>
+<marker id="orange" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#B65B1B"/></marker>
+<marker id="muted" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#53697E"/></marker>
+<marker id="purple" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#7650A0"/></marker>
+</defs>
+<style>text{font-family:"Hiragino Sans GB","PingFang SC",Arial,sans-serif}line,path,polyline{stroke-linecap:round;stroke-linejoin:round}</style>
+<rect width="1200" height="650" fill="#F9FBFD"/>
+<text x="48" y="58" font-size="34" fill="#18324B" text-anchor="start" font-weight="600">几何命中点，还可以经过交互修正</text>
+<text x="48" y="98" font-size="21" fill="#53697E" text-anchor="start" font-weight="400">当 dir.y &lt; 0.3 时，先把 y 设为 0.3，再归一化。图中取 dir.z = 0。</text>
+<circle cx="760" cy="310" r="165" fill="#EAF2FA" stroke="#2865B0" stroke-width="2"/>
+<line x1="150" y1="409.0" x2="628.0" y2="409.0" stroke="#2865B0" stroke-width="4"/>
+<line x1="628.0" y1="409.0" x2="1090" y2="409.0" stroke="#2865B0" stroke-width="2" marker-end="url(#blue)" stroke-dasharray="8 7"/>
+<line x1="760" y1="310" x2="628.0" y2="409.0" stroke="#B65B1B" stroke-width="2"/>
+<line x1="760" y1="310" x2="605.5056857011076" y2="252.06463213791537" stroke="#7650A0" stroke-width="2"/>
+<circle cx="760" cy="310" r="7" fill="#087E78" stroke="#F9FBFD" stroke-width="2"/>
+<circle cx="628.0" cy="409.0" r="7" fill="#B65B1B" stroke="#F9FBFD" stroke-width="2"/>
+<circle cx="605.5056857011076" cy="252.06463213791537" r="7" fill="#7650A0" stroke="#F9FBFD" stroke-width="2"/>
+<path d="M 616.0 405.0 C 533.0 379.0, 520.5056857011076 287.0646321379154, 593.5056857011076 255.06463213791537" stroke="#7650A0" stroke-width="3" fill="none" marker-end="url(#purple)"/>
+<text x="150" y="384.0" font-size="25" fill="#2865B0" text-anchor="start" font-weight="400">触摸射线</text>
+<text x="778" y="300" font-size="27" fill="#087E78" text-anchor="start" font-weight="600">C</text>
+<text x="620.0" y="452.0" font-size="25" fill="#B65B1B" text-anchor="end" font-weight="600">H 原命中点</text>
+<text x="591.5056857011076" y="227.06463213791537" font-size="25" fill="#7650A0" text-anchor="end" font-weight="600">S 修正后的按压点</text>
+<text x="475" y="320" font-size="23" fill="#7650A0" text-anchor="middle" font-weight="400">位置修正</text>
+<line x1="1060" y1="320" x2="1060" y2="185" stroke="#087E78" stroke-width="3" marker-end="url(#teal)"/>
+<text x="1060" y="157" font-size="24" fill="#087E78" text-anchor="middle" font-weight="400">世界 +Y（向上）</text>
+<text x="48" y="545" font-size="25" fill="#18324B" text-anchor="start" font-weight="400">方向示例：(-0.8, -0.6, 0) → (-0.8, 0.3, 0) → 归一化</text>
+<text x="48" y="585" font-size="24" fill="#53697E" text-anchor="start" font-weight="400">归一化后约为 (-0.9363, 0.3511, 0)，再乘半径并加上球心。</text>
+<text x="48" y="625" font-size="25" fill="#18324B" text-anchor="start" font-weight="600">H 在射线上；S 仍在球面上，但可能已经离开原来的射线。</text>
+</svg>

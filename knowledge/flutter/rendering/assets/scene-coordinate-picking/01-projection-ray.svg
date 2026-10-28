@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+<title id="title">沿着同一条视线，远近不同也会重叠</title><desc id="desc">教学相机：(0, 0, −5)，朝正 Z 看；FOV 90°，视图 400 × 400。左侧省略 Y。</desc>
+<defs>
+<marker id="blue" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#2865B0"/></marker>
+<marker id="teal" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#087E78"/></marker>
+<marker id="orange" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#B65B1B"/></marker>
+<marker id="muted" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#53697E"/></marker>
+<marker id="purple" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#7650A0"/></marker>
+</defs>
+<style>text{font-family:"Hiragino Sans GB","PingFang SC",Arial,sans-serif}line,path,polyline{stroke-linecap:round;stroke-linejoin:round}</style>
+<rect width="1200" height="620" fill="#F9FBFD"/>
+<text x="48" y="58" font-size="34" fill="#18324B" text-anchor="start" font-weight="600">沿着同一条视线，远近不同也会重叠</text>
+<text x="48" y="98" font-size="21" fill="#53697E" text-anchor="start" font-weight="400">教学相机：(0, 0, −5)，朝正 Z 看；FOV 90°，视图 400 × 400。左侧省略 Y。</text>
+<text x="48" y="150" font-size="26" fill="#2865B0" text-anchor="start" font-weight="600">世界空间：从侧面看</text>
+<text x="866" y="150" font-size="26" fill="#2865B0" text-anchor="start" font-weight="600">屏幕空间：正面看</text>
+<line x1="100" y1="418" x2="790" y2="245" stroke="#2865B0" stroke-width="4" marker-end="url(#blue)"/>
+<line x1="100" y1="455" x2="795" y2="455" stroke="#53697E" stroke-width="2" marker-end="url(#muted)"/>
+<text x="794" y="517" font-size="22" fill="#53697E" text-anchor="end" font-weight="400">世界 Z →</text>
+<circle cx="100" cy="418" r="7" fill="#18324B" stroke="#F9FBFD" stroke-width="2"/>
+<circle cx="420" cy="338" r="7" fill="#B65B1B" stroke="#F9FBFD" stroke-width="2"/>
+<circle cx="740" cy="258" r="7" fill="#087E78" stroke="#F9FBFD" stroke-width="2"/>
+<text x="74" y="385" font-size="24" fill="#18324B" text-anchor="start" font-weight="400">相机</text>
+<text x="100" y="488" font-size="22" fill="#53697E" text-anchor="middle" font-weight="400">−5</text>
+<line x1="420" y1="349" x2="420" y2="455" stroke="#CBD8E4" stroke-width="2" stroke-dasharray="5 6"/>
+<line x1="740" y1="269" x2="740" y2="455" stroke="#CBD8E4" stroke-width="2" stroke-dasharray="5 6"/>
+<text x="420" y="488" font-size="22" fill="#53697E" text-anchor="middle" font-weight="400">0</text>
+<text x="740" y="488" font-size="22" fill="#53697E" text-anchor="middle" font-weight="400">5</text>
+<text x="420" y="290" font-size="25" fill="#B65B1B" text-anchor="middle" font-weight="600">Q = (1, 0.5, 0)</text>
+<text x="710" y="209" font-size="25" fill="#087E78" text-anchor="middle" font-weight="600">Q₂ = (2, 1, 5)</text>
+<text x="180" y="435" font-size="23" fill="#2865B0" text-anchor="start" font-weight="400">同一条观察射线</text>
+<rect x="875" y="205" width="250" height="250" fill="#FFFFFF" stroke="#CBD8E4" stroke-width="2"/>
+<line x1="1000" y1="205" x2="1000" y2="455" stroke="#CBD8E4" stroke-width="1"/>
+<line x1="875" y1="330" x2="1125" y2="330" stroke="#CBD8E4" stroke-width="1"/>
+<text x="875" y="190" font-size="21" fill="#53697E" text-anchor="start" font-weight="400">(0, 0)</text>
+<text x="1125" y="485" font-size="21" fill="#53697E" text-anchor="end" font-weight="400">(400, 400)</text>
+<circle cx="1025" cy="317.5" r="12" fill="none" stroke="#087E78" stroke-width="3"/>
+<circle cx="1025" cy="317.5" r="7" fill="#B65B1B" stroke="#F9FBFD" stroke-width="2"/>
+<text x="1000" y="280" font-size="23" fill="#18324B" text-anchor="middle" font-weight="600">都在 (240, 180)</text>
+<text x="48" y="548" font-size="25" fill="#18324B" text-anchor="start" font-weight="400">投影：已知世界点，找到它在屏幕上的位置。</text>
+<text x="48" y="588" font-size="25" fill="#18324B" text-anchor="start" font-weight="400">反过来只知道屏幕位置，还需要一个深度条件，才能选出射线上的某一点。</text>
+</svg>

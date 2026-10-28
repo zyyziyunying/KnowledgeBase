@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+<title id="title">射线偏离球心：用一个直角三角形找到交点</title><desc id="desc">独立的截面算例：半径 r = 0.5，射线离球心 miss = 0.3；圆内长度按比例绘制。</desc>
+<defs>
+<marker id="blue" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#2865B0"/></marker>
+<marker id="teal" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#087E78"/></marker>
+<marker id="orange" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#B65B1B"/></marker>
+<marker id="muted" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#53697E"/></marker>
+<marker id="purple" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#7650A0"/></marker>
+</defs>
+<style>text{font-family:"Hiragino Sans GB","PingFang SC",Arial,sans-serif}line,path,polyline{stroke-linecap:round;stroke-linejoin:round}</style>
+<rect width="1200" height="720" fill="#F9FBFD"/>
+<text x="48" y="58" font-size="34" fill="#18324B" text-anchor="start" font-weight="600">射线偏离球心：用一个直角三角形找到交点</text>
+<text x="48" y="98" font-size="21" fill="#53697E" text-anchor="start" font-weight="400">独立的截面算例：半径 r = 0.5，射线离球心 miss = 0.3；圆内长度按比例绘制。</text>
+<circle cx="780" cy="305" r="170" fill="#EAF2FA" stroke="#2865B0" stroke-width="2"/>
+<path d="M 780 305 L 644.0 407 L 780 407 Z" stroke="#CBD8E4" stroke-width="1" fill="#DDEEEA"/>
+<line x1="150" y1="407" x2="644.0" y2="407" stroke="#2865B0" stroke-width="4"/>
+<line x1="644.0" y1="407" x2="1100" y2="407" stroke="#2865B0" stroke-width="3" marker-end="url(#blue)" stroke-dasharray="8 7"/>
+<line x1="780" y1="305" x2="644.0" y2="407" stroke="#B65B1B" stroke-width="3"/>
+<line x1="780" y1="305" x2="780" y2="407" stroke="#087E78" stroke-width="3"/>
+<path d="M 764 407 L 764 391 L 780 391" stroke="#087E78" stroke-width="2" fill="none"/>
+<circle cx="150" cy="407" r="7" fill="#18324B" stroke="#F9FBFD" stroke-width="2"/>
+<circle cx="644.0" cy="407" r="7" fill="#B65B1B" stroke="#F9FBFD" stroke-width="2"/>
+<circle cx="780" cy="407" r="7" fill="#2865B0" stroke="#F9FBFD" stroke-width="2"/>
+<circle cx="780" cy="305" r="7" fill="#087E78" stroke="#F9FBFD" stroke-width="2"/>
+<text x="150" y="379" font-size="27" fill="#18324B" text-anchor="middle" font-weight="600">O</text>
+<text x="798" y="287" font-size="26" fill="#087E78" text-anchor="start" font-weight="600">C 球心</text>
+<text x="626.0" y="450" font-size="25" fill="#B65B1B" text-anchor="end" font-weight="600">H 前表面</text>
+<line x1="780" y1="419" x2="780" y2="520" stroke="#CBD8E4" stroke-width="1.5"/>
+<text x="800" y="535" font-size="25" fill="#2865B0" text-anchor="start" font-weight="600">N 最近点</text>
+<text x="655" y="315" font-size="25" fill="#B65B1B" text-anchor="start" font-weight="400">r = 0.5</text>
+<text x="804" y="365" font-size="25" fill="#087E78" text-anchor="start" font-weight="400">miss = 0.3</text>
+<line x1="780" y1="510" x2="644.0" y2="510" stroke="#B65B1B" stroke-width="3" marker-end="url(#orange)"/>
+<text x="712.0" y="495" font-size="25" fill="#B65B1B" text-anchor="middle" font-weight="600">a = 0.4</text>
+<line x1="150" y1="560" x2="780" y2="560" stroke="#53697E" stroke-width="2" marker-end="url(#muted)"/>
+<text x="465.0" y="592" font-size="24" fill="#53697E" text-anchor="middle" font-weight="400">先从 O 前进 along，到达 N</text>
+<text x="48" y="648" font-size="27" fill="#18324B" text-anchor="start" font-weight="600">a² + miss² = r²，所以 a = √(0.5² − 0.3²) = 0.4</text>
+<text x="48" y="690" font-size="25" fill="#18324B" text-anchor="start" font-weight="400">再从 N 沿射线退回 a，就得到前表面交点 H。</text>
+</svg>
