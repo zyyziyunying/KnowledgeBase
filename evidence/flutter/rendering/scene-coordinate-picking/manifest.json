@@ -1,0 +1,253 @@
+{
+  "$schema": "../../../schema/evidence-manifest.schema.json",
+  "schema_version": 1,
+  "topic_id": "flutter.rendering.scene-coordinate-picking",
+  "topic_document": "../../../../knowledge/flutter/rendering/Flutter-Scene坐标转换与射线拾取.md",
+  "verified_at": "2026-10-28",
+  "baseline_note": "Pinned upstream author sources used as a teaching case for projection, unprojection and picking. Numerical examples are analytical evaluations under explicitly stated inputs, not device observations. The main worked example uses a simplified camera; the second uses the application's closed-room camera parameters with an assumed logical viewport. Geometric intersections are distinguished from petting adjustments and final rendered visibility. Both upstream MIT LICENSE files were read at the pinned revisions. Source files are not mirrored in this repository.",
+  "claims": [
+    {
+      "id": "scene-coordinate-001",
+      "section": "坐标空间与矩阵约定",
+      "statement": "Coordinate-space conventions, view basis and combined projection-view transform.",
+      "source_ids": [
+        "camera"
+      ]
+    },
+    {
+      "id": "scene-coordinate-002",
+      "section": "投影与透视除法",
+      "statement": "Perspective projection and viewport mapping, with an explicitly assumed numerical example.",
+      "source_ids": [
+        "camera",
+        "app-park"
+      ]
+    },
+    {
+      "id": "scene-coordinate-003",
+      "section": "从一个触点构造世界射线",
+      "statement": "Homogeneous unprojection, near/far point construction and unnormalized ray direction.",
+      "source_ids": [
+        "camera"
+      ]
+    },
+    {
+      "id": "scene-coordinate-004",
+      "section": "与工作平面求交",
+      "statement": "Overlay-local input and z-zero plane intersection; general plane formula derived from ray geometry.",
+      "source_ids": [
+        "app-park",
+        "camera"
+      ]
+    },
+    {
+      "id": "scene-coordinate-005",
+      "section": "球体近似与抚摸容差",
+      "statement": "Approximate spherical contact and subsequent upper-region or miss adjustments.",
+      "source_ids": [
+        "pet",
+        "camera"
+      ]
+    },
+    {
+      "id": "scene-coordinate-006",
+      "section": "网格拾取与最近命中",
+      "statement": "Filtered nearest geometry hit, local bounds and triangle tests, distance parameter preservation and query limitations.",
+      "source_ids": [
+        "raycast",
+        "app-park",
+        "character"
+      ]
+    },
+    {
+      "id": "scene-coordinate-007",
+      "section": "世界命中点回到头部局部空间",
+      "statement": "Inverse node-world transform before applying head-local soft-body input.",
+      "source_ids": [
+        "character"
+      ]
+    },
+    {
+      "id": "scene-coordinate-008",
+      "section": "使用案例相机参数复算",
+      "statement": "Pinned dependency and camera parameters supporting a conditional mathematical worked example.",
+      "source_ids": [
+        "dependency",
+        "app-park",
+        "character",
+        "camera"
+      ]
+    },
+    {
+      "id": "scene-coordinate-009",
+      "section": "验证方法与适用边界",
+      "statement": "Logical viewport contract and distinction between camera picking projection and raster depth projection.",
+      "source_ids": [
+        "camera",
+        "raycast"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "camera",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/camera.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "b8023c6261ed77ed4046d72c86496ed40c96b37b",
+      "path": "packages/flutter_scene/lib/src/camera.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/b8023c6261ed77ed4046d72c86496ed40c96b37b/packages/flutter_scene/lib/src/camera.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/b8023c6261ed77ed4046d72c86496ed40c96b37b/packages/flutter_scene/lib/src/camera.dart",
+      "raw_encoding": "identity",
+      "sha256": "d2719bf880911d0ed88b004176043b3ba0a35098d79ae33555869d2500cb9fb6",
+      "assertions": [
+        "Vector3 right = up.cross(forward).normalized();",
+        "up = forward.cross(right).normalized();",
+        "projection.getProjectionMatrixForViewport(dimensions, jitter: jitter) *",
+        "double height = tan(fovRadiansY * 0.5);",
+        "depthScale = infinite ? 1.0 : zFar / (zFar - zNear);",
+        "depthOffset = infinite ? -zNear : -(zFar * zNear) / (zFar - zNear);",
+        "return Vector2((clip.x / clip.w + 1) / 2, (1 - clip.y / clip.w) / 2);",
+        "if (clip.w <= 0)",
+        "return ui.Offset(uv.x * viewSize.width, uv.y * viewSize.height);",
+        "final ndcX = screenPosition.dx / viewSize.width * 2 - 1;",
+        "final ndcY = 1 - screenPosition.dy / viewSize.height * 2;",
+        "final v = inverse * Vector4(ndcX, ndcY, z, 1) as Vector4;",
+        "return v.xyz / v.w;",
+        "final near = unproject(0.0);",
+        "return Ray.originDirection(near, unproject(1.0) - near);",
+        "this.fovNear = 0.1,",
+        "this.fovFar = 1000.0,",
+        "Matrix4? buildRasterProjectionMatrix(",
+        "near != null && near > perspective.near ? near : perspective.near,",
+        "reversed: reversed,"
+      ]
+    },
+    {
+      "id": "raycast",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/raycast.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "b8023c6261ed77ed4046d72c86496ed40c96b37b",
+      "path": "packages/flutter_scene/lib/src/raycast.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/b8023c6261ed77ed4046d72c86496ed40c96b37b/packages/flutter_scene/lib/src/raycast.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/b8023c6261ed77ed4046d72c86496ed40c96b37b/packages/flutter_scene/lib/src/raycast.dart",
+      "raw_encoding": "identity",
+      "sha256": "d1a5e2c61905b9dcc7245bcd13288e49c2135c5ebf29b9bb308bd332189ae3f0",
+      "assertions": [
+        "if (nearest == null || hit.distance < nearest!.distance) nearest = hit;",
+        "final worldDirection = ray.direction.normalized();",
+        "final localOrigin = toLocal.transform3(ray.origin.clone());",
+        "final localTip = toLocal.transform3(ray.origin + worldDirection);",
+        "final localRay = Ray.originDirection(localOrigin, localTip - localOrigin);",
+        "if (bounds != null && !_rayIntersectsAabb(localRay, bounds, maxDistance))",
+        "// Moller-Trumbore, both faces.",
+        "if (u < 0.0 || u > 1.0) continue;",
+        "if (v < 0.0 || u + v > 1.0) continue;",
+        "if (rayT <= 0.0 || rayT > maxDistance) continue;",
+        "final worldPoint = worldOrigin + worldDirection * hit.t;",
+        "/// provided. Skinned meshes are tested at rest pose.",
+        "// TODO(raycast): test InstancedMesh components",
+        "if (geometry.primitiveType != gpu.PrimitiveType.triangle) continue;",
+        "final data = geometry.cpuMeshData;"
+      ]
+    },
+    {
+      "id": "app-park",
+      "source_class": "official_source",
+      "title": "lib/ui/park_screen.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "lib/ui/park_screen.dart",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/ui/park_screen.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/ui/park_screen.dart",
+      "raw_encoding": "identity",
+      "sha256": "ae7f3e74d3d3d6d6d99abd13e6d0d4d325f917b42c4e43e4572aa90f9fec5684",
+      "assertions": [
+        "fovRadiansY: 27 * vm.degrees2Radians,",
+        "position: vm.Vector3(0, 1.55, 7.6 * kFaceZ),",
+        "target: vm.Vector3(0, 1.38, 0),",
+        "return camera.worldToScreen(c.headCenter, _headerSize);",
+        "final ray = camera.screenPointToRay(d.localPosition, _headerSize);",
+        "pts.add(GlowPoint(out ? at : header.localToGlobal(at), color, strength));",
+        "return box?.globalToLocal(global);",
+        "final ray = _outCamera.screenPointToRay(global - _outRect.topLeft, _outRect.size);",
+        "return ray.origin + d * (-ray.origin.z / d.z);",
+        "final e = roomOpen;"
+      ]
+    },
+    {
+      "id": "character",
+      "source_class": "official_source",
+      "title": "lib/lantern/character.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "lib/lantern/character.dart",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/lantern/character.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/lantern/character.dart",
+      "raw_encoding": "identity",
+      "sha256": "1acfe4e0a9658ba34694c1779f4fed0ebe8d8f56b8eec030a57fa2bea08e133a",
+      "assertions": [
+        "const double kFaceZ = -1.0;",
+        "final hit = scene.raycast(ray, where: (n) => n == _head);",
+        "soft.impulse(_toHead(hit.worldPoint), 3.4);",
+        "Vector3 _toHead(Vector3 world) => Matrix4.inverted(_head.globalTransform).transformed3(world.clone());",
+        "Vector3 get headCenter => _head.globalTransform.getTranslation();"
+      ]
+    },
+    {
+      "id": "pet",
+      "source_class": "official_source",
+      "title": "lib/ui/park_pet.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "lib/ui/park_pet.dart",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/ui/park_pet.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/ui/park_pet.dart",
+      "raw_encoding": "identity",
+      "sha256": "cd7f5ef803f31acbcbbbfe68ce9e28b4222e3635e2b14a0067ef4634e930ffe6",
+      "assertions": [
+        "final ray = camera.screenPointToRay(p, _headerSize);",
+        "final along = (center - ray.origin).dot(d);",
+        "final nearest = ray.origin + d * along;",
+        "var dir = miss < r ? (nearest - d * math.sqrt(r * r - miss * miss)) - center : nearest - center;",
+        "if (dir.y < 0.3)",
+        "dir = vm.Vector3(dir.x, 0.3, dir.z)..normalize();",
+        "return center + dir * r;"
+      ]
+    },
+    {
+      "id": "dependency",
+      "source_class": "official_source",
+      "title": "pubspec.yaml",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "pubspec.yaml",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/pubspec.yaml",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/pubspec.yaml",
+      "raw_encoding": "identity",
+      "sha256": "76e9bc1fc9db5de55c9e4097c18a7a0f9973989e39809e8b1471da0f8720ac96",
+      "assertions": [
+        "ref: b8023c6261ed77ed4046d72c86496ed40c96b37b"
+      ]
+    }
+  ]
+}
