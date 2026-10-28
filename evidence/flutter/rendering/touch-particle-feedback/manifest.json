@@ -1,0 +1,203 @@
+{
+  "$schema": "../../../schema/evidence-manifest.schema.json",
+  "schema_version": 1,
+  "topic_id": "flutter.rendering.touch-particle-feedback",
+  "topic_document": "../../../../knowledge/flutter/rendering/Flutter-触摸粒子反馈与爱心动效.md",
+  "verified_at": "2026-10-28",
+  "baseline_note": "Pinned upstream author sources used as a teaching case for touch-driven 2D particles over a 3D character. Static review covers the ordinary header petting path, distance and time emission, particle parameters, motion, painting and page refresh. Numerical examples are formula evaluations; strict distance resampling and isolated repaint are proposed extensions, not upstream behavior. No device frame-rate, latency, sampling-invariance or large-timestep validation is implied. The upstream LICENSE was read at the pinned revision; source files are not mirrored in this repository.",
+  "claims": [
+    {
+      "id": "touch-particle-001",
+      "section": "从头顶命中到距离发射",
+      "statement": "Gesture routing, projected interaction region, approximate press location and distance-threshold emission.",
+      "source_ids": [
+        "pet",
+        "app-park"
+      ]
+    },
+    {
+      "id": "touch-particle-002",
+      "section": "粒子的参数分布",
+      "statement": "Particle state, seeded parameter distribution, companion-heart probability and lifetime formula.",
+      "source_ids": [
+        "pet"
+      ]
+    },
+    {
+      "id": "touch-particle-003",
+      "section": "用时间推进漂浮",
+      "statement": "Per-frame damping, oscillatory forcing, position integration and lifetime removal; timestep-clamp boundary.",
+      "source_ids": [
+        "pet",
+        "character"
+      ]
+    },
+    {
+      "id": "touch-particle-004",
+      "section": "分阶段控制出现与消失",
+      "statement": "Normalized lifetime curves, procedural outline and layered 2D painting.",
+      "source_ids": [
+        "pet"
+      ]
+    },
+    {
+      "id": "touch-particle-005",
+      "section": "角色响应和松手后的余韵",
+      "statement": "Soft pressing, eased lean, emotional decay, shared distance/time emission threshold and sound throttling.",
+      "source_ids": [
+        "pet",
+        "character"
+      ]
+    },
+    {
+      "id": "touch-particle-006",
+      "section": "逐帧调用与重绘边界",
+      "statement": "Frame callback ordering, overlay hit-testing behavior and page setState repaint path.",
+      "source_ids": [
+        "pet",
+        "app-park",
+        "app-life",
+        "app-clock"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "pet",
+      "source_class": "official_source",
+      "title": "lib/ui/park_pet.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "lib/ui/park_pet.dart",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/ui/park_pet.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/ui/park_pet.dart",
+      "raw_encoding": "identity",
+      "sha256": "cd7f5ef803f31acbcbbbfe68ce9e28b4222e3635e2b14a0067ef4634e930ffe6",
+      "assertions": [
+        "double toNextHeart = 0;",
+        "final rng = math.Random(23);",
+        "return d.dx.abs() < r * 0.95 && d.dy > -r * 0.6 && d.dy < r * 0.5;",
+        "final ray = camera.screenPointToRay(p, _headerSize);",
+        "pet.toNextHeart -= stroke;",
+        "pet.toNextHeart = 90 + pet.rng.nextDouble() * 60;",
+        "_addHeart(_headerGlobal(p) + Offset((pet.rng.nextDouble() - 0.5) * 20, -10));",
+        "final gentle = (1.2 - (stroke / 40)).clamp(0.4, 1.0);",
+        "Offset((rng.nextDouble() - 0.5) * 36, -40 - rng.nextDouble() * 30 - size)",
+        "life: 1.4 + size / 28,",
+        "final size = 9 + 22 * math.pow(rng.nextDouble(), 1.8).toDouble();",
+        "if (rng.nextDouble() < 0.3) one(",
+        "gap: const Duration(milliseconds: 160)",
+        "gap: const Duration(milliseconds: 140)",
+        "if (!pet.stroking) pet.level = math.max(0.0, pet.level - dt * (pet.level > 0.75 ? 0.05 : 0.16));",
+        "c.glowScale = 1 + 0.4 * p;",
+        "c.react(drowsy ? LanternFace.sleepy : LanternFace.content, 0.2);",
+        "if ((p > 0.55 && !pet.stroking) || trance > 0) {",
+        "pet.toNextHeart -= dt * 60 * (0.4 + trance);",
+        "pet.toNextHeart = 70 + pet.rng.nextDouble() * 50;",
+        "h.velocity = Offset(h.velocity.dx * math.exp(-dt * 1.5) + math.sin(h.age * 4 + h.spin * 9) * 14 * dt * 10, h.velocity.dy * math.exp(-dt * 0.6));",
+        "h.at += h.velocity * dt;",
+        "pet.hearts.removeWhere((h) => h.age >= h.life);",
+        "if (pet.hearts.isNotEmpty || p > 0) _refresh();",
+        "return Positioned.fill(child: IgnorePointer(child: CustomPaint(painter: _HeartsPainter(List.of(pet.hearts)))));",
+        "final pop = u < 0.12 ? Curves.elasticOut.transform(u / 0.12) : 1.0;",
+        "final fade = u < 0.6 ? 1.0 : 1 - (u - 0.6) / 0.4;",
+        "final s = h.size * pop * (1 + 0.15 * u);",
+        "canvas.rotate(h.spin + math.sin(h.age * 3 + h.spin * 5) * 0.18);",
+        "MaskFilter.blur(BlurStyle.normal, s * 0.45)",
+        "..shader = LinearGradient(",
+        "canvas.drawOval(",
+        "bool shouldRepaint(_HeartsPainter old) => true;"
+      ]
+    },
+    {
+      "id": "app-park",
+      "source_class": "official_source",
+      "title": "lib/ui/park_screen.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "lib/ui/park_screen.dart",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/ui/park_screen.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/ui/park_screen.dart",
+      "raw_encoding": "identity",
+      "sha256": "ae7f3e74d3d3d6d6d99abd13e6d0d4d325f917b42c4e43e4572aa90f9fec5684",
+      "assertions": [
+        "if (startPet(c, p)) return;",
+        "if (pet.stroking) {\n      movePet(c, p);",
+        "onPanStart: (d) => _dragStart(d.localPosition),",
+        "onPanCancel: _dragEnd,",
+        "onLongPressMoveUpdate: (d) => _dragMove(d.localPosition),",
+        "lifeTick(dt);\n        c.update(dt, _clock);",
+        "_heartsLayer(),",
+        "void _refresh() {\n    if (mounted) setState(() {});"
+      ]
+    },
+    {
+      "id": "app-life",
+      "source_class": "official_source",
+      "title": "lib/ui/park_life.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "lib/ui/park_life.dart",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/ui/park_life.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/ui/park_life.dart",
+      "raw_encoding": "identity",
+      "sha256": "222c3b9f125ca5eff1c3f7e6fa79f32edb66fffbd91dd09a23edce7b35fa05da",
+      "assertions": [
+        "void lifeTick(double dt) {",
+        "tickPet(c, dt);"
+      ]
+    },
+    {
+      "id": "character",
+      "source_class": "official_source",
+      "title": "lib/lantern/character.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "lib/lantern/character.dart",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/lantern/character.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/lantern/character.dart",
+      "raw_encoding": "identity",
+      "sha256": "1acfe4e0a9658ba34694c1779f4fed0ebe8d8f56b8eec030a57fa2bea08e133a",
+      "assertions": [
+        "void pet(Vector3 at, double depth) {",
+        "soft.press(_toHead(at)..normalize(), depth);",
+        "_squash.target = depth * 0.45;",
+        "void stopPet() {",
+        "soft.release();",
+        "_petLean += (petLean - _petLean) * (1 - math.exp(-dt * 4));",
+        "dt = dt.clamp(0.0, 1 / 20);"
+      ]
+    },
+    {
+      "id": "app-clock",
+      "source_class": "official_source",
+      "title": "lib/app/scene_clock.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "lib/app/scene_clock.dart",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/app/scene_clock.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/app/scene_clock.dart",
+      "raw_encoding": "identity",
+      "sha256": "88041bb4b0ddd524773a78060dd028ae777e3e1ffe21ca13992a8bb9614aba68",
+      "assertions": [
+        "clock: Clock(() => AppClock.now),",
+        "onTick(elapsed, dt);\n        scene.update(dt);"
+      ]
+    }
+  ]
+}

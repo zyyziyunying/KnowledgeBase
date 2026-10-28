@@ -12,8 +12,10 @@
 
 页面与场景的转场可独立阅读 [Flutter 裁剪展开转场与性能边界](Flutter-裁剪展开转场与性能边界.md)：区分页面布局、窗口裁剪、场景渲染和同场景展开；固定来源见 [对应证据包](../../../evidence/flutter/rendering/clipped-reveal-transitions/manifest.json)。
 
+触摸粒子方向可独立阅读 [Flutter 触摸粒子反馈与爱心动效](Flutter-触摸粒子反馈与爱心动效.md)：从输入与发射节奏进入运动模拟、画笔表现、角色联动及重绘边界；固定来源见 [对应证据包](../../../evidence/flutter/rendering/touch-particle-feedback/manifest.json)。
+
 ## 范围与拆分边界
 
-Android 原生内容集成、场景图动画与页面转场各自作为独立阅读单元。场景图与转场内容使用固定开源案例解释可复用机制，不维护案例应用的架构或运行状态。iOS 只记录平台差异入口，不在这里展开 UIKit 合成实现。后续 Layer tree、Skia、Impeller 后端与资源管理形成独立内容时，再建立相应事实源；不把它们持续堆入 Platform Views 文档。
+Android 原生内容集成、场景图动画、页面转场与触摸粒子各自作为独立阅读单元。场景图、转场与粒子内容使用固定开源案例解释可复用机制，不维护案例应用的架构或运行状态。iOS 只记录平台差异入口，不在这里展开 UIKit 合成实现。后续 Layer tree、Skia、Impeller 后端与资源管理形成独立内容时，再建立相应事实源；不把它们持续堆入 Platform Views 文档。
 
 Android 的 Surface、BufferQueue、SurfaceFlinger 和 HWC 机制归入 [Android 领域](../../android/README.md)。涉及 Android 图形栈时，本专题只解释 Flutter 与这些机制的交界；不保存具体应用、设备、trace 或一次运行的性能结论。
