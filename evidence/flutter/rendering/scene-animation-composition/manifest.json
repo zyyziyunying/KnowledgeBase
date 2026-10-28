@@ -1,0 +1,400 @@
+{
+  "$schema": "../../../schema/evidence-manifest.schema.json",
+  "schema_version": 1,
+  "topic_id": "flutter.rendering.scene-animation-composition",
+  "topic_document": "../../../../knowledge/flutter/rendering/Flutter-Scene动画与交互叠加.md",
+  "verified_at": "2026-10-28",
+  "baseline_note": "Pinned upstream author sources used as a teaching case for reusable scene-graph mechanisms. The Flutter Scene revision is the dependency pinned by the sample, not a Flutter SDK guarantee. Static source review covers the default Lumi header path, generator hierarchy, transform ownership, explicit scene update and face deformation. Numeric examples are labeled mathematical illustrations. No device run, performance claim, binary GLB regeneration comparison or full-screen errand validation is implied. Both upstream repository LICENSE files were read at the pinned revisions; source files are not mirrored in this repository.",
+  "claims": [
+    {
+      "id": "scene-animation-001",
+      "section": "从资源准备到每帧绘制",
+      "statement": "Asset preparation, pipeline warm-up and character assembly entry points.",
+      "source_ids": [
+        "app-main",
+        "app-boot",
+        "app-preload",
+        "character",
+        "app-dependency"
+      ]
+    },
+    {
+      "id": "scene-animation-002",
+      "section": "从资源准备到每帧绘制",
+      "statement": "Application callback, explicit scene tick and paint ordering; character-local timestep clamp.",
+      "source_ids": [
+        "app-clock",
+        "app-park",
+        "character",
+        "scene-view",
+        "scene-update",
+        "scene-node"
+      ]
+    },
+    {
+      "id": "scene-animation-003",
+      "section": "用父子节点分配变换的写入者",
+      "statement": "Generated Ctrl/Fx hierarchy, sibling geometry and animation-channel targets.",
+      "source_ids": [
+        "rig-generator",
+        "character"
+      ]
+    },
+    {
+      "id": "scene-animation-004",
+      "section": "预制动画写主姿态",
+      "statement": "Authored samples, clip weights and property-specific animation blending.",
+      "source_ids": [
+        "rig-generator",
+        "character",
+        "scene-player",
+        "scene-resolver"
+      ]
+    },
+    {
+      "id": "scene-animation-005",
+      "section": "交互逻辑写局部偏移",
+      "statement": "Per-frame Fx matrix, distinct gaze smoothing rates and face UV parameter.",
+      "source_ids": [
+        "character",
+        "face-material"
+      ]
+    },
+    {
+      "id": "scene-animation-006",
+      "section": "矩阵相乘怎样叠加动作",
+      "statement": "Parent-times-local transform composition and its distinction from temporal update order.",
+      "source_ids": [
+        "scene-node",
+        "app-clock",
+        "character",
+        "scene-player"
+      ]
+    },
+    {
+      "id": "scene-animation-007",
+      "section": "面部跟随包含变换和形变两个层次",
+      "statement": "Head/cap coordinate scales and shared soft-control deformation with separate geometry writes.",
+      "source_ids": [
+        "rig-generator",
+        "character",
+        "soft-head"
+      ]
+    },
+    {
+      "id": "scene-animation-008",
+      "section": "面部跟随包含变换和形变两个层次",
+      "statement": "Expression atlas blending and whole-expression UV offset independent of node pose.",
+      "source_ids": [
+        "face-material",
+        "character"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "app-main",
+      "source_class": "official_source",
+      "title": "lib/main.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "lib/main.dart",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/main.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/main.dart",
+      "raw_encoding": "identity",
+      "sha256": "27f7353c9b9a789ccef17735d0663ee1d8360257029bcf19ca0b748b9e941863",
+      "assertions": [
+        "final profile = await Profile.load();",
+        "home: const Boot(),"
+      ]
+    },
+    {
+      "id": "app-boot",
+      "source_class": "official_source",
+      "title": "lib/ui/loading_screen.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "lib/ui/loading_screen.dart",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/ui/loading_screen.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/ui/loading_screen.dart",
+      "raw_encoding": "identity",
+      "sha256": "280913e37f047e5ed665b45dd8dc049c0aff2ed0d4c2ebc32f852a901b5be399",
+      "assertions": [
+        "Preload.run(",
+        "child: _ready ? const ParkScreen() : _loading(),"
+      ]
+    },
+    {
+      "id": "app-preload",
+      "source_class": "official_source",
+      "title": "lib/app/preload.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "lib/app/preload.dart",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/app/preload.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/app/preload.dart",
+      "raw_encoding": "identity",
+      "sha256": "3e42102d625ce11340b025fa3a0970305f2b40084f84f0f9e3e5de8c345ae038",
+      "assertions": [
+        "await Future.wait([",
+        "for (final warm in warms) {",
+        "await scene.warmUp(",
+        "sliceBudget: _slice,"
+      ]
+    },
+    {
+      "id": "app-dependency",
+      "source_class": "official_source",
+      "title": "pubspec.yaml",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "pubspec.yaml",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/pubspec.yaml",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/pubspec.yaml",
+      "raw_encoding": "identity",
+      "sha256": "76e9bc1fc9db5de55c9e4097c18a7a0f9973989e39809e8b1471da0f8720ac96",
+      "assertions": [
+        "ref: b8023c6261ed77ed4046d72c86496ed40c96b37b"
+      ]
+    },
+    {
+      "id": "rig-generator",
+      "source_class": "official_source",
+      "title": "tool/make_lantern_glb.py",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "tool/make_lantern_glb.py",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/tool/make_lantern_glb.py",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/tool/make_lantern_glb.py",
+      "raw_encoding": "identity",
+      "sha256": "7d9364c2cdd35b02502d558f82938ad3e3129bac8e22fce0f6faeaa655619962",
+      "assertions": [
+        "FPS = 30",
+        "\"Head\": (0.0, 1.8, 0.0),",
+        "R = HEAD_R * 1.012",
+        "kids.append(b.node(\"Face\", mesh=face_mesh))",
+        "fx = b.node(part + \"Fx\", children=kids)",
+        "ctrl[part] = b.node(part + \"Ctrl\", children=[fx], t=REST[part])",
+        "\"target\": {\"node\": ctrl[part], \"path\": path}"
+      ]
+    },
+    {
+      "id": "character",
+      "source_class": "official_source",
+      "title": "lib/lantern/character.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "lib/lantern/character.dart",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/lantern/character.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/lantern/character.dart",
+      "raw_encoding": "identity",
+      "sha256": "1acfe4e0a9658ba34694c1779f4fed0ebe8d8f56b8eec030a57fa2bea08e133a",
+      "assertions": [
+        "p: root.getChildByName('${p}Fx')!,",
+        "dt = dt.clamp(0.0, 1 / 20);",
+        "_updateWeights(dt);\n    _updateFace(dt);\n    _updateMotion(dt, time);\n    _updateMaterials(dt, time);",
+        "_fx['Head']!.localTransform = Matrix4.compose(",
+        "_eyes.add((target - _eyes)..scale(1 - math.exp(-dt * 28)));",
+        "_look.add((headTarget - _look)..scale(1 - math.exp(-dt * 5.5)));",
+        "soft.update(dt);",
+        "p.geometry = soft.headGeometry;",
+        "p.geometry = soft.capGeometry;"
+      ]
+    },
+    {
+      "id": "app-clock",
+      "source_class": "official_source",
+      "title": "lib/app/scene_clock.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "lib/app/scene_clock.dart",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/app/scene_clock.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/app/scene_clock.dart",
+      "raw_encoding": "identity",
+      "sha256": "88041bb4b0ddd524773a78060dd028ae777e3e1ffe21ca13992a8bb9614aba68",
+      "assertions": [
+        "onTick(elapsed, dt);\n        scene.update(dt);"
+      ]
+    },
+    {
+      "id": "app-park",
+      "source_class": "official_source",
+      "title": "lib/ui/park_screen.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "lib/ui/park_screen.dart",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/ui/park_screen.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/ui/park_screen.dart",
+      "raw_encoding": "identity",
+      "sha256": "ae7f3e74d3d3d6d6d99abd13e6d0d4d325f917b42c4e43e4572aa90f9fec5684",
+      "assertions": [
+        "final Scene scene = Scene();",
+        "final c = await LanternCharacter.load(scene,",
+        "if (errandActive) return;",
+        "c.update(dt, _clock);"
+      ]
+    },
+    {
+      "id": "soft-head",
+      "source_class": "official_source",
+      "title": "lib/lantern/soft_body.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "lib/lantern/soft_body.dart",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/lantern/soft_body.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/lantern/soft_body.dart",
+      "raw_encoding": "identity",
+      "sha256": "6facda31837ddce5e1e7417f257462533c9a641589d8e1df52f13421b0ec01b4",
+      "assertions": [
+        "_deform(_headRest, _headW, _headVerts, _headPos, 1.0);",
+        "_deform(_capRest, _capW, _capVerts, _capPos, radius * capScale);",
+        "headGeometry.rebuild(",
+        "capGeometry.rebuild("
+      ]
+    },
+    {
+      "id": "face-material",
+      "source_class": "official_source",
+      "title": "assets/face.fmat",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "assets/face.fmat",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/assets/face.fmat",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/assets/face.fmat",
+      "raw_encoding": "identity",
+      "sha256": "03de6a49a12ed98f1c6e4534882a2d9eef085ea007b6ad7721ab3412851298ad",
+      "assertions": [
+        "vec2 uv = GetUV0() - material_params.look;",
+        "vec4 s = mix(a, b, material_params.frame_mix) * inside.x * inside.y;"
+      ]
+    },
+    {
+      "id": "scene-node",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/node.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "b8023c6261ed77ed4046d72c86496ed40c96b37b",
+      "path": "packages/flutter_scene/lib/src/node.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/b8023c6261ed77ed4046d72c86496ed40c96b37b/packages/flutter_scene/lib/src/node.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/b8023c6261ed77ed4046d72c86496ed40c96b37b/packages/flutter_scene/lib/src/node.dart",
+      "raw_encoding": "identity",
+      "sha256": "4c9d444593c5b2d7f8ea4ee8fc8cb954f02af4ae4f73ea9871d6e458a60e8f19",
+      "assertions": [
+        "..setFrom(parent.globalTransform)\n        ..multiply(_localTransform);",
+        "_animationPlayer?.update(deltaSeconds);"
+      ]
+    },
+    {
+      "id": "scene-player",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/animation/animation_player.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "b8023c6261ed77ed4046d72c86496ed40c96b37b",
+      "path": "packages/flutter_scene/lib/src/animation/animation_player.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/b8023c6261ed77ed4046d72c86496ed40c96b37b/packages/flutter_scene/lib/src/animation/animation_player.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/b8023c6261ed77ed4046d72c86496ed40c96b37b/packages/flutter_scene/lib/src/animation/animation_player.dart",
+      "raw_encoding": "identity",
+      "sha256": "60fb30b85a7a76233c314c41b984fa806919f89f5773f1f3499929bdb41f2ff2",
+      "assertions": [
+        "transforms.animatedPose = transforms.bindPose.clone();",
+        "clip.advance(deltaSeconds);",
+        "node.setLocalTransformTrs(transforms.animatedPose);"
+      ]
+    },
+    {
+      "id": "scene-resolver",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/animation/property_resolver.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "b8023c6261ed77ed4046d72c86496ed40c96b37b",
+      "path": "packages/flutter_scene/lib/src/animation/property_resolver.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/b8023c6261ed77ed4046d72c86496ed40c96b37b/packages/flutter_scene/lib/src/animation/property_resolver.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/b8023c6261ed77ed4046d72c86496ed40c96b37b/packages/flutter_scene/lib/src/animation/property_resolver.dart",
+      "raw_encoding": "identity",
+      "sha256": "3ac0385899b0d10f2398856a18509798e583909d70a83cdb7ed0480048b78c6d",
+      "assertions": [
+        "(value - target.bindPose.translation) * weight;",
+        "target.animatedPose.rotation = target.animatedPose.rotation.slerp(",
+        "value.divided(target.bindPose.scale), weight"
+      ]
+    },
+    {
+      "id": "scene-update",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/scene.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "b8023c6261ed77ed4046d72c86496ed40c96b37b",
+      "path": "packages/flutter_scene/lib/src/scene.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/b8023c6261ed77ed4046d72c86496ed40c96b37b/packages/flutter_scene/lib/src/scene.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/b8023c6261ed77ed4046d72c86496ed40c96b37b/packages/flutter_scene/lib/src/scene.dart",
+      "raw_encoding": "identity",
+      "sha256": "e3908bc5086ba8846021cbaa7cbaf626e07f48e3f4b17f4ddb2267e428fad70d",
+      "assertions": [
+        "void update(double deltaSeconds) {\n    _tick(deltaSeconds);\n    _tickedThisFrame = true;",
+        "if (!_tickedThisFrame) {"
+      ]
+    },
+    {
+      "id": "scene-view",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/widgets/scene_view.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "b8023c6261ed77ed4046d72c86496ed40c96b37b",
+      "path": "packages/flutter_scene/lib/src/widgets/scene_view.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/b8023c6261ed77ed4046d72c86496ed40c96b37b/packages/flutter_scene/lib/src/widgets/scene_view.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/b8023c6261ed77ed4046d72c86496ed40c96b37b/packages/flutter_scene/lib/src/widgets/scene_view.dart",
+      "raw_encoding": "identity",
+      "sha256": "d4b66b59d0bf3c1aa6b281dafa13fecd08e9e271c9147986939fcf3c5a722c09",
+      "assertions": [
+        "widget.onTick?.call(revealElapsed, deltaSeconds);\n    _repaint.notify();",
+        "class _ScenePainter extends CustomPainter",
+        "scene.render("
+      ]
+    }
+  ]
+}

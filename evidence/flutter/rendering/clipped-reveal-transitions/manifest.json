@@ -1,0 +1,375 @@
+{
+  "$schema": "../../../schema/evidence-manifest.schema.json",
+  "schema_version": 1,
+  "topic_id": "flutter.rendering.clipped-reveal-transitions",
+  "topic_document": "../../../../knowledge/flutter/rendering/Flutter-裁剪展开转场与性能边界.md",
+  "verified_at": "2026-10-28",
+  "baseline_note": "Pinned author sources used as a teaching case for reusable reveal transitions and their rendering boundaries. The sample dependency pins Flutter Scene. Flutter 3.44.0 is a separate API comparison baseline, not a claim about the SDK used to build the sample. Source hashes and literal assertions establish source identity and entry points, not runtime performance. Coordinate-system caveats, optimization options and controlled comparisons are engineering deductions; arithmetic examples are illustrative. No device frame-time, GPU, power or memory measurements are asserted. Upstream LICENSE files were read at the pinned revisions. Only metadata and links are retained in this evidence package.",
+  "claims": [
+    {
+      "id": "clipped-reveal-001",
+      "section": "卡片展开时固定内部布局",
+      "statement": "Window geometry, fixed child constraints and animation-independent child reuse.",
+      "source_ids": [
+        "app-route",
+        "flutter-basic",
+        "flutter-transitions"
+      ]
+    },
+    {
+      "id": "clipped-reveal-002",
+      "section": "打开与返回的衔接",
+      "statement": "Forward timing, staged reverse animation and live entry-rectangle lookup with fallbacks.",
+      "source_ids": [
+        "app-route"
+      ]
+    },
+    {
+      "id": "clipped-reveal-003",
+      "section": "静态封面与实时场景的接续",
+      "statement": "Shared cover asset, readiness gate and independent cover fade in a separately constructed target scene.",
+      "source_ids": [
+        "app-park",
+        "app-show"
+      ]
+    },
+    {
+      "id": "clipped-reveal-004",
+      "section": "小窗口与全尺寸 3D 渲染",
+      "statement": "Explicit view region, scaled offscreen target, texture composition and pacing boundary in the pinned library.",
+      "source_ids": [
+        "app-route",
+        "app-dependency",
+        "scene-view",
+        "scene-render"
+      ]
+    },
+    {
+      "id": "clipped-reveal-005",
+      "section": "性能成本与优化边界",
+      "statement": "Clip and opacity semantics, route opacity contract and scene updates independent of page rebuild reuse.",
+      "source_ids": [
+        "app-route",
+        "app-clock",
+        "scene-view",
+        "flutter-basic",
+        "flutter-transitions",
+        "flutter-painting",
+        "flutter-routes"
+      ]
+    },
+    {
+      "id": "clipped-reveal-006",
+      "section": "性能成本与优化边界",
+      "statement": "Asset preparation and scene pipeline warm-up entry points.",
+      "source_ids": [
+        "app-preload"
+      ]
+    },
+    {
+      "id": "clipped-reveal-007",
+      "section": "同一场景展开为房间",
+      "statement": "Shared scene attachment, viewport growth, camera and light interpolation, delayed piece scaling and reverse cleanup.",
+      "source_ids": [
+        "app-park",
+        "app-room"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "app-route",
+      "source_class": "official_source",
+      "title": "lib/app/show_route.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "lib/app/show_route.dart",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/app/show_route.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/app/show_route.dart",
+      "raw_encoding": "identity",
+      "sha256": "5ea7e6daa68675983d5ee954f7de71d84e7c8befb770002a2a94ab8d94b7bbfa",
+      "assertions": [
+        "class CardRevealRoute<T> extends PageRoute<T>",
+        "static const curve = Cubic(0.2, 0.0, 0.0, 1.0);",
+        "Duration get transitionDuration => const Duration(milliseconds: 1150);",
+        "Duration get reverseTransitionDuration => const Duration(milliseconds: 1150);",
+        "static const _fade = 0.3;",
+        "bool get opaque => false;",
+        "final full = Offset.zero & constraints.biggest;",
+        "animation: animation,\n          child: child,",
+        "final shrink = ((animation.value - _fade) / (1 - _fade)).clamp(0.0, 1.0);",
+        "opacity = Curves.easeInOut.transform((animation.value / _fade).clamp(0.0, 1.0));",
+        "final card = (fromKey == null ? null : visibleRectOf(fromKey!)) ?? from;",
+        "final rect = Rect.lerp(card, full, t)!;",
+        "final radius = lerpDouble(fromRadius, 0, Curves.easeIn.transform(t))!;",
+        "Colors.black.withValues(alpha: 0.6 * t)",
+        "alignment: Alignment.center,\n                        minWidth: full.width,\n                        maxWidth: full.width,\n                        minHeight: full.height,\n                        maxHeight: full.height,",
+        "return box.localToGlobal(Offset.zero) & box.size;",
+        "final cut = rect.intersect(clip);",
+        "return cut.width > 4 && cut.height > 4 ? cut : rect;"
+      ]
+    },
+    {
+      "id": "app-park",
+      "source_class": "official_source",
+      "title": "lib/ui/park_screen.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "lib/ui/park_screen.dart",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/ui/park_screen.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/ui/park_screen.dart",
+      "raw_encoding": "identity",
+      "sha256": "ae7f3e74d3d3d6d6d99abd13e6d0d4d325f917b42c4e43e4572aa90f9fec5684",
+      "assertions": [
+        "late final AnimationController _room = AnimationController(vsync: this, duration: const Duration(milliseconds: 1100))",
+        "if (s == AnimationStatus.dismissed) {\n        _roomScene?.root.detach();",
+        "double get roomOpen => Curves.easeInOutCubic.transform(_room.value);",
+        "scene.add(room.root);",
+        "..position = lerp(vm.Vector3(0, 1.55, 7.6 * kFaceZ), vm.Vector3(0.0, 4.4, 13.4 * kFaceZ))",
+        "..fovRadiansY = (27 + 11 * e) * vm.degrees2Radians;",
+        "c.ambientColor.setFrom(vm.Vector3(0.55, 0.34, 0.16) * e);",
+        "height: headerHeight + (media.size.height - headerHeight) * roomOpen,",
+        "borderRadius: BorderRadius.vertical(bottom: Radius.circular(28 * (1 - e))),",
+        "Image.asset('assets/ui/tonight.jpg', fit: BoxFit.cover, alignment: const Alignment(0, -0.2))"
+      ]
+    },
+    {
+      "id": "app-room",
+      "source_class": "official_source",
+      "title": "lib/room/room.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "lib/room/room.dart",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/room/room.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/room/room.dart",
+      "raw_encoding": "identity",
+      "sha256": "288b68f24484fcfcc361607a43b9f4ba6802d02b6b9d4bf93148501cb2b60c9f",
+      "assertions": [
+        "final t = ((open - p.delay) / 0.45).clamp(0.0, 1.0);",
+        "Curves.elasticOut.transform(t) * 0.98 + 0.02 * t;",
+        "final lit = ((open - 0.3) / 0.4).clamp(0.0, 1.0);"
+      ]
+    },
+    {
+      "id": "app-show",
+      "source_class": "official_source",
+      "title": "lib/show/show_screen.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "lib/show/show_screen.dart",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/show/show_screen.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/show/show_screen.dart",
+      "raw_encoding": "identity",
+      "sha256": "87f805f1d10394f7d37a9d9bd78bc9a1360739a2d3bf8fff8285f6175b588cea",
+      "assertions": [
+        "final Scene scene = Scene();",
+        "LanternCharacter.load(scene, friend: friend),",
+        "await scene.warmUp([RenderView(camera: d.camera)], includeOffscreen: true);",
+        "setState(() => director = d);",
+        "appSceneView(scene, camera: d.camera, onTick: _tick),",
+        "opacity: d == null ? 1 : 0,",
+        "duration: const Duration(milliseconds: 600),",
+        "Image.asset('assets/ui/tonight.jpg', fit: BoxFit.cover, alignment: const Alignment(0, -0.2))"
+      ]
+    },
+    {
+      "id": "app-preload",
+      "source_class": "official_source",
+      "title": "lib/app/preload.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "lib/app/preload.dart",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/app/preload.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/app/preload.dart",
+      "raw_encoding": "identity",
+      "sha256": "3e42102d625ce11340b025fa3a0970305f2b40084f84f0f9e3e5de8c345ae038",
+      "assertions": [
+        "await Future.wait([",
+        "for (final warm in warms) {",
+        "await scene.warmUp(",
+        "sliceBudget: _slice,"
+      ]
+    },
+    {
+      "id": "app-clock",
+      "source_class": "official_source",
+      "title": "lib/app/scene_clock.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "lib/app/scene_clock.dart",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/app/scene_clock.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/lib/app/scene_clock.dart",
+      "raw_encoding": "identity",
+      "sha256": "88041bb4b0ddd524773a78060dd028ae777e3e1ffe21ca13992a8bb9614aba68",
+      "assertions": [
+        "onTick(elapsed, dt);\n        scene.update(dt);"
+      ]
+    },
+    {
+      "id": "scene-view",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/widgets/scene_view.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "b8023c6261ed77ed4046d72c86496ed40c96b37b",
+      "path": "packages/flutter_scene/lib/src/widgets/scene_view.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/b8023c6261ed77ed4046d72c86496ed40c96b37b/packages/flutter_scene/lib/src/widgets/scene_view.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/b8023c6261ed77ed4046d72c86496ed40c96b37b/packages/flutter_scene/lib/src/widgets/scene_view.dart",
+      "raw_encoding": "identity",
+      "sha256": "d4b66b59d0bf3c1aa6b281dafa13fecd08e9e271c9147986939fcf3c5a722c09",
+      "assertions": [
+        "this.autoTick = true,",
+        "final double? maxFrameRate;",
+        "widget.onTick?.call(revealElapsed, deltaSeconds);\n    _repaint.notify();",
+        "widget.pixelRatio ?? View.of(context).devicePixelRatio,",
+        "region: Offset.zero & size,",
+        "viewport: Offset.zero & size,"
+      ]
+    },
+    {
+      "id": "scene-render",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/scene.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "b8023c6261ed77ed4046d72c86496ed40c96b37b",
+      "path": "packages/flutter_scene/lib/src/scene.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/b8023c6261ed77ed4046d72c86496ed40c96b37b/packages/flutter_scene/lib/src/scene.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/b8023c6261ed77ed4046d72c86496ed40c96b37b/packages/flutter_scene/lib/src/scene.dart",
+      "raw_encoding": "identity",
+      "sha256": "e3908bc5086ba8846021cbaa7cbaf626e07f48e3f4b17f4ddb2267e428fad70d",
+      "assertions": [
+        "final drawArea = region ?? canvas.getLocalClipBounds();",
+        "dpr * (view.renderScale ?? _renderScale) * adaptiveRenderScale;",
+        "(drawArea.width * scale).ceilToDouble(),",
+        "(drawArea.height * scale).ceilToDouble(),",
+        "rendererSubmissions.priorFramesInFlight >= maxGpuFramesInFlight",
+        "gpu.gpuHost.textureToImage(previous),",
+        "final gpu.Texture swapchainColor = surface.getNextSwapchainColorTexture(",
+        "outputColor: swapchainColor,",
+        "viewportSize: drawArea.size,",
+        "canvas.drawImageRect(image, srcRect, drawArea, paint);"
+      ]
+    },
+    {
+      "id": "flutter-basic",
+      "source_class": "official_source",
+      "title": "packages/flutter/lib/src/widgets/basic.dart",
+      "publisher": "Flutter authors / Google",
+      "retrieved_at": "2026-10-28",
+      "license": "BSD-3-Clause; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "559ffa3f75e7402d65a8def9c28389a9b2e6fe42",
+      "path": "packages/flutter/lib/src/widgets/basic.dart",
+      "web_url": "https://github.com/flutter/flutter/blob/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/packages/flutter/lib/src/widgets/basic.dart",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/packages/flutter/lib/src/widgets/basic.dart",
+      "raw_encoding": "identity",
+      "sha256": "ddff4990268cc0a34e85c7ab508c3c57e4cdf84b0581d0b53017729b453f6f0c",
+      "assertions": [
+        "class ClipRRect extends SingleChildRenderObjectWidget",
+        "this.clipBehavior = Clip.antiAlias,",
+        "class OverflowBox extends SingleChildRenderObjectWidget",
+        "Values one and zero are painted with a fast path. Other values require",
+        "painting the child into an intermediate buffer, which is expensive."
+      ]
+    },
+    {
+      "id": "flutter-transitions",
+      "source_class": "official_source",
+      "title": "packages/flutter/lib/src/widgets/transitions.dart",
+      "publisher": "Flutter authors / Google",
+      "retrieved_at": "2026-10-28",
+      "license": "BSD-3-Clause; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "559ffa3f75e7402d65a8def9c28389a9b2e6fe42",
+      "path": "packages/flutter/lib/src/widgets/transitions.dart",
+      "web_url": "https://github.com/flutter/flutter/blob/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/packages/flutter/lib/src/widgets/transitions.dart",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/packages/flutter/lib/src/widgets/transitions.dart",
+      "raw_encoding": "identity",
+      "sha256": "56bc793ab1815577c64cc75ad6629feb0be213575fe494aca97d048ebb90ecfb",
+      "assertions": [
+        "If a pre-built subtree is passed as the [child] parameter, the",
+        "subtree once instead of rebuilding it on every animation tick."
+      ]
+    },
+    {
+      "id": "flutter-painting",
+      "source_class": "official_source",
+      "title": "engine/src/flutter/lib/ui/painting.dart",
+      "publisher": "Flutter authors / Google",
+      "retrieved_at": "2026-10-28",
+      "license": "BSD-3-Clause; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "559ffa3f75e7402d65a8def9c28389a9b2e6fe42",
+      "path": "engine/src/flutter/lib/ui/painting.dart",
+      "web_url": "https://github.com/flutter/flutter/blob/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/lib/ui/painting.dart",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/engine/src/flutter/lib/ui/painting.dart",
+      "raw_encoding": "identity",
+      "sha256": "86c1ec022b68de69556838c7122db3387bd526445ec1c948693681e476f0d2b0",
+      "assertions": [
+        "enum Clip {",
+        "Clip with anti-aliasing and `saveLayer` immediately following the clip.",
+        "This mode not only clips with anti-aliasing, but also allocates an offscreen"
+      ]
+    },
+    {
+      "id": "flutter-routes",
+      "source_class": "official_source",
+      "title": "packages/flutter/lib/src/widgets/routes.dart",
+      "publisher": "Flutter authors / Google",
+      "retrieved_at": "2026-10-28",
+      "license": "BSD-3-Clause; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "559ffa3f75e7402d65a8def9c28389a9b2e6fe42",
+      "path": "packages/flutter/lib/src/widgets/routes.dart",
+      "web_url": "https://github.com/flutter/flutter/blob/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/packages/flutter/lib/src/widgets/routes.dart",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/559ffa3f75e7402d65a8def9c28389a9b2e6fe42/packages/flutter/lib/src/widgets/routes.dart",
+      "raw_encoding": "identity",
+      "sha256": "5111d6a007e64c7b5f010eb53be6e69e5d31ffbdf5fe3bddda7c85822cdd7561",
+      "assertions": [
+        "When an opaque route's entrance transition is complete, the routes behind",
+        "the opaque route will not be built to save resources."
+      ]
+    },
+    {
+      "id": "app-dependency",
+      "source_class": "official_source",
+      "title": "pubspec.yaml",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream repository LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/lantern_spirit",
+      "revision": "bc151089f4ecfeae6675ef98731b55f8770ed39b",
+      "path": "pubspec.yaml",
+      "web_url": "https://github.com/bdero/lantern_spirit/blob/bc151089f4ecfeae6675ef98731b55f8770ed39b/pubspec.yaml",
+      "raw_url": "https://raw.githubusercontent.com/bdero/lantern_spirit/bc151089f4ecfeae6675ef98731b55f8770ed39b/pubspec.yaml",
+      "raw_encoding": "identity",
+      "sha256": "76e9bc1fc9db5de55c9e4097c18a7a0f9973989e39809e8b1471da0f8720ac96",
+      "assertions": [
+        "ref: b8023c6261ed77ed4046d72c86496ed40c96b37b"
+      ]
+    }
+  ]
+}
