@@ -12,7 +12,7 @@
 | [Flutter Scene][scene-repo] | `b8023c6261ed77ed4046d72c86496ed40c96b37b` | SceneView 更新与离屏渲染目标；由案例依赖固定 |
 | [Flutter][flutter-repo] | `559ffa3f75e7402d65a8def9c28389a9b2e6fe42`，3.44.0 | Widget 复用、裁剪、透明度与路由语义的对照源码 |
 
-核对日期：2026-10-28。Flutter 对照版本用于解释相关 API，不代表案例实际构建采用的 SDK；迁移时应复核目标 SDK。Flutter Scene 的渲染路径是固定库版本的实现，不能推广为所有 Flutter 页面或所有 3D 库的保证。来源哈希、关键断言和下文 claim 映射见 [证据包](../../../evidence/flutter/rendering/clipped-reveal-transitions/manifest.json)。
+核对日期：2026-10-28。Flutter 对照版本用于解释相关 API，不代表案例实际构建采用的 SDK；迁移时应复核目标 SDK。Flutter Scene 的渲染路径是固定库版本的实现，不能推广为所有 Flutter 页面或所有 3D 库的保证。来源哈希、关键断言和下文 claim 映射见 [证据包](../../../evidence/flutter/scene/clipped-reveal-transitions/manifest.json)。
 
 ## 卡片展开时固定内部布局
 

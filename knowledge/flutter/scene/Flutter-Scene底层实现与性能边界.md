@@ -14,7 +14,7 @@ Flutter Scene 在 Dart 中维护场景、动画和绘制列表，通过 Flutter 
 
 核对日期：2026-10-28。Scene 的 [pubspec][scene-package] 自报版本为 `0.24.3`，Flutter 约束为 `>=3.47.0`；这不等于验证了 pub.dev 发布状态或所有满足约束的 SDK。Engine revision 取自固定 SDK 的 [engine.version][engine-version]，不是把 Framework 提交号直接当成所下载 Engine 的版本。对应证据：`scene-internals-001`。
 
-[证据包](../../../evidence/flutter/rendering/scene-internals-performance/manifest.json)保存固定来源的 SHA-256、关键字符串断言与 claim 映射。本文只做静态源码核对，尚未在这些版本的实际构建、设备和浏览器上验证运行路径。
+[证据包](../../../evidence/flutter/scene/scene-internals-performance/manifest.json)保存固定来源的 SHA-256、关键字符串断言与 claim 映射。本文只做静态源码核对，尚未在这些版本的实际构建、设备和浏览器上验证运行路径。
 
 已有动画、转场案例固定在 Scene 的 `b8023c6261ed77ed4046d72c86496ed40c96b37b`。它们继续保留各自证据基线；本文的资源回收、提交节奏等细节不能反向当成案例旧版本已经验证的事实。
 

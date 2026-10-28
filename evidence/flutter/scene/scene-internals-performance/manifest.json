@@ -1,8 +1,8 @@
 {
   "$schema": "../../../schema/evidence-manifest.schema.json",
   "schema_version": 1,
-  "topic_id": "flutter.rendering.scene-internals-performance",
-  "topic_document": "../../../../knowledge/flutter/rendering/Flutter-Scene底层实现与性能边界.md",
+  "topic_id": "flutter.scene.scene-internals-performance",
+  "topic_document": "../../../../knowledge/flutter/scene/Flutter-Scene底层实现与性能边界.md",
   "verified_at": "2026-10-28",
   "baseline_note": "Pinned upstream sources explain reusable renderer mechanisms and measurement boundaries. Scene pubspec reports 0.24.3; this is not a pub.dev release verification. Flutter 3.47.0 resolves to Framework revision 4cf24164269a5ebf0c16a028a00727d0e77bbb05; its bin/internal/engine.version pins 5f77625673248ee5846fbcaf5d3e1a3878386fd7, used for Engine source reads. Existing animation and interaction case documents retain their own Scene revision. Upstream LICENSE files were inspected at the pinned Scene and Engine revisions. Source content is not mirrored in this repository. Static source/hash/assertion verification does not establish a compiled runtime, device performance, browser behavior, GPU execution timings, power consumption or frame presentation. Pixel-count examples are arithmetic illustrations and proposed optimization directions require controlled measurement.",
   "claims": [

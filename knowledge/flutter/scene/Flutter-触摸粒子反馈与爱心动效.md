@@ -8,7 +8,7 @@
 
 固定来源为作者的 [bdero/lantern_spirit][app-repo]，revision 为 `bc151089f4ecfeae6675ef98731b55f8770ed39b`，核对日期为 2026-10-28。主要实现是 [park_pet.dart][pet]；输入和页面刷新位于 [park_screen.dart][park]，逐帧调用经过 [park_life.dart][life] 和 [scene_clock.dart][clock]，角色响应位于 [character.dart][character]。
 
-来源哈希、关键断言和下文 claim 映射见 [证据包](../../../evidence/flutter/rendering/touch-particle-feedback/manifest.json)。这里记录的是固定开源实现，不是 Flutter SDK 对所有粒子系统的保证。
+来源哈希、关键断言和下文 claim 映射见 [证据包](../../../evidence/flutter/scene/touch-particle-feedback/manifest.json)。这里记录的是固定开源实现，不是 Flutter SDK 对所有粒子系统的保证。
 
 ## 从头顶命中到距离发射
 

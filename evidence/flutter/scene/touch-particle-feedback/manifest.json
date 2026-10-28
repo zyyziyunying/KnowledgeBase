@@ -1,8 +1,8 @@
 {
   "$schema": "../../../schema/evidence-manifest.schema.json",
   "schema_version": 1,
-  "topic_id": "flutter.rendering.touch-particle-feedback",
-  "topic_document": "../../../../knowledge/flutter/rendering/Flutter-触摸粒子反馈与爱心动效.md",
+  "topic_id": "flutter.scene.touch-particle-feedback",
+  "topic_document": "../../../../knowledge/flutter/scene/Flutter-触摸粒子反馈与爱心动效.md",
   "verified_at": "2026-10-28",
   "baseline_note": "Pinned upstream author sources used as a teaching case for touch-driven 2D particles over a 3D character. Static review covers the ordinary header petting path, distance and time emission, particle parameters, motion, painting and page refresh. Numerical examples are formula evaluations; strict distance resampling and isolated repaint are proposed extensions, not upstream behavior. No device frame-rate, latency, sampling-invariance or large-timestep validation is implied. The upstream LICENSE was read at the pinned revision; source files are not mirrored in this repository.",
   "claims": [

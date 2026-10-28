@@ -1,8 +1,8 @@
 {
   "$schema": "../../../schema/evidence-manifest.schema.json",
   "schema_version": 1,
-  "topic_id": "flutter.rendering.clipped-reveal-transitions",
-  "topic_document": "../../../../knowledge/flutter/rendering/Flutter-裁剪展开转场与性能边界.md",
+  "topic_id": "flutter.scene.clipped-reveal-transitions",
+  "topic_document": "../../../../knowledge/flutter/scene/Flutter-裁剪展开转场与性能边界.md",
   "verified_at": "2026-10-28",
   "baseline_note": "Pinned author sources used as a teaching case for reusable reveal transitions and their rendering boundaries. The sample dependency pins Flutter Scene. Flutter 3.44.0 is a separate API comparison baseline, not a claim about the SDK used to build the sample. Source hashes and literal assertions establish source identity and entry points, not runtime performance. Coordinate-system caveats, optimization options and controlled comparisons are engineering deductions; arithmetic examples are illustrative. No device frame-time, GPU, power or memory measurements are asserted. Upstream LICENSE files were read at the pinned revisions. Only metadata and links are retained in this evidence package.",
   "claims": [

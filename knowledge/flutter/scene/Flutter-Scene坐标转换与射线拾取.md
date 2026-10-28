@@ -11,7 +11,7 @@
 | [bdero/lantern_spirit][app-repo] | `bc151089f4ecfeae6675ef98731b55f8770ed39b` | 页面输入、角色定位、头部命中与抚摸容差 |
 | [bdero/flutter_scene][scene-repo] | `b8023c6261ed77ed4046d72c86496ed40c96b37b` | 相机矩阵、投影、射线与三角形求交 |
 
-核对日期：2026-10-28。库版本由案例 [pubspec.yaml][dependency] 固定；本文使用该版本的相机约定，不将它推广为所有图形 API 的统一约定。来源哈希、关键断言和 claim 映射见 [证据包](../../../evidence/flutter/rendering/scene-coordinate-picking/manifest.json)。数值例子是给定参数下的数学计算，不是设备测量值。
+核对日期：2026-10-28。库版本由案例 [pubspec.yaml][dependency] 固定；本文使用该版本的相机约定，不将它推广为所有图形 API 的统一约定。来源哈希、关键断言和 claim 映射见 [证据包](../../../evidence/flutter/scene/scene-coordinate-picking/manifest.json)。数值例子是给定参数下的数学计算，不是设备测量值。
 
 ## 坐标空间与矩阵约定
 

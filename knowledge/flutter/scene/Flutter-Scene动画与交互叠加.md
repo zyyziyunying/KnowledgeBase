@@ -11,7 +11,7 @@
 | [bdero/lantern_spirit][app-repo] | `bc151089f4ecfeae6675ef98731b55f8770ed39b` | 节点生成、角色控制、页面更新与材质 |
 | [bdero/flutter_scene][scene-repo] | `b8023c6261ed77ed4046d72c86496ed40c96b37b` | 节点矩阵、动画播放器、SceneView 与场景更新 |
 
-核对日期：2026-10-28。第二个 revision 由案例的 [pubspec.yaml][dependency] 固定；Flutter Scene 是本例使用的库，其 API 与动画混合实现不能直接视为 Flutter SDK 的通用保证。证据入口：[manifest.json](../../../evidence/flutter/rendering/scene-animation-composition/manifest.json)。下文 claim ID 对应其中的映射。
+核对日期：2026-10-28。第二个 revision 由案例的 [pubspec.yaml][dependency] 固定；Flutter Scene 是本例使用的库，其 API 与动画混合实现不能直接视为 Flutter SDK 的通用保证。证据入口：[manifest.json](../../../evidence/flutter/scene/scene-animation-composition/manifest.json)。下文 claim ID 对应其中的映射。
 
 ## 从资源准备到每帧绘制
 

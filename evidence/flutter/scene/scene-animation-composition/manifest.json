@@ -1,8 +1,8 @@
 {
   "$schema": "../../../schema/evidence-manifest.schema.json",
   "schema_version": 1,
-  "topic_id": "flutter.rendering.scene-animation-composition",
-  "topic_document": "../../../../knowledge/flutter/rendering/Flutter-Scene动画与交互叠加.md",
+  "topic_id": "flutter.scene.scene-animation-composition",
+  "topic_document": "../../../../knowledge/flutter/scene/Flutter-Scene动画与交互叠加.md",
   "verified_at": "2026-10-28",
   "baseline_note": "Pinned upstream author sources used as a teaching case for reusable scene-graph mechanisms. The Flutter Scene revision is the dependency pinned by the sample, not a Flutter SDK guarantee. Static source review covers the default Lumi header path, generator hierarchy, transform ownership, explicit scene update and face deformation. Numeric examples are labeled mathematical illustrations. No device run, performance claim, binary GLB regeneration comparison or full-screen errand validation is implied. Both upstream repository LICENSE files were read at the pinned revisions; source files are not mirrored in this repository.",
   "claims": [
