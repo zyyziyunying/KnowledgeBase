@@ -1,0 +1,674 @@
+{
+  "$schema": "../../../schema/evidence-manifest.schema.json",
+  "schema_version": 1,
+  "topic_id": "flutter.rendering.scene-internals-performance",
+  "topic_document": "../../../../knowledge/flutter/rendering/Flutter-Scene底层实现与性能边界.md",
+  "verified_at": "2026-10-28",
+  "baseline_note": "Pinned upstream sources explain reusable renderer mechanisms and measurement boundaries. Scene pubspec reports 0.24.3; this is not a pub.dev release verification. Flutter 3.47.0 resolves to Framework revision 4cf24164269a5ebf0c16a028a00727d0e77bbb05; its bin/internal/engine.version pins 5f77625673248ee5846fbcaf5d3e1a3878386fd7, used for Engine source reads. Existing animation and interaction case documents retain their own Scene revision. Upstream LICENSE files were inspected at the pinned Scene and Engine revisions. Source content is not mirrored in this repository. Static source/hash/assertion verification does not establish a compiled runtime, device performance, browser behavior, GPU execution timings, power consumption or frame presentation. Pixel-count examples are arithmetic illustrations and proposed optimization directions require controlled measurement.",
+  "claims": [
+    {
+      "id": "scene-internals-001",
+      "section": "源码基线与适用范围",
+      "statement": "Package constraints and SDK-to-Engine revision mapping.",
+      "source_ids": [
+        "scene-package",
+        "engine-version"
+      ]
+    },
+    {
+      "id": "scene-internals-002",
+      "section": "分层与纹理交接",
+      "statement": "Native backend selection, existing texture wrapping and canvas output boundary.",
+      "source_ids": [
+        "gpu-shim",
+        "native-host",
+        "engine-texture",
+        "scene"
+      ]
+    },
+    {
+      "id": "scene-internals-003",
+      "section": "一帧的更新、可见性与绘制排序",
+      "statement": "Repaint notification, explicit versus implicit scene tick and spatial visibility entry points.",
+      "source_ids": [
+        "scene-view",
+        "scene",
+        "render-scene"
+      ]
+    },
+    {
+      "id": "scene-internals-004",
+      "section": "一帧的更新、可见性与绘制排序",
+      "statement": "Render-order precedence, opaque/translucent tie-breaks and compatibility/exclusion conditions for automatic batching.",
+      "source_ids": [
+        "scene-encoder",
+        "instance-batching"
+      ]
+    },
+    {
+      "id": "scene-internals-005",
+      "section": "骨骼与动态几何体的 CPU/GPU 分工",
+      "statement": "Joint matrix preparation and upload, vertex shader skinning and mutable geometry streams.",
+      "source_ids": [
+        "skin",
+        "skinning-shader",
+        "render-scene",
+        "mesh-geometry"
+      ]
+    },
+    {
+      "id": "scene-internals-006",
+      "section": "多阶段渲染与资源生命周期",
+      "statement": "Ordered passes, transient allocation, output target reuse and backend-specific release boundaries.",
+      "source_ids": [
+        "scene",
+        "render-graph",
+        "frame-transients",
+        "surface",
+        "skin",
+        "mesh-geometry",
+        "native-host",
+        "web-host"
+      ]
+    },
+    {
+      "id": "scene-internals-007",
+      "section": "原生命令提交、线程与首次成本",
+      "statement": "Dart native binding and GLES versus non-GLES command submission branches.",
+      "source_ids": [
+        "engine-command-dart",
+        "engine-command-native",
+        "scene-view"
+      ]
+    },
+    {
+      "id": "scene-internals-008",
+      "section": "原生命令提交、线程与首次成本",
+      "statement": "Pipeline creation wait, cache and scene warm-up entry points.",
+      "source_ids": [
+        "engine-pass",
+        "scene-encoder",
+        "scene"
+      ]
+    },
+    {
+      "id": "scene-internals-009",
+      "section": "GPU 背压与重复呈现",
+      "statement": "Submission callback tracking, backend-dependent completion semantics, paced screen views and re-presentation of previous output.",
+      "source_ids": [
+        "scene",
+        "frame-transients",
+        "scene-view",
+        "engine-command-native",
+        "engine-gles-command",
+        "engine-gles-reactor"
+      ]
+    },
+    {
+      "id": "scene-internals-010",
+      "section": "分辨率与性能判断",
+      "statement": "Screen render target dimensions, scale composition and size-dependent target reuse.",
+      "source_ids": [
+        "scene",
+        "scene-view",
+        "surface"
+      ]
+    },
+    {
+      "id": "scene-internals-011",
+      "section": "Web 后端的独立边界",
+      "statement": "Default WebGL2 synchronous image bridge and lack of reverse texture adoption.",
+      "source_ids": [
+        "gpu-shim",
+        "web-host",
+        "web-texture",
+        "web-context"
+      ]
+    },
+    {
+      "id": "scene-internals-012",
+      "section": "测量口径与源码阅读顺序",
+      "statement": "CPU stopwatch instrumentation, shared sample aggregation and stress benchmark measurement limits.",
+      "source_ids": [
+        "render-graph",
+        "render-profile",
+        "stress-bench"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "scene-package",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/pubspec.yaml",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "2ad6a8ab1d76010802dd08194b74ea2a3edfbb44",
+      "path": "packages/flutter_scene/pubspec.yaml",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/pubspec.yaml",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/pubspec.yaml",
+      "raw_encoding": "identity",
+      "assertions": [
+        "version: 0.24.3",
+        "flutter: \">=3.47.0\"",
+        "flutter_gpu:"
+      ],
+      "sha256": "baa1b527689300f3fc9ab3e0aeae631e9a4a8c145fa94cc7fa7525236a9e5d4a"
+    },
+    {
+      "id": "gpu-shim",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/gpu/gpu.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "2ad6a8ab1d76010802dd08194b74ea2a3edfbb44",
+      "path": "packages/flutter_scene/lib/src/gpu/gpu.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/gpu/gpu.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/gpu/gpu.dart",
+      "raw_encoding": "identity",
+      "assertions": [
+        "if (dart.library.io) 'impeller/_gpu.dart'",
+        "if (dart.library.js_interop) 'web/_gpu.dart'",
+        "flutter_scene.webgpu=true"
+      ],
+      "sha256": "a034347264280768e0ccfece9d57fe233c3fca360ad833be80eb6ef592ffc22c"
+    },
+    {
+      "id": "native-host",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/gpu/impeller/host.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "2ad6a8ab1d76010802dd08194b74ea2a3edfbb44",
+      "path": "packages/flutter_scene/lib/src/gpu/impeller/host.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/gpu/impeller/host.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/gpu/impeller/host.dart",
+      "raw_encoding": "identity",
+      "assertions": [
+        "ui.Image textureToImage(Texture texture) => texture.asImage();",
+        "void releaseTexture(Texture texture) {}",
+        "void releaseBuffer(DeviceBuffer buffer) {}"
+      ],
+      "sha256": "8f8a302daa9c1b7c24cb53398f6941fc641b2ff4540cd9ba2bdd503fa9772dcb"
+    },
+    {
+      "id": "scene-view",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/widgets/scene_view.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "2ad6a8ab1d76010802dd08194b74ea2a3edfbb44",
+      "path": "packages/flutter_scene/lib/src/widgets/scene_view.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/widgets/scene_view.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/widgets/scene_view.dart",
+      "raw_encoding": "identity",
+      "assertions": [
+        "widget.onTick?.call(revealElapsed, deltaSeconds);\n    _repaint.notify();",
+        ": super(repaint: repaint);",
+        "scene.render("
+      ],
+      "sha256": "d4b66b59d0bf3c1aa6b281dafa13fecd08e9e271c9147986939fcf3c5a722c09"
+    },
+    {
+      "id": "scene",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/scene.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "2ad6a8ab1d76010802dd08194b74ea2a3edfbb44",
+      "path": "packages/flutter_scene/lib/src/scene.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/scene.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/scene.dart",
+      "raw_encoding": "identity",
+      "assertions": [
+        "void update(double deltaSeconds) {\n    _tick(deltaSeconds);\n    _tickedThisFrame = true;",
+        "if (!_tickedThisFrame) {",
+        "int maxGpuFramesInFlight = 1;",
+        "dpr * (view.renderScale ?? _renderScale) * adaptiveRenderScale;",
+        "rendererSubmissions.priorFramesInFlight >= maxGpuFramesInFlight",
+        "canvas.drawImageRect(image, srcRect, drawArea, paint);",
+        "final graph = RenderGraph();",
+        "ScenePass(",
+        "BloomPass(",
+        "ResolvePass("
+      ],
+      "sha256": "657ff2939bb7f7395c8a97cc7e798a57828b494805b3f216743d522d27ccf0f1"
+    },
+    {
+      "id": "render-scene",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/render/render_scene.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "2ad6a8ab1d76010802dd08194b74ea2a3edfbb44",
+      "path": "packages/flutter_scene/lib/src/render/render_scene.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/render/render_scene.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/render/render_scene.dart",
+      "raw_encoding": "identity",
+      "assertions": [
+        "_bvh.refit();",
+        "int cull(",
+        "final Set<Skin> pendingJointUploads = {};",
+        "skin.flushJointsUpload();"
+      ],
+      "sha256": "03dfa7d74ce5466f10f342f5096e2924d9d99ea97790cd1f423f754cf9b87412"
+    },
+    {
+      "id": "scene-encoder",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/scene_encoder.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "2ad6a8ab1d76010802dd08194b74ea2a3edfbb44",
+      "path": "packages/flutter_scene/lib/src/scene_encoder.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/scene_encoder.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/scene_encoder.dart",
+      "raw_encoding": "identity",
+      "assertions": [
+        "_opaqueRecords.sort((a, b) {\n      final byOrder = a.item.renderOrder.compareTo(b.item.renderOrder);\n      if (byOrder != 0) return byOrder;\n      final byPipeline = a.pipelineKey.compareTo(b.pipelineKey);",
+        "return _opaqueDepth(a).compareTo(_opaqueDepth(b));",
+        "static int _backToFront(_TranslucentRecord a, _TranslucentRecord b) {\n    final byOrder = a.item.renderOrder.compareTo(b.item.renderOrder);\n    return byOrder != 0 ? byOrder : b.depth.compareTo(a.depth);\n  }",
+        "_translucentRecords.sort(_backToFront);",
+        "opaqueBatchEnd("
+      ],
+      "sha256": "4bf1c4069fa66d885937a36f4e671e3e7991c48bff5a86d0f9f4af4a768ea8c6"
+    },
+    {
+      "id": "instance-batching",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/render/instance_batching.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "2ad6a8ab1d76010802dd08194b74ea2a3edfbb44",
+      "path": "packages/flutter_scene/lib/src/render/instance_batching.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/render/instance_batching.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/render/instance_batching.dart",
+      "raw_encoding": "identity",
+      "assertions": [
+        "first.jointsTexture != null",
+        "first.morphWeights != null",
+        "identical(first.pipeline, next.pipeline)",
+        "identical(first.geometry, next.geometry)",
+        "identical(first.material, next.material)"
+      ],
+      "sha256": "e611ca9fb414234bd1df441636d582688dd17b05cfbd33cac90cfbdeb40a5a1c"
+    },
+    {
+      "id": "skin",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/skin.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "2ad6a8ab1d76010802dd08194b74ea2a3edfbb44",
+      "path": "packages/flutter_scene/lib/src/skin.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/skin.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/skin.dart",
+      "raw_encoding": "identity",
+      "assertions": [
+        "final int requiredTexels = jointCount * 4;",
+        "joint.globalTransform * inverseBindMatrices[jointIndex]",
+        "void flushJointsUpload()",
+        "gpu.PixelFormat.r32g32b32a32Float"
+      ],
+      "sha256": "ce0ae14c0455756674c276740dd7e88709db60af3ac3d8e374fdce2d9f2184fc"
+    },
+    {
+      "id": "skinning-shader",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/shaders/flutter_scene_skinned_body.glsl",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "2ad6a8ab1d76010802dd08194b74ea2a3edfbb44",
+      "path": "packages/flutter_scene/shaders/flutter_scene_skinned_body.glsl",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/shaders/flutter_scene_skinned_body.glsl",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/shaders/flutter_scene_skinned_body.glsl",
+      "raw_encoding": "identity",
+      "assertions": [
+        "uniform sampler2D joints_texture;",
+        "skin_matrix = GetJoint(joints.x) * w.x + GetJoint(joints.y) * w.y +",
+        "vec4 skinned_position = skin_matrix * vec4(in_position, 1.0);"
+      ],
+      "sha256": "8a0383f02dae21d9bb6a1730424123718a6a50996f74c6f1f0ae8b258a18fdf6"
+    },
+    {
+      "id": "mesh-geometry",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/geometry/mesh_geometry.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "2ad6a8ab1d76010802dd08194b74ea2a3edfbb44",
+      "path": "packages/flutter_scene/lib/src/geometry/mesh_geometry.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/geometry/mesh_geometry.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/geometry/mesh_geometry.dart",
+      "raw_encoding": "identity",
+      "assertions": [
+        "static const int _ringDepth = 4;",
+        "// Writes one changed attribute into its ring's next buffer and rebinds the",
+        "buffer.overwrite("
+      ],
+      "sha256": "f3942787fb5064901722c70f59dccebc3a39e0a037ca4be8e2280d427d3a8af9"
+    },
+    {
+      "id": "render-graph",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/render/render_graph.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "2ad6a8ab1d76010802dd08194b74ea2a3edfbb44",
+      "path": "packages/flutter_scene/lib/src/render/render_graph.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/render/render_graph.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/render/render_graph.dart",
+      "raw_encoding": "identity",
+      "assertions": [
+        "insertion order, transient render targets come from a shared",
+        "It does not insert GPU barriers",
+        "alias transient memory, or cull unused",
+        "final stopwatch = Stopwatch();"
+      ],
+      "sha256": "0a1496362a0578ef7d2690900f19ef9f716ef72e52d96e1a739d0f57eff68016"
+    },
+    {
+      "id": "frame-transients",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/render/frame_transients.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "2ad6a8ab1d76010802dd08194b74ea2a3edfbb44",
+      "path": "packages/flutter_scene/lib/src/render/frame_transients.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/render/frame_transients.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/render/frame_transients.dart",
+      "raw_encoding": "identity",
+      "assertions": [
+        "commandBuffer.submit(completionCallback: (_) => complete(id));",
+        "class TransientArena implements FrameTransients",
+        "ByteData.sublistView(block.staging, 0, block.cursor)",
+        "int get completedThrough => _pending.isEmpty ? _lastId : _pending.first - 1;",
+        "complete(id);\n      rethrow;"
+      ],
+      "sha256": "5ffe5d0a497db7d0a735d1ca6bed36e5771e2f8d400bd1621a46dfe8c2ac5542"
+    },
+    {
+      "id": "surface",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/surface.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "2ad6a8ab1d76010802dd08194b74ea2a3edfbb44",
+      "path": "packages/flutter_scene/lib/src/surface.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/surface.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/surface.dart",
+      "raw_encoding": "identity",
+      "assertions": [
+        "two most recent sizes",
+        "getNextSwapchainColorTexture",
+        "swapchainColors.forEach(gpu.gpuHost.releaseTexture);"
+      ],
+      "sha256": "0eead73a6816a3cfcd6707026f3bcf45b4d49b25205dd34977b671c1e97dabe9"
+    },
+    {
+      "id": "web-host",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/gpu/web/webgl/host.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "2ad6a8ab1d76010802dd08194b74ea2a3edfbb44",
+      "path": "packages/flutter_scene/lib/src/gpu/web/webgl/host.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/gpu/web/webgl/host.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/gpu/web/webgl/host.dart",
+      "raw_encoding": "identity",
+      "assertions": [
+        "imageToTexture: false",
+        "Texture? imageToTexture(ui.Image image) => null;",
+        "void releaseTexture(Texture texture) => texture.webGl._release();"
+      ],
+      "sha256": "2472b1ecb702fa1e80a24fc8702f43b4248cd4d67997b24769087a90cbc32482"
+    },
+    {
+      "id": "web-texture",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/gpu/web/webgl/texture.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "2ad6a8ab1d76010802dd08194b74ea2a3edfbb44",
+      "path": "packages/flutter_scene/lib/src/gpu/web/webgl/texture.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/gpu/web/webgl/texture.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/gpu/web/webgl/texture.dart",
+      "raw_encoding": "identity",
+      "assertions": [
+        "ui.Image asImage()",
+        "return _gpuContext.snapshotTextureSync(this);"
+      ],
+      "sha256": "5cb33521251268fa7ba48cc1d3f47358cc115323d65c12c8304f58ec216a4df0"
+    },
+    {
+      "id": "web-context",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/gpu/web/webgl/gpu_context.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "2ad6a8ab1d76010802dd08194b74ea2a3edfbb44",
+      "path": "packages/flutter_scene/lib/src/gpu/web/webgl/gpu_context.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/gpu/web/webgl/gpu_context.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/gpu/web/webgl/gpu_context.dart",
+      "raw_encoding": "identity",
+      "assertions": [
+        "_gl.blitFramebuffer(",
+        "_blitTextureToCanvas(texture);",
+        "final bitmap = _canvas.transferToImageBitmap();",
+        "final result = ui_web.createImageFromImageBitmap(bitmap as JSAny);"
+      ],
+      "sha256": "e98e3e77c80239e4c6e4fa31ca134592179431deaf410aac00560d30e0756892"
+    },
+    {
+      "id": "render-profile",
+      "source_class": "official_source",
+      "title": "packages/flutter_scene/lib/src/render/render_profile.dart",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "2ad6a8ab1d76010802dd08194b74ea2a3edfbb44",
+      "path": "packages/flutter_scene/lib/src/render/render_profile.dart",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/render/render_profile.dart",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/packages/flutter_scene/lib/src/render/render_profile.dart",
+      "raw_encoding": "identity",
+      "assertions": [
+        "bool.fromEnvironment('FLUTTER_SCENE_PROFILE')",
+        "Shared profile samples intentionally combine all active render views.",
+        "this.sampleWindow = 120"
+      ],
+      "sha256": "5700d6ad2cc3e3ab4f1bce07c2c170d99d01546cfabf98b2d9ca359a048806cf"
+    },
+    {
+      "id": "stress-bench",
+      "source_class": "official_source",
+      "title": "examples/stress_bench/README.md",
+      "publisher": "Brandon DeRosier / bdero (upstream project author)",
+      "retrieved_at": "2026-10-28",
+      "license": "MIT; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/bdero/flutter_scene",
+      "revision": "2ad6a8ab1d76010802dd08194b74ea2a3edfbb44",
+      "path": "examples/stress_bench/README.md",
+      "web_url": "https://github.com/bdero/flutter_scene/blob/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/examples/stress_bench/README.md",
+      "raw_url": "https://raw.githubusercontent.com/bdero/flutter_scene/2ad6a8ab1d76010802dd08194b74ea2a3edfbb44/examples/stress_bench/README.md",
+      "raw_encoding": "identity",
+      "assertions": [
+        "20 warmup + 100 measured frames",
+        "Scenario timings include GPU command encoding but not GPU execution"
+      ],
+      "sha256": "fbeb5fce25167b44be13ba3e6c6994846d3df9537a8c142f9bfaea026ca04a46"
+    },
+    {
+      "id": "engine-command-dart",
+      "source_class": "official_source",
+      "title": "engine/src/flutter/lib/gpu/lib/src/command_buffer.dart",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-28",
+      "license": "BSD-3-Clause; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "5f77625673248ee5846fbcaf5d3e1a3878386fd7",
+      "path": "engine/src/flutter/lib/gpu/lib/src/command_buffer.dart",
+      "web_url": "https://github.com/flutter/flutter/blob/5f77625673248ee5846fbcaf5d3e1a3878386fd7/engine/src/flutter/lib/gpu/lib/src/command_buffer.dart",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/5f77625673248ee5846fbcaf5d3e1a3878386fd7/engine/src/flutter/lib/gpu/lib/src/command_buffer.dart",
+      "raw_encoding": "identity",
+      "assertions": [
+        "symbol: 'InternalFlutterGpu_CommandBuffer_Submit'",
+        "external String? _submit(CompletionCallback? completionCallback);"
+      ],
+      "sha256": "3b9ef08e71fba9fdd778b4ce35bdc3c725148881b61cd833584063b52ec7912d"
+    },
+    {
+      "id": "engine-command-native",
+      "source_class": "official_source",
+      "title": "engine/src/flutter/lib/gpu/command_buffer.cc",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-28",
+      "license": "BSD-3-Clause; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "5f77625673248ee5846fbcaf5d3e1a3878386fd7",
+      "path": "engine/src/flutter/lib/gpu/command_buffer.cc",
+      "web_url": "https://github.com/flutter/flutter/blob/5f77625673248ee5846fbcaf5d3e1a3878386fd7/engine/src/flutter/lib/gpu/command_buffer.cc",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/5f77625673248ee5846fbcaf5d3e1a3878386fd7/engine/src/flutter/lib/gpu/command_buffer.cc",
+      "raw_encoding": "identity",
+      "assertions": [
+        "context_->GetBackendType() == impeller::Context::BackendType::kOpenGLES",
+        "task_runners.GetRasterTaskRunner()->PostTask(",
+        "auto status = context_->GetCommandQueue()->Submit(",
+        "task_runners.GetUITaskRunner()->PostTask(ui_completion_task);"
+      ],
+      "sha256": "c05d444493ed4a0b8e9b318d7a1dc7d6236c3a9b8596d30b897950548843958c"
+    },
+    {
+      "id": "engine-texture",
+      "source_class": "official_source",
+      "title": "engine/src/flutter/lib/gpu/texture.cc",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-28",
+      "license": "BSD-3-Clause; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "5f77625673248ee5846fbcaf5d3e1a3878386fd7",
+      "path": "engine/src/flutter/lib/gpu/texture.cc",
+      "web_url": "https://github.com/flutter/flutter/blob/5f77625673248ee5846fbcaf5d3e1a3878386fd7/engine/src/flutter/lib/gpu/texture.cc",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/5f77625673248ee5846fbcaf5d3e1a3878386fd7/engine/src/flutter/lib/gpu/texture.cc",
+      "raw_encoding": "identity",
+      "assertions": [
+        "Dart_Handle Texture::AsImage() const",
+        "auto dl_image = impeller::DlImageImpeller::Make(texture_);",
+        "image->set_image(dl_image);"
+      ],
+      "sha256": "161e87cf5c9f7d2c741417bcf87cc82bf53d0ec699a77d25698da4a747d471cd"
+    },
+    {
+      "id": "engine-pass",
+      "source_class": "official_source",
+      "title": "engine/src/flutter/lib/gpu/render_pass.cc",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-28",
+      "license": "BSD-3-Clause; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "5f77625673248ee5846fbcaf5d3e1a3878386fd7",
+      "path": "engine/src/flutter/lib/gpu/render_pass.cc",
+      "web_url": "https://github.com/flutter/flutter/blob/5f77625673248ee5846fbcaf5d3e1a3878386fd7/engine/src/flutter/lib/gpu/render_pass.cc",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/5f77625673248ee5846fbcaf5d3e1a3878386fd7/engine/src/flutter/lib/gpu/render_pass.cc",
+      "raw_encoding": "identity",
+      "assertions": [
+        "!context.GetPipelineLibrary()->HasPipeline(pipeline_desc)",
+        "dart_state->GetTaskRunners().GetRasterTaskRunner()",
+        "pipeline = pipeline_future.get();"
+      ],
+      "sha256": "e599b6ef31ea15de01e46dba93a81b6883776a6d92f2e15ca8034cbadce79355"
+    },
+    {
+      "id": "engine-version",
+      "source_class": "official_source",
+      "title": "bin/internal/engine.version",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-28",
+      "license": "BSD-3-Clause; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "4cf24164269a5ebf0c16a028a00727d0e77bbb05",
+      "path": "bin/internal/engine.version",
+      "web_url": "https://github.com/flutter/flutter/blob/4cf24164269a5ebf0c16a028a00727d0e77bbb05/bin/internal/engine.version",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/4cf24164269a5ebf0c16a028a00727d0e77bbb05/bin/internal/engine.version",
+      "raw_encoding": "identity",
+      "assertions": [
+        "5f77625673248ee5846fbcaf5d3e1a3878386fd7"
+      ],
+      "sha256": "1fa9654ffa28f11071dcf4dcfdc8d75753446033985412cc3483a207097117c6"
+    },
+    {
+      "id": "engine-gles-command",
+      "source_class": "official_source",
+      "title": "engine/src/flutter/impeller/renderer/backend/gles/command_buffer_gles.cc",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-28",
+      "license": "BSD-3-Clause; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "5f77625673248ee5846fbcaf5d3e1a3878386fd7",
+      "path": "engine/src/flutter/impeller/renderer/backend/gles/command_buffer_gles.cc",
+      "web_url": "https://github.com/flutter/flutter/blob/5f77625673248ee5846fbcaf5d3e1a3878386fd7/engine/src/flutter/impeller/renderer/backend/gles/command_buffer_gles.cc",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/5f77625673248ee5846fbcaf5d3e1a3878386fd7/engine/src/flutter/impeller/renderer/backend/gles/command_buffer_gles.cc",
+      "raw_encoding": "identity",
+      "assertions": [
+        "const auto result = reactor_->React();\n    if (callback) {\n      callback(result ? CommandBuffer::Status::kCompleted\n                      : CommandBuffer::Status::kError);",
+        "deferred_callback->Complete();",
+        "void CommandBufferGLES::OnWaitUntilCompleted() {\n  reactor_->GetProcTable().Finish();\n}"
+      ],
+      "sha256": "19cf914c350ab86faa528595a565f8ebd8a60ea4fb014b42d0e22b11757bd9db"
+    },
+    {
+      "id": "engine-gles-reactor",
+      "source_class": "official_source",
+      "title": "engine/src/flutter/impeller/renderer/backend/gles/reactor_gles.cc",
+      "publisher": "Flutter Authors",
+      "retrieved_at": "2026-10-28",
+      "license": "BSD-3-Clause; upstream LICENSE at the pinned revision",
+      "repository_url": "https://github.com/flutter/flutter",
+      "revision": "5f77625673248ee5846fbcaf5d3e1a3878386fd7",
+      "path": "engine/src/flutter/impeller/renderer/backend/gles/reactor_gles.cc",
+      "web_url": "https://github.com/flutter/flutter/blob/5f77625673248ee5846fbcaf5d3e1a3878386fd7/engine/src/flutter/impeller/renderer/backend/gles/reactor_gles.cc",
+      "raw_url": "https://raw.githubusercontent.com/flutter/flutter/5f77625673248ee5846fbcaf5d3e1a3878386fd7/engine/src/flutter/impeller/renderer/backend/gles/reactor_gles.cc",
+      "raw_encoding": "identity",
+      "assertions": [
+        "while (HasPendingOperations()) {\n    if (!ReactOnce()) {\n      return false;\n    }\n  }\n  return true;",
+        "return ConsolidateHandles() && FlushOps();",
+        "for (const auto& op : ops) {\n    TRACE_EVENT0(\"impeller\", \"ReactorGLES::Operation\");\n    op(*this);\n  }"
+      ],
+      "sha256": "46b522c858e1f8316c48d0634defc4add208b13dba9b5cd0fa8240270e17ba53"
+    }
+  ]
+}

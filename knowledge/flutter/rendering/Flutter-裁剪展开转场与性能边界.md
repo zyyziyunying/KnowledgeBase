@@ -123,6 +123,8 @@ scale = pixelRatio × (view.renderScale ?? scene.renderScale) × adaptiveRenderS
 
 这些是由成本模型导出的选择，不是固定案例已经完成或验证有效的优化。
 
+Scene 的离屏目标、尺寸缓存、提交背压与纹理合成接口可继续读 [Flutter Scene 的底层实现与性能边界](Flutter-Scene底层实现与性能边界.md)。该文固定独立的源码基线；本篇保持案例依赖版本，不能据新版本实现反推旧版本的资源回收行为。
+
 ## 同一场景展开为房间
 
 房间展开使用同一页面中的 `AnimationController`，时长 **1100ms**，通过 `easeInOutCubic` 得到主进度。它保留原有角色和 Scene，把房间根节点加入场景，再协调多个参数。[房间开关][park-room]、[相机与角色受光][park-camera]、[房间部件动画][room]。对应证据：`clipped-reveal-007`。

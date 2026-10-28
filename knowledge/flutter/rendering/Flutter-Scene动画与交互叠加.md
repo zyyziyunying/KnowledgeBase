@@ -140,6 +140,8 @@ p_world = M_ancestors × M_HeadCtrl × M_HeadFx × M_Head × p
 
 “屏幕位置 → 相机射线 → 命中点 → 头部局部坐标”的公式、求交边界和数值例子，见 [Flutter Scene 的坐标转换与射线拾取](Flutter-Scene坐标转换与射线拾取.md)。若需要判断性能，应使用 [运行时性能验证链](../engine/运行时性能验证链.md)明确测量端点；本节不从源码结构直接推导运行性能。
 
+渲染器如何把这些节点与几何体组织成 GPU 绘制，以及骨骼上传、自动合批、纹理交接和测量口径，见 [Flutter Scene 的底层实现与性能边界](Flutter-Scene底层实现与性能边界.md)。该文单独固定库与 Engine 的源码基线，本案例仍沿用上表版本。
+
 抚摸动作如何连接页面上的粒子、角色反馈与松手后的余韵，见 [Flutter 触摸粒子反馈与爱心动效](Flutter-触摸粒子反馈与爱心动效.md)。
 
 [app-repo]: https://github.com/bdero/lantern_spirit/tree/bc151089f4ecfeae6675ef98731b55f8770ed39b
