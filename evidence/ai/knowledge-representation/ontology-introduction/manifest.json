@@ -1,0 +1,147 @@
+{
+  "$schema": "../../../schema/evidence-manifest.schema.json",
+  "schema_version": 1,
+  "topic_id": "ai.knowledge-representation.ontology-introduction",
+  "topic_document": "../../../../knowledge/ai/knowledge-representation/本体论入门与知识地图.md",
+  "verified_at": "2026-11-09",
+  "baseline_note": "Dated W3C publication URLs and versioned author-released papers. Source dates refer to the cited editions. School entities, permissions and inference traces are illustrative and checked by hand. No reasoner, rule engine or production authorization system was run.",
+  "claims": [
+    {
+      "id": "ontology-intro-001",
+      "section": "1 存在、类别与同一性",
+      "statement": "Classes, instances, properties and class inclusion in the OWL 2 introductory model.",
+      "source_ids": ["owl2-primer"]
+    },
+    {
+      "id": "ontology-intro-002",
+      "section": "3 形式逻辑与公理",
+      "statement": "Description logic axiom categories and model-based entailment.",
+      "source_ids": ["dl-primer", "owl2-direct-semantics"]
+    },
+    {
+      "id": "ontology-intro-003",
+      "section": "4 规则推理与信息缺失",
+      "statement": "Conjunctive antecedents, consistent variable bindings and rule consequences.",
+      "source_ids": ["swrl-submission"]
+    },
+    {
+      "id": "ontology-intro-004",
+      "section": "4 规则推理与信息缺失",
+      "statement": "Open-world interpretation of missing facts, the meaning of a SPARQL ASK result, and ontology consistency.",
+      "source_ids": ["owl2-primer", "owl2-direct-semantics", "sparql11-query"]
+    },
+    {
+      "id": "ontology-intro-005",
+      "section": "5 表示、查询与校验",
+      "statement": "RDF triple structure, RDFS subproperty entailment, RDF graph pattern queries and validation of required data values.",
+      "source_ids": ["rdf11-concepts", "rdf-schema11", "owl2-primer", "sparql11-query", "shacl"]
+    },
+    {
+      "id": "ontology-intro-006",
+      "section": "6 本体工程与 AI 应用",
+      "statement": "Comparison of vocabulary recovery and structural ontology generation in the CQ4OE evaluation.",
+      "source_ids": ["cq4oe-v1"]
+    }
+  ],
+  "sources": [
+    {
+      "id": "owl2-primer",
+      "source_class": "official_document",
+      "title": "OWL 2 Web Ontology Language Primer (Second Edition)",
+      "publisher": "W3C OWL Working Group",
+      "retrieved_at": "2026-11-09",
+      "license": "W3C document terms of use. Metadata and links only.",
+      "url": "https://www.w3.org/TR/2012/REC-owl2-primer-20121211/",
+      "last_updated": "2012-12-11",
+      "applies_to": "Dated OWL 2 primer, sections 2, 4.1–4.3 and 5.3. Introductory semantics and modeling examples."
+    },
+    {
+      "id": "owl2-direct-semantics",
+      "source_class": "official_document",
+      "title": "OWL 2 Web Ontology Language Direct Semantics (Second Edition)",
+      "publisher": "W3C OWL Working Group",
+      "retrieved_at": "2026-11-09",
+      "license": "W3C document terms of use. Metadata and links only.",
+      "url": "https://www.w3.org/TR/2012/REC-owl2-direct-semantics-20121211/",
+      "last_updated": "2012-12-11",
+      "applies_to": "Section 2.5 of the dated OWL 2 Direct Semantics recommendation, covering consistency and entailment."
+    },
+    {
+      "id": "dl-primer",
+      "source_class": "official_document",
+      "title": "A Description Logic Primer (arXiv v3)",
+      "publisher": "Markus Krötzsch, František Simančík and Ian Horrocks via arXiv",
+      "retrieved_at": "2026-11-09",
+      "license": "CC BY-NC-SA 3.0 as noted in the paper. Metadata and links only.",
+      "url": "https://arxiv.org/pdf/1201.4089v3",
+      "last_updated": "2013-06-03",
+      "applies_to": "Sections 1 and 4, the description logic distinction between ABox, TBox and RBox axioms and their semantics."
+    },
+    {
+      "id": "swrl-submission",
+      "source_class": "official_document",
+      "title": "SWRL: A Semantic Web Rule Language Combining OWL and RuleML",
+      "publisher": "SWRL authors via W3C Member Submission",
+      "retrieved_at": "2026-11-09",
+      "license": "W3C Document License. Metadata and links only.",
+      "url": "https://www.w3.org/submissions/2004/SUBM-SWRL-20040521/",
+      "last_updated": "2004-05-21",
+      "applies_to": "Sections 2.2 and 3 on rule syntax and variable bindings. This is a member submission. The example trace is an illustrative forward application of positive rules."
+    },
+    {
+      "id": "rdf11-concepts",
+      "source_class": "official_document",
+      "title": "RDF 1.1 Concepts and Abstract Syntax",
+      "publisher": "W3C RDF Working Group",
+      "retrieved_at": "2026-11-09",
+      "license": "W3C document terms of use. Metadata and links only.",
+      "url": "https://www.w3.org/TR/2014/REC-rdf11-concepts-20140225/#section-triples",
+      "last_updated": "2014-02-25",
+      "applies_to": "Section 3.1 of the dated RDF 1.1 recommendation, covering the subject, predicate and object of a triple."
+    },
+    {
+      "id": "rdf-schema11",
+      "source_class": "official_document",
+      "title": "RDF Schema 1.1",
+      "publisher": "W3C RDF Working Group",
+      "retrieved_at": "2026-11-09",
+      "license": "W3C document terms of use. Metadata and links only.",
+      "url": "https://www.w3.org/TR/2014/REC-rdf-schema-20140225/#ch_subpropertyof",
+      "last_updated": "2014-02-25",
+      "applies_to": "Section 3.5 of the dated RDFS recommendation, covering rdfs:subPropertyOf."
+    },
+    {
+      "id": "sparql11-query",
+      "source_class": "official_document",
+      "title": "SPARQL 1.1 Query Language",
+      "publisher": "W3C SPARQL Working Group",
+      "retrieved_at": "2026-11-09",
+      "license": "W3C document terms of use. Metadata and links only.",
+      "url": "https://www.w3.org/TR/2013/REC-sparql11-query-20130321/",
+      "last_updated": "2013-03-21",
+      "applies_to": "Dated SPARQL 1.1 query recommendation, covering RDF graph patterns and the ASK query form in section 16.3."
+    },
+    {
+      "id": "shacl",
+      "source_class": "official_document",
+      "title": "Shapes Constraint Language (SHACL)",
+      "publisher": "W3C RDF Data Shapes Working Group",
+      "retrieved_at": "2026-11-09",
+      "license": "W3C document terms of use. Metadata and links only.",
+      "url": "https://www.w3.org/TR/2017/REC-shacl-20170720/",
+      "last_updated": "2017-07-20",
+      "applies_to": "Dated SHACL recommendation, including the sh:minCount constraint on the data graph supplied for validation."
+    },
+    {
+      "id": "cq4oe-v1",
+      "source_class": "official_document",
+      "title": "CQ4OE: A benchmark for assessing LLM-assisted ontology generation from competency questions (arXiv v1)",
+      "publisher": "Jiayi Li, Ziyuan Wang, Daniel Garijo and María Poveda-Villalón via arXiv",
+      "retrieved_at": "2026-11-09",
+      "license": "CC BY 4.0 per the arXiv version page. Metadata and links only.",
+      "url": "https://arxiv.org/abs/2609.26029v1",
+      "last_updated": "2026-09-22",
+      "applies_to": "Preprint v1, ontology generation from competency questions under the reported benchmark and model settings."
+    }
+  ]
+}
